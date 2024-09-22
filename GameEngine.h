@@ -1,6 +1,7 @@
 //
 // Created by manol on 9/21/2024.
 //
+// FSM pattern referenced from https://www.aleksandrhovhannisyan.com/blog/implementing-a-finite-state-machine-in-cpp/
 
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
@@ -10,39 +11,77 @@ using namespace std;
 
 class GameEngine;
 
-class GameEngineState {
+class GameState {
     public:
-    virtual void changeState(GameEngine* game_engine, string state_input);
-    virtual string getName();
+    virtual void changeState(GameEngine* game_engine, string state_input) = 0;
+    virtual string getName() = 0;
 };
 
-class StartState : public GameEngineState {
+class StartState : public GameState {
     public:
-    void changeState(GameEngine* game_engine, string state_input);
-    static GameEngineState& getInstance();
-    string getName();
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
 };
 
-class MapLoadedState : public GameEngineState {
+class MapLoadedState : public GameState {
     public:
-    void changeState(GameEngine* game_engine, string state_input);
-    static GameEngineState& getInstance();
-    string getName();
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
+};
 
+class MapValidatedState : public GameState {
+public:
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
+};
+
+class PlayersAddedState : public GameState {
+public:
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
+};
+
+class AssignReinforcementState : public GameState {
+public:
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
+};
+
+class IssueOrdersState : public GameState {
+public:
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
+};
+
+class ExecuteOrdersState : public GameState {
+public:
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
+};
+
+class WinState : public GameState {
+public:
+    void changeState(GameEngine* game_engine, string state_input) override;
+    static GameState& getInstance();
+    string getName() override;
 };
 
 class GameEngine {
-
-
     public:
     GameEngine();
-    GameEngineState* getCurrentState() const {return gameEngineState;}
-    void setState(GameEngineState& new_state);
+    GameState* getCurrentState() const;
+    void setState(GameState& new_state);
     void changeState(string state_input);
 
     private:
-    GameEngineState* gameEngineState;
-
+    GameState* gameEngineState;
 };
 
 
