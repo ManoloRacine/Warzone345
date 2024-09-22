@@ -1,17 +1,11 @@
 #include <iostream>
 
-#define quote(x) #x
-
 #include "GameEngine.h"
 using namespace std;
 
+#include "GameEngineDriver.h"
+
 int main() {
-    GameEngine game;
-    while (true) {
-        string input;
-        cin >> input;
-        game.changeState(input);
-        cout << game.getCurrentState()->getName() << endl;
-    }
+    testGameStates();
     return 0;
 }
