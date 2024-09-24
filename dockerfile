@@ -1,22 +1,33 @@
 # Use the GCC base image
 FROM gcc:latest
 
+# Install CMake
+RUN apt-get update && apt-get install -y cmake
+
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
 COPY . .
 
-# Compile the main program
-RUN g++ main.cpp -o main
+# Create a build directory
+RUN mkdir build
+
+# Change to the build directory
+WORKDIR /app/build
+
+# Run CMake to configure the project
+RUN cmake ..
+
+# Build the project
+RUN make
 
 # Compile the test files ( examples )
 # RUN g++ test1.cpp -o test1
 # RUN g++ test2.cpp -o test2
 
-# Set the default command to run the main program
-CMD ["./main"]
-
+# Default command to run the compiled binary
+CMD ["./Warzone345"]
 
 # Intialize Docker image using: 
 # path> docker build -t warzone345 .
