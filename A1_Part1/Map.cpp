@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include "Map.h"
 
 using std::cout;
 using std::endl;
@@ -16,220 +17,105 @@ using std::pair;
 using std::vector;
 using std::unordered_map;
 
-class Territory;
-class Continent;
-class Map;
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// --------------------  MAP ------------------------------
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-class Map {
-private:
-    std::string author;
-    bool warn;
-    std::string imgPath;
-    bool wrap;
-    
-
-public:
-
-    enum Scroll {
-        horizontal,
-        vertical,
-        none 
-    };
-    Scroll scrollType;
-
-vector<Continent*> Continents;
-unordered_map<string,Territory*> mapData;
-
-
-// Destructor
- ~Map() {
-        for (auto continent : Continents) {
-            delete continent;  // Free allocated memory for continents
-        }
-        for (auto pair : mapData) {
-            delete pair.second;  // Free allocated memory for territories
-        }
-    }
-
-
-    // Setters
-    void setAuthor(const std::string& author) {
-        this->author = author;
-    }
-
-    void setWarn(bool warn) {
-        this->warn = warn;
-    }
-
-    void setImgPath(const std::string& imgPath) {
-        this->imgPath = imgPath;
-    }
-
-    void setWrap(bool wrap) {
-        this->wrap = wrap;
-    }
-
-    void setScrollType(Scroll scrollType) {
-        this->scrollType = scrollType;
-    }
-
-    // Getters
-    std::string getAuthor() const {
-        return author;
-    }
-
-    bool getWarn() const {
-        return warn;
-    }
-
-    std::string getImgPath() const {
-        return imgPath;
-    }
-
-    bool getWrap() const {
-        return wrap;
-    }
-
-    Scroll getScrollType() const {
-        return scrollType;
-    }
-
-     void addContinent(Continent* continent) {
-        if (continent != nullptr) { 
-            Continents.push_back(continent);
-        }
-    }
-
-    void addTerritory(const std::string& name, Territory* territory) {
-        if (territory != nullptr) { // Ensure the territory pointer is valid
-            mapData[name] = territory; // Add the territory to the hashmap with its name as the key
-        }
-    }
-};
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ CONTINENT ---------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-class Continent {
-   
-    private:
-       std::string name;
-       int bonus;
-
-    public: 
-    
-    vector<Territory*> territories;
 
     // Construcotr
-    Continent(const std::string& name, int bonus)
+    Continent::Continent(const std::string& name, int bonus)
         : name(name), bonus(bonus) {}
 
     // Setters and Getters
 
-       void setName(const std::string& n) {
+       void Continent::setName(const std::string& n) {
         name = n;
     }
 
-    std::string getName() const {
+    std::string Continent::getName() const {
         return name;
     }
 
-    void setBonus(int b) {
+    void Continent::setBonus(int b) {
         bonus = b;
     }
 
-    int getBonus() const {
+    int Continent::getBonus() const {
         return bonus;
     }
 
-    void addTerritory(Territory* territory) {
+    void Continent::addTerritory(Territory* territory) {
         if (territory != nullptr) {  // Ensure the territory pointer is valid
             territories.push_back(territory);
         }
     }
 
-    void displayInfo() const {
-        cout << " Continent : " << name << ", Bonus : " << bonus << endl;
+    void Continent::displayInfo() const {
+        std::cout << " Continent : " << name << ", Bonus : " << bonus << std::endl;
     }
-
-};
-
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ TERRITORY ---------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class Territory {
-private:
-    // Territory Attributes
-    std::string name;
-    std::pair<int, int> coordinates;
-    Continent* continent; 
-    std::vector<Territory*> connectedTerritories; 
-    int owner = -1;  
-    int armies = 0;
 
-public:
+
     // Constructor
-    Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies)
+    Territory::Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies)
         : name(name), coordinates(coordinates), continent(continent), owner(owner), armies(armies) {}
 
     // Overloaded constructor with name, coordinates, and continent
-    Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent) 
+    Territory::Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent) 
         : Territory(name, coordinates, continent, 0, 0) {} 
 
     // Setters and Getters
-    void setName(const std::string& name) {
+    void Territory::setName(const std::string& name) {
         this->name = name;
     }
 
-    std::string getName() const {
+    std::string Territory::getName() const {
         return name;
     }
 
-    void setCoordinates(const std::pair<int, int>& c) {
+    void Territory::setCoordinates(const std::pair<int, int>& c) {
         coordinates = c;
     }
 
-    std::pair<int, int> getCoordinates() const {
+    std::pair<int, int> Territory::getCoordinates() const {
         return coordinates;
     }
 
-    void setContinent(Continent* con) {  
+    void Territory::setContinent(Continent* con) {  
         continent = con;
     }
 
-    Continent* getContinent() const {  
+    Continent* Territory::getContinent() const {  
         return continent;
     }
 
-    void addConnectedTerritory(Territory* territory) {  
+    void Territory::addConnectedTerritory(Territory* territory) {  
         connectedTerritories.push_back(territory);
     }
 
-    void setOwner(int newOwner) {
+    void Territory::setOwner(int newOwner) {
         owner = newOwner;  
     }
 
-    int getOwner() const {
+    int Territory::getOwner() const {
         return owner;  
     }
 
-    void setArmies(int numArmies) {
+    void Territory::setArmies(int numArmies) {
         armies = numArmies;
     }
 
-    int getArmies() const {
+    int Territory::getArmies() const {
         return armies;
     }
 
     // Method to display territory information
-    void displayInfo() const {
+    void Territory::displayInfo() const {
         std::cout << "Territory: " << name << std::endl;
         std::cout << "Coordinates: (" << coordinates.first << ", " << coordinates.second << ")" << std::endl;
         if (continent) {
@@ -245,39 +131,117 @@ public:
         }
         std::cout << std::endl;
     }
-};
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// --------------------  MAP ------------------------------
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+// Destructor
+ Map::~Map() {
+        for (auto continent : Continents) {
+            delete continent;  // Free allocated memory for continents
+        }
+        for (auto pair : mapData) {
+            delete pair.second;  // Free allocated memory for territories
+        }
+    }
+
+
+    // Setters
+    void Map::setAuthor(const std::string& author) {
+        this->author = author;
+    }
+
+    void Map::setWarn(bool warn) {
+        this->warn = warn;
+    }
+
+    void Map::setImgPath(const std::string& imgPath) {
+        this->imgPath = imgPath;
+    }
+
+    void Map::setWrap(bool wrap) {
+        this->wrap = wrap;
+    }
+
+    void Map::setScrollType(Scroll scrollType) {
+        this->scrollType = scrollType;
+    }
+
+    // Getters
+    std::string Map::getAuthor() const {
+        return author;
+    }
+
+    bool Map::getWarn() const {
+        return warn;
+    }
+
+    std::string Map::getImgPath() const {
+        return imgPath;
+    }
+
+    bool Map::getWrap() const {
+        return wrap;
+    }
+
+    Map::Scroll Map::getScrollType() const {
+        return scrollType;
+    }
+
+     void Map::addContinent(Continent* continent) {
+        if (continent != nullptr) { 
+            Continents.push_back(continent);
+        }
+    }
+
+    void Map::addTerritory(const std::string& name, Territory* territory) {
+        if (territory != nullptr) { // Ensure the territory pointer is valid
+            mapData[name] = territory; // Add the territory to the hashmap with its name as the key
+        }
+    }
+
+    void Map::displayInfo() const{
+    std::cout << "Map Author: " << getAuthor() << std::endl;
+    std::cout << "Image Path: " << getImgPath() << std::endl;
+    std::cout << "Wrap: " << (getWrap() ? "Yes" : "No") << std::endl;
+    std::cout << "Scroll Type: ";
+    switch (getScrollType()) {
+        case Map::Scroll::horizontal:
+            std::cout << "Horizontal" << std::endl;
+            break;
+        case Map::Scroll::vertical:
+            std::cout << "Vertical" << std::endl;
+            break;
+        case Map::Scroll::none:
+            std::cout << "None" << std::endl;
+            break;
+    }
+}
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ MAP LOADER --------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-class MapLoader {
-public:
-    struct Connector {
-        Territory* territory;
-        std::vector<std::string> connectedT;
 
-        Connector(Territory* t) : territory(t) {}
 
-        void addConnectedTerritory(const std::string& connTerritory) {
+    MapLoader::Connector::Connector(Territory* t) : territory(t) {}
+
+
+
+    void MapLoader::Connector::addConnectedTerritory(const std::string& connTerritory) {
         connectedT.push_back(connTerritory);
         }
 
-        void addConnector(Territory* newTerritory, const std::string& connectedTerritoriesStr) {
+    void MapLoader::Connector::addConnector(Territory* newTerritory, const std::string& connectedTerritoriesStr) {
         Connector newConnector(newTerritory);
         }
 
-    };
-
-    private:
-    std::vector<Connector> connectors;
-
-    public:
 
     // Load map
-    Map loadMap(const std::string& path) {
+    Map MapLoader::loadMap(const std::string& path) {
         Map map;
         std::ifstream inputFile(path);
         
@@ -412,10 +376,10 @@ public:
                 }
             }
 
-        inputFile.close(); 
+         inputFile.close(); 
          return map; 
     }
-};
+
 
 
 
