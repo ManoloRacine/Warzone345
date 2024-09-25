@@ -15,7 +15,8 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -30,12 +31,20 @@
 					"name" : "Warzone345",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
 			"targets" : 
 			[
+				{
+					"directoryIndex" : 0,
+					"id" : "MapDriver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-MapDriver-Debug-e0aabb920c26199da5b1.json",
+					"name" : "MapDriver",
+					"projectIndex" : 0
+				},
 				{
 					"directoryIndex" : 0,
 					"id" : "Warzone345::@6890427a1f51a3e7e1df",

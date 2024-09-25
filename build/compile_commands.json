@@ -4,5 +4,17 @@
   "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -std=gnu++20 -o CMakeFiles\\Warzone345.dir\\main.cpp.obj -c C:\\Users\\Nektarios\\Documents\\GitHub\\Warzone345\\main.cpp",
   "file": "C:/Users/Nektarios/Documents/GitHub/Warzone345/main.cpp",
   "output": "CMakeFiles/Warzone345.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/Nektarios/Documents/GitHub/Warzone345/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -std=gnu++20 -o CMakeFiles\\MapDriver.dir\\A1_Part1\\MapDriver.cpp.obj -c C:\\Users\\Nektarios\\Documents\\GitHub\\Warzone345\\A1_Part1\\MapDriver.cpp",
+  "file": "C:/Users/Nektarios/Documents/GitHub/Warzone345/A1_Part1/MapDriver.cpp",
+  "output": "CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj"
+},
+{
+  "directory": "C:/Users/Nektarios/Documents/GitHub/Warzone345/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -std=gnu++20 -o CMakeFiles\\MapDriver.dir\\A1_Part1\\Map.cpp.obj -c C:\\Users\\Nektarios\\Documents\\GitHub\\Warzone345\\A1_Part1\\Map.cpp",
+  "file": "C:/Users/Nektarios/Documents/GitHub/Warzone345/A1_Part1/Map.cpp",
+  "output": "CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj"
 }
 ]

@@ -128,6 +128,67 @@ Warzone345/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/build
 .PHONY : Warzone345/fast
 
+#=============================================================================
+# Target rules for targets named MapDriver
+
+# Build rule for target.
+MapDriver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 MapDriver
+.PHONY : MapDriver
+
+# fast build rule for target.
+MapDriver/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/build
+.PHONY : MapDriver/fast
+
+A1_Part1/Map.obj: A1_Part1/Map.cpp.obj
+.PHONY : A1_Part1/Map.obj
+
+# target to build an object file
+A1_Part1/Map.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj
+.PHONY : A1_Part1/Map.cpp.obj
+
+A1_Part1/Map.i: A1_Part1/Map.cpp.i
+.PHONY : A1_Part1/Map.i
+
+# target to preprocess a source file
+A1_Part1/Map.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.i
+.PHONY : A1_Part1/Map.cpp.i
+
+A1_Part1/Map.s: A1_Part1/Map.cpp.s
+.PHONY : A1_Part1/Map.s
+
+# target to generate assembly for a file
+A1_Part1/Map.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.s
+.PHONY : A1_Part1/Map.cpp.s
+
+A1_Part1/MapDriver.obj: A1_Part1/MapDriver.cpp.obj
+.PHONY : A1_Part1/MapDriver.obj
+
+# target to build an object file
+A1_Part1/MapDriver.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj
+.PHONY : A1_Part1/MapDriver.cpp.obj
+
+A1_Part1/MapDriver.i: A1_Part1/MapDriver.cpp.i
+.PHONY : A1_Part1/MapDriver.i
+
+# target to preprocess a source file
+A1_Part1/MapDriver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.i
+.PHONY : A1_Part1/MapDriver.cpp.i
+
+A1_Part1/MapDriver.s: A1_Part1/MapDriver.cpp.s
+.PHONY : A1_Part1/MapDriver.s
+
+# target to generate assembly for a file
+A1_Part1/MapDriver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.s
+.PHONY : A1_Part1/MapDriver.cpp.s
+
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -160,7 +221,14 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... MapDriver
 	@echo ... Warzone345
+	@echo ... A1_Part1/Map.obj
+	@echo ... A1_Part1/Map.i
+	@echo ... A1_Part1/Map.s
+	@echo ... A1_Part1/MapDriver.obj
+	@echo ... A1_Part1/MapDriver.i
+	@echo ... A1_Part1/MapDriver.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
