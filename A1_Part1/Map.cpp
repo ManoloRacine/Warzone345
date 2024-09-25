@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <stdexcept>
 
 using std::cout;
 using std::endl;
@@ -33,7 +34,7 @@ private:
 
 public:
 
-enum Scroll {
+    enum Scroll {
         horizontal,
         vertical,
         none 
@@ -42,6 +43,17 @@ enum Scroll {
 
 vector<Continent*> Continents;
 unordered_map<string,Territory*> mapData;
+
+
+// Destructor
+ ~Map() {
+        for (auto continent : Continents) {
+            delete continent;  // Free allocated memory for continents
+        }
+        for (auto pair : mapData) {
+            delete pair.second;  // Free allocated memory for territories
+        }
+    }
 
 
     // Setters
@@ -158,7 +170,7 @@ private:
     std::string name;
     std::pair<int, int> coordinates;
     Continent* continent; 
-    vector<Territory*> connectedTerritories;
+    std::vector<Territory*> connectedTerritories; 
     int owner = -1;  
     int armies = 0;
 
@@ -166,6 +178,10 @@ public:
     // Constructor
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies)
         : name(name), coordinates(coordinates), continent(continent), owner(owner), armies(armies) {}
+
+    // Overloaded constructor with name, coordinates, and continent
+    Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent) 
+        : Territory(name, coordinates, continent, 0, 0) {} 
 
     // Setters and Getters
     void setName(const std::string& name) {
@@ -184,16 +200,16 @@ public:
         return coordinates;
     }
 
-    void setContinent(Continent* con) {  // Accept a pointer to Continent
+    void setContinent(Continent* con) {  
         continent = con;
     }
 
-    Continent* getContinent() const {  // Return a pointer to Continent
+    Continent* getContinent() const {  
         return continent;
     }
 
-    void addConnectedTerritory(const std::string& territoryName) {
-        connectedTerritories.push_back(territoryName);
+    void addConnectedTerritory(Territory* territory) {  
+        connectedTerritories.push_back(territory);
     }
 
     void setOwner(int newOwner) {
@@ -214,69 +230,90 @@ public:
 
     // Method to display territory information
     void displayInfo() const {
-        cout << "Territory: " << name << endl;
-        cout << "Coordinates: (" << coordinates.first << ", " << coordinates.second << ")" << endl;
+        std::cout << "Territory: " << name << std::endl;
+        std::cout << "Coordinates: (" << coordinates.first << ", " << coordinates.second << ")" << std::endl;
         if (continent) {
-            cout << "Continent: " << continent->getName() << endl;  // Access continent name
+            std::cout << "Continent: " << continent->getName() << std::endl;  // Access continent name
         } else {
-            cout << "Continent: None" << endl;  // Handle case where continent is not set
+            std::cout << "Continent: None" << std::endl;  // Handle case where continent is not set
         }
-        cout << "Owner: " << owner << endl; 
-        cout << "Armies: " << armies << endl;
-        cout << "Connected Territories: ";
+        std::cout << "Owner: " << owner << std::endl; 
+        std::cout << "Armies: " << armies << std::endl;
+        std::cout << "Connected Territories: ";
         for (const auto& territory : connectedTerritories) {
-            cout << territory << " ";
+            std::cout << territory->getName() << " ";  // Display territory names
         }
-        cout << endl;
+        std::cout << std::endl;
     }
 };
+
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ MAP LOADER --------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// Load map
-Map MapLoader(const std::string& path) {
-    Map map;
+class MapLoader {
+public:
+    struct Connector {
+        Territory* territory;
+        std::vector<std::string> connectedT;
 
-    std::ifstream inputFile(path);
-    
-    if (!inputFile.is_open()) {
-        throw std::runtime_error("Could not open file: " + path);
-        return map; 
-    }
+        Connector(Territory* t) : territory(t) {}
 
-    std::string line;
-    std::string section;
-
-    while (std::getline(inputFile, line)) {
-        // Trim whitespace
-        line.erase(0, line.find_first_not_of(" \t"));
-        line.erase(line.find_last_not_of(" \t") + 1);
-
-        // Skip empty lines and comments
-        if (line.empty() || line[0] == ';') continue;
-
-        // Check for section headers
-        if (line[0] == '[') {
-            section = line.substr(1, line.find(']') - 1);
-            continue;
+        void addConnectedTerritory(const std::string& connTerritory) {
+        connectedT.push_back(connTerritory);
         }
-    
-        // Parse the contents based on the section
-        if (section == "Map") {
-            std::istringstream iss(line);
-            std::string key, value;
 
-            while (std::getline(inputFile, line)) {
-                if (line.find('=') == std::string::npos) {
-                    continue;
-                } 
-                if (std::getline(iss, key, '=') && std::getline(iss, value)) {
+        void addConnector(Territory* newTerritory, const std::string& connectedTerritoriesStr) {
+        Connector newConnector(newTerritory);
+        }
+
+    };
+
+    private:
+    std::vector<Connector> connectors;
+
+    public:
+
+    // Load map
+    Map loadMap(const std::string& path) {
+        Map map;
+        std::ifstream inputFile(path);
+        
+        if (!inputFile.is_open()) {
+            throw std::runtime_error("Could not open file: " + path);
+        }
+
+        std::string line;
+        std::string section;
+        std::vector<Connector> connectors;  // Vector to store connections
+        std::unordered_map<std::string, Territory*> territoryMap; // Map to associate territory names with pointers
+
+        while (std::getline(inputFile, line)) {
+            // Trim whitespace
+            line.erase(0, line.find_first_not_of(" \t"));
+            line.erase(line.find_last_not_of(" \t") + 1);
+
+            // Skip empty lines and comments
+            if (line.empty() || line[0] == ';') continue;
+
+            // Check for section headers
+            if (line[0] == '[') {
+                section = line.substr(1, line.find(']') - 1);
+                continue;
+            }
+        
+            // Parse the contents based on the section
+            if (section == "Map") {
+                std::istringstream iss(line);
+                std::string key, value;
+
+                // Parse key-value pairs for Map settings
+                if (line.find('=') != std::string::npos && std::getline(iss, key, '=') && std::getline(iss, value)) {
                     // Remove potential leading/trailing spaces
-                    key = key.substr(0, key.find_last_not_of(" \t") + 1);
-                    value = value.substr(value.find_first_not_of(" \t"));
+                    key.erase(0, key.find_first_not_of(" \t"));
+                    value.erase(0, value.find_first_not_of(" \t"));
 
                     // Map key to setters in MapSettings
                     if (key == "author") {
@@ -297,38 +334,88 @@ Map MapLoader(const std::string& path) {
                         }
                     }
                 }
+            } else if (section == "Continents") {
+                std::istringstream iss(line);
+                std::string name, bonusStr;
+
+                // Parse continent data
+                if (line.find('=') != std::string::npos && std::getline(iss, name, '=') && std::getline(iss, bonusStr)) {
+                    // Trim whitespace from name and bonus
+                    name.erase(0, name.find_first_not_of(" \t"));
+                    bonusStr.erase(0, bonusStr.find_first_not_of(" \t"));
+
+                    // Create a new Continent object
+                    int bonus = std::stoi(bonusStr);  // Convert the value to an integer
+                    Continent* newContinent = new Continent(name, bonus);
+                    map.addContinent(newContinent); 
+                }
+            } else if (section == "Territories") {
+                std::istringstream iss(line);
+                std::string name, x, y, continentName;
+
+                // Read the territory line and extract data
+                if (std::getline(iss, name, ',') && std::getline(iss, x, ',') &&
+                    std::getline(iss, y, ',') && std::getline(iss, continentName)) {
+                    
+                    // Trim whitespace
+                    name.erase(0, name.find_first_not_of(" \t"));
+                    continentName.erase(0, continentName.find_first_not_of(" \t"));
+                    x.erase(0, x.find_first_not_of(" \t"));
+                    y.erase(0, y.find_first_not_of(" \t"));
+
+                    // Convert coordinates to integers
+                    int coordX = std::stoi(x);
+                    int coordY = std::stoi(y);
+
+                    // Find the corresponding continent
+                    Continent* continent = nullptr;
+                    for (auto* cont : map.Continents) {
+                        if (cont->getName() == continentName) {
+                            continent = cont;
+                            break;
+                        }
+                    }
+
+                    // Throw runtime error if continent is not found
+                    if (!continent) {
+                        throw std::runtime_error("Error: Continent '" + continentName + "' does not exist.");
+                    }
+
+                    // Create the Territory object
+                    Territory* newTerritory = new Territory(name, {coordX, coordY}, continent);
+                    map.addTerritory(name,newTerritory);
+
+                    Connector newConnector(newTerritory);
+
+                    // Now read the remaining connected territories
+                    std::string connTerritory;
+                    while (std::getline(iss, connTerritory, ',')) {
+                        // Trim whitespace
+                        connTerritory.erase(0, connTerritory.find_first_not_of(" \t"));
+                        if (!connTerritory.empty()) {
+                            newConnector.addConnectedTerritory(connTerritory); // Store connected territories
+                        }
+                    }
+                    connectors.push_back(newConnector); 
+                }
             }
-        } else if (section == "Continents") {
-            std::istringstream iss(line);
-            std::string name;
-            std::string bonusStr;
-
-            if (std::getline(iss, name, '=') && std::getline(iss, bonusStr)) {
-                // Trim whitespace from name and bonus
-                name.erase(0, name.find_first_not_of(" \t"));
-                name.erase(name.find_last_not_of(" \t") + 1);
-                bonusStr.erase(0, bonusStr.find_first_not_of(" \t"));
-                
-                // Create a new Continent object
-                int bonus = std::stoi(bonusStr);  // Convert the value to an integer
-
-                Continent* newContinent = new Continent(name, bonus);
-                map.addContinent(newContinent); 
-            }
-        } else if (section == "Territories") {
-            std::istringstream iss(line);
-            std::string name;
-            std::string x;
-            std::string y;
-            Continent* continent;
-
         }
+
+        // Set up the connections based on the stored connectors
+            for (const auto& connector : connectors) {
+                Territory* territory = connector.territory;
+                for (const auto& connName : connector.connectedT) {
+                    auto it = territoryMap.find(connName);
+                    if (it != territoryMap.end()) {
+                        territory->addConnectedTerritory(it->second); 
+                    }
+                }
+            }
+
+        inputFile.close(); 
+         return map; 
     }
-
-    inputFile.close(); 
-    return map; 
 };
-
 
 
 
