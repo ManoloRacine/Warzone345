@@ -3,6 +3,7 @@ FROM gcc:latest
 
 # Install CMake
 RUN apt-get update && apt-get install -y cmake
+RUN apt-get -y install gdb
 
 # Set the working directory inside the container
 WORKDIR /app
