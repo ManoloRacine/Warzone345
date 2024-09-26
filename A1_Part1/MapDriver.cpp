@@ -3,58 +3,56 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include <iostream>
 #include <string>
-#include "Map.h"
+#include "map.h"
 
 
 using std::cout;
+using std::string;
 
 int main() {
 
-    cout << " Hello World From MapDriver ";
+    cout << "Hello World From MapDriver " << endl;
 
-    Continent europe("Europe", 5);
+//     Continent europe("Europe", 5);
 
-    cout << "ERROR after";
+//     europe.displayInfo();
 
-     europe.displayInfo();
+//     //Creating Territory objects
+//    Territory* ireland = new Territory("Ireland", {81, 320}, &europe);
+//     Territory* northernIreland = new Territory("Northern Ireland", {90, 300}, &europe);
 
-    // Creating Territory objects
-  //  Territory* ireland = new Territory("Ireland", {81, 320}, &europe);
-    //Territory* northernIreland = new Territory("Northern Ireland", {90, 300}, &europe);
+//     // Connecting territories
+//     ireland->addConnectedTerritory(northernIreland);
+//     northernIreland->addConnectedTerritory(ireland);
 
-    // // Connecting territories
-    // ireland->addConnectedTerritory(northernIreland);
-    // northernIreland->addConnectedTerritory(ireland);
+//     // Setting properties for Ireland
+//     ireland->setOwner(1); // Owner ID 
+//     ireland->setArmies(50); // Armies stationed in Ireland
 
-    // // Setting properties for Ireland
-    // ireland->setOwner(1); // Owner ID 
-    // ireland->setArmies(50); // Armies stationed in Ireland
+//     //Display information
+//    ireland->displayInfo();
+//     northernIreland->displayInfo();
 
-    // Display information
- //   ireland->displayInfo();
-    //northernIreland->displayInfo();
-
-    // Clean up
-   // delete ireland;
-    //delete northernIreland;
+//     //Clean up
+//     delete ireland;
+//     delete northernIreland;
 
 
-    // string filePath = "../maps/Europe.txt";
+    string filePath = "./maps/USA.txt";
 
-    // MapLoader mapLoader;
+    MapLoader mapLoader;
 
-
-
-    // try {
-    //     // Load the map using the MapLoader
-    //     Map loadedMap = mapLoader.loadMap(filePath);
+    try {
+        // Load the map using the MapLoader
+        Map loadedMap = mapLoader.loadMap(filePath);
 
 
-    //     loadedMap.displayInfo();
+        loadedMap.displayInfo();
 
-    // } catch (const std::runtime_error& e) {
-    //     cout << "Error: " << e.what() << endl;
-    // }
+
+    } catch (const std::runtime_error& e) {
+        cout << "Error: " << e.what() << endl;
+    }
 
     return 0;
 }

@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <numeric> 
 #include "Map.h"
 
 using std::cout;
@@ -46,13 +47,13 @@ using std::unordered_map;
     }
 
     void Continent::addTerritory(Territory* territory) {
-        if (territory != nullptr) {  // Ensure the territory pointer is valid
+        if (territory != nullptr) {  
             territories.push_back(territory);
         }
     }
 
     void Continent::displayInfo() const {
-        std::cout << " Continent : " << name << ", Bonus : " << bonus << std::endl;
+        std::cout << "Continent : " << name << ", Bonus : " << bonus << std::endl;
     }
 
 
@@ -114,23 +115,23 @@ using std::unordered_map;
         return armies;
     }
 
-    // Method to display territory information
+    const std::vector<Territory*>& Territory::getConnectedTerritories() const {
+        return connectedTerritories;  
+}
+
     void Territory::displayInfo() const {
-        std::cout << "Territory: " << name << std::endl;
-        std::cout << "Coordinates: (" << coordinates.first << ", " << coordinates.second << ")" << std::endl;
-        if (continent) {
-            std::cout << "Continent: " << continent->getName() << std::endl;  // Access continent name
-        } else {
-            std::cout << "Continent: None" << std::endl;  // Handle case where continent is not set
-        }
-        std::cout << "Owner: " << owner << std::endl; 
-        std::cout << "Armies: " << armies << std::endl;
-        std::cout << "Connected Territories: ";
-        for (const auto& territory : connectedTerritories) {
-            std::cout << territory->getName() << " ";  // Display territory names
-        }
-        std::cout << std::endl;
-    }
+    std::cout << name << "," 
+              << coordinates.first << "," 
+              << coordinates.second << "," 
+              << (continent ? continent->getName() : "None") << "," 
+              << owner << "," 
+              << armies << "," 
+              << std::accumulate(connectedTerritories.begin(), connectedTerritories.end(), std::string{},
+                  [](const std::string& a, const Territory* b) {
+                      return a + (a.length() > 0 ? " " : "") + b->getName();
+                  })
+              << std::endl;
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // --------------------  MAP ------------------------------
@@ -202,11 +203,15 @@ using std::unordered_map;
         }
     }
 
-    void Map::displayInfo() const{
+void Map::displayInfo() const {
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~ MAP DATA ~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
     std::cout << "Map Author: " << getAuthor() << std::endl;
     std::cout << "Image Path: " << getImgPath() << std::endl;
     std::cout << "Wrap: " << (getWrap() ? "Yes" : "No") << std::endl;
     std::cout << "Scroll Type: ";
+    
     switch (getScrollType()) {
         case Map::Scroll::horizontal:
             std::cout << "Horizontal" << std::endl;
@@ -218,7 +223,37 @@ using std::unordered_map;
             std::cout << "None" << std::endl;
             break;
     }
+
+    // Display Continents and their Territories
+    std::cout << "\nContinents and Territories:" << std::endl;
+    for (const auto& continent : Continents) {
+        continent->displayInfo(); 
+        
+        std::cout << "Territories in " << continent->getName() << ":" << std::endl;
+        
+        for (const auto& pair : mapData) {
+            if (pair.second->getContinent() == continent) { 
+                pair.second->displayInfo(); 
+
+                // Display connected territories for each territory
+                std::cout << "  Connected Territories: ";
+                const auto& connectedTerritories = pair.second->getConnectedTerritories(); // Assuming this getter exists
+                if (connectedTerritories.empty()) {
+                    std::cout << "None" << std::endl;
+                } else {
+                    for (const auto& connectedTerritory : connectedTerritories) {
+                        std::cout << connectedTerritory->getName() << " "; // Assuming getName() returns the territory name
+                    }
+                    std::cout << std::endl;
+                }
+            }
+        }
+        std::cout << std::endl; 
+    }
 }
+
+
+
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -229,10 +264,27 @@ using std::unordered_map;
 
     MapLoader::Connector::Connector(Territory* t) : territory(t) {}
 
+    void MapLoader::Connector::displayConnector() const {
+        if (territory) {
+            std::cout << "Territory: " << territory->getName() << std::endl; // Display territory name
+        } else {
+            std::cout << "Territory: None" << std::endl; // Handle null territory
+        }
 
+        std::cout << "Connected Territories: ";
+        if (connectedT.empty()) {
+            std::cout << "None" << std::endl; // Handle case with no connected territories
+        } else {
+            for (const auto& connTerritory : connectedT) {
+                std::cout << connTerritory << ","; // Display each connected territory
+            }
+            std::cout << std::endl;
+        }
+    }
 
     void MapLoader::Connector::addConnectedTerritory(const std::string& connTerritory) {
         connectedT.push_back(connTerritory);
+        //cout << " adding: " << connTerritory << endl;
         }
 
     void MapLoader::Connector::addConnector(Territory* newTerritory, const std::string& connectedTerritoriesStr) {
@@ -319,7 +371,7 @@ using std::unordered_map;
 
                 // Read the territory line and extract data
                 if (std::getline(iss, name, ',') && std::getline(iss, x, ',') &&
-                    std::getline(iss, y, ',') && std::getline(iss, continentName)) {
+                    std::getline(iss, y, ',') && std::getline(iss, continentName, ',')) {
                     
                     // Trim whitespace
                     name.erase(0, name.find_first_not_of(" \t"));
@@ -361,12 +413,14 @@ using std::unordered_map;
                         }
                     }
                     connectors.push_back(newConnector); 
+                    //newConnector.displayConnector();
                 }
             }
         }
 
         // Set up the connections based on the stored connectors
-            for (const auto& connector : connectors) {
+            for (const Connector& connector : connectors) {
+                connector.displayConnector();
                 Territory* territory = connector.territory;
                 for (const auto& connName : connector.connectedT) {
                     auto it = territoryMap.find(connName);

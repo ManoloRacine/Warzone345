@@ -75,6 +75,7 @@ public:
     int getOwner() const;
     void setArmies(int numArmies);
     int getArmies() const;
+    const std::vector<Territory*>& getConnectedTerritories() const;
 
     // Method to display territory information
     void displayInfo() const;
@@ -135,6 +136,7 @@ public:
         Connector(Territory* t);
         void addConnectedTerritory(const std::string& connTerritory);
         void addConnector(Territory* newTerritory, const std::string& connectedTerritoriesStr);
+        void displayConnector() const;
     };
 
 private:
