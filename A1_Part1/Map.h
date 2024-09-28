@@ -100,7 +100,8 @@ public:
     Scroll scrollType;
 
     vector<Continent*> Continents;
-    unordered_map<string, Territory*> mapData;
+    unordered_map<std::string, Territory*> mapData;
+
 
     // Destructor
     ~Map();
@@ -121,6 +122,7 @@ public:
 
     void addContinent(Continent* continent);
     void addTerritory(const std::string& name, Territory* territory);
+    Territory* getTerritoryPtr(const std::string& name);
     void displayInfo() const;
 };
 
@@ -128,19 +130,6 @@ public:
 // ------------------ MAP LOADER --------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class MapLoader {
-public:
-    struct Connector {
-        Territory* territory;
-        std::vector<std::string> connectedT;
-
-        Connector(Territory* t);
-        void addConnectedTerritory(const std::string& connTerritory);
-        void addConnector(Territory* newTerritory, const std::string& connectedTerritoriesStr);
-        void displayConnector() const;
-    };
-
-private:
-    std::vector<Connector> connectors;
 
 public:
     // Load map

@@ -3,15 +3,14 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #include <iostream>
 #include <string>
-#include "map.h"
-
+#include "Map.h"
 
 using std::cout;
 using std::string;
 
 int main() {
 
-    cout << "Hello World From MapDriver " << endl;
+    cout << "Docker Sucks" << endl;
 
 //     Continent europe("Europe", 5);
 
