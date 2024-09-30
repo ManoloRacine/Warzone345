@@ -1,5 +1,5 @@
 /cmake-build-debug/
-.vscode/
-.vscode\c_cpp_properties.json
-*.exe\
-.build/
+/.vscode/
+/.vscode/c_cpp_properties.json
+*.exe
+/build/
