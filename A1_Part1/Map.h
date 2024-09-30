@@ -59,7 +59,7 @@ private:
     int armies = 0;
 
 public:
-    // Constructors
+    // Constructors - ADD COPY CONSTRUCTOR
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies);
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent);
 
@@ -100,8 +100,9 @@ public:
     Scroll scrollType;
 
     vector<Continent*> Continents;
-    unordered_map<std::string, Territory*> mapData;
-
+    unordered_map<std::string, Territory*> mapData; //its just a dictionary of key = territory name, value = territory pointer. :)
+    //vector<pair<std::string, Territory*>> territoriesOfMap; // MAYBE LATER CHANGE TO THIS
+    
 
     // Destructor
     ~Map();
