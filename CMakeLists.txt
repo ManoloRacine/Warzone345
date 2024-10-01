@@ -3,19 +3,18 @@ project(Warzone345)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# Add source files and headers for the main executable
 add_executable(Warzone345
-    main.cpp
-    src/Cards/Cards.h
-    src/Cards/Cards.cpp
-    src/Cards/CardsDriver.cpp
-    src/GameEngine/GameEngine.h
-    src/GameEngine/GameEngine.cpp
-    src/GameEngine/GameEngineDriver.cpp
-    src/Map/Map.h
-    src/Map/Map.cpp
-    src/Map/MapDriver.cpp
-    src/Map/MapDriver.h
+        main.cpp
+        src/Cards/Cards.h
+        src/Cards/Cards.cpp
+        src/Cards/CardsDriver.cpp
+        src/GameEngine/GameEngine.h
+        src/GameEngine/GameEngine.cpp
+        src/GameEngine/GameEngineDriver.cpp
+        src/Map/Map.h
+        src/Map/Map.cpp
+        src/Map/MapDriver.cpp
+        src/Map/MapDriver.h
 )
 
 # Copy resource files (maps) to the build directory
