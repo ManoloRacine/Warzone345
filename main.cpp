@@ -1,6 +1,6 @@
-#include <iostream>
+#include "src/GameEngine/GameEngineDriver.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    testGameStates();
     return 0;
 }
