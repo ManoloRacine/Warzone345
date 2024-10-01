@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <unordered_set>
 
 using std::cout;
 using std::endl;
@@ -90,6 +91,7 @@ private:
     bool warn;
     std::string imgPath;
     bool wrap;
+    int numTerritories;
 
 public:
     enum Scroll {
@@ -112,6 +114,7 @@ public:
     void setImgPath(const std::string& imgPath);
     void setWrap(bool wrap);
     void setScrollType(Scroll scrollType);
+    void setNumTerritories(const int numTerritories);
 
     // Getters
     std::string getAuthor() const;
@@ -119,11 +122,17 @@ public:
     std::string getImgPath() const;
     bool getWrap() const;
     Scroll getScrollType() const;
+    int getNumTerritories() const;
+    unordered_map<std::string, Territory*> getMapData() const;
+
 
     void addContinent(Continent* continent);
     void addTerritory(const std::string& name, Territory* territory);
     Territory* getTerritoryPtr(const std::string& name);
     void displayInfo() const;
+
+    void DFS(Territory *territory, std::unordered_set<Territory*>& visitedNodes);
+    void mapFullyConnected(unordered_map<std::string, Territory*> mapData);
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

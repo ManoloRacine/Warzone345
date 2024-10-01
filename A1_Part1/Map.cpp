@@ -9,6 +9,7 @@
 #include <string>
 #include <stdexcept>
 #include <numeric>
+#include <unordered_set>
 #include "Map.h"
 
 using std::cout;
@@ -28,8 +29,7 @@ Continent::Continent(const std::string &name, int bonus)
 
 // Setters and Getters
 
-void Continent::setName(const std::string &n)
-{
+void Continent::setName(const std::string &n) {
     name = n;
 }
 
@@ -193,6 +193,11 @@ void Map::setScrollType(Scroll scrollType)
     this->scrollType = scrollType;
 }
 
+void Map::setNumTerritories(int numTerritories)
+{
+    this->numTerritories = numTerritories;
+}
+
 // Getters
 std::string Map::getAuthor() const
 {
@@ -217,6 +222,10 @@ bool Map::getWrap() const
 Map::Scroll Map::getScrollType() const
 {
     return scrollType;
+}
+
+unordered_map<std::string, Territory*> Map::getMapData() const {
+    return mapData;
 }
 
 void Map::addContinent(Continent *continent)
@@ -600,3 +609,49 @@ Map MapLoader::loadMap(const std::string &path)
     }
     return map;
 }
+//Map Validation Written By Griffin Sin-Chan (40278049)
+//Depth first search takes in a starting node and a has a list tracking the visited nodes
+void DFS(Territory *territory, std::unordered_set<Territory*>& visitedNodes) {
+    //track the current node that is being visited
+    visitedNodes.insert(territory);
+    
+    //From the current node check the vector of adjacent territories
+    for (Territory* adjacent : territory->getConnectedTerritories()) {
+        
+        //This is error checking for max num adjacent territories
+        if (adjacent->getConnectedTerritories().size()> 10) {
+           //throw std::runtime_error("Max number of adjacent territories exceeded, exiting!");
+        } 
+
+        std::cout<<"Visiting: " << territory->getName()<<std::endl;
+            
+        if (visitedNodes.find(adjacent) == visitedNodes.end()){
+            DFS(adjacent,visitedNodes);
+        }
+    }
+}
+
+void mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
+   
+    if (mapData.empty()) {
+    std::cout<<"Map is empty";
+    return;
+    }
+
+    //create an empty unordered set to store visited nodes
+    std::unordered_set<Territory*> visitedNodes;
+
+    auto it = mapData.begin();
+
+    //grab the territory pointer from map data which is stored in the maps second position
+    Territory* startNode = it->second;
+    DFS(startNode,visitedNodes);
+
+    //using the size of the vector in mapData check if that number matches the number of visited territories
+    std::cout<<(visitedNodes.size() == mapData.size());
+    //check that num territories do not exceed 255
+    std::cout<<(mapData.size() <= 255);
+    return;
+    
+}
+

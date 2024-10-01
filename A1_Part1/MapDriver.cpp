@@ -40,13 +40,23 @@ int main() {
     string filePath = "./maps/USA.txt";
 
     MapLoader mapLoader;
-
+ //Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent);
     try {
+        Continent* cont = new Continent("adasd", 121);
+        Territory* ptr = new Territory("Bob Island", {1,2}, cont);
         // Load the map using the MapLoader
         Map loadedMap = mapLoader.loadMap(filePath);
+        unordered_map<std::string, Territory*> mapData = {{"Bob Island", ptr}};
 
 
+        
         loadedMap.displayInfo();
+        std::cout <<"111\n";
+        std::cout <<"222\n";
+        std::cout <<"333\n";
+      // loadedMap.mapFullyConnected(mapData);
+        std::cout <<"HOWDY THERE";
+        
 
 
     } catch (const std::runtime_error& e) {
