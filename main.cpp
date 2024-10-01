@@ -1,9 +1,4 @@
-#include <iostream>
-
-#include "GameEngine.h"
-using namespace std;
-
-#include "GameEngineDriver.h"
+#include "src/GameEngine/GameEngineDriver.h"
 
 int main() {
     testGameStates();
