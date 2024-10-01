@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <string>
 #include <stdexcept>
@@ -37,7 +38,7 @@ public:
 
     // Copy Constructor
     Continent(const Continent& other);
-    
+
     // Assignment Operator
     Continent& operator=(const Continent& other);
 
@@ -155,6 +156,11 @@ public:
     void addTerritory(const std::string& name, Territory* territory);
     Territory* getTerritoryPtr(const std::string& name);
     void displayInfo() const;
+
+
+    // -------- validation ----------
+    void DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes);
+    bool mapFullyConnected(unordered_map<std::string, Territory*> mapData);
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

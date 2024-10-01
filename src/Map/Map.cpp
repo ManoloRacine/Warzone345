@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <string>
 #include <stdexcept>
@@ -423,6 +424,66 @@ void Map::displayInfo() const
     }
 }
 
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ------------------ MAP VALIDATION ----------------------
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+// --------------------------------- Griffin -----------------------------------------
+
+// Depth-first search takes in a starting node and a set tracking the visited nodes
+void Map::DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes) {
+    if (!territory) return; // Check for null pointer
+
+    // Track the current node that is being visited
+    visitedNodes.insert(territory);
+    std::cout << "Visiting: " << territory->getName() << std::endl;
+
+    // From the current node check the vector of adjacent territories
+    for (Territory* adjacent : territory->getConnectedTerritories()) {
+
+        // Error checking for max num adjacent territories
+        if (adjacent->getConnectedTerritories().size() > 10) {
+            throw std::runtime_error("Max number of adjacent territories exceeded, exiting!");
+        }
+
+        // Check if the adjacent territory has not been visited
+        if (visitedNodes.find(adjacent) == visitedNodes.end()) {
+            DFS(adjacent, visitedNodes);
+        }
+    }
+}
+
+bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
+    if (mapData.empty()) {
+        std::cout << "Map is empty" << std::endl;
+        return false; // Indicate the map is not connected
+    }
+
+    // Create an empty unordered set to store visited nodes
+    std::unordered_set<Territory*> visitedNodes;
+
+    auto it = mapData.begin();
+    Territory* startNode = it->second; // Grab the first territory pointer
+
+    // Start DFS from the initial territory
+    DFS(startNode, visitedNodes);
+
+    // Check if the number of visited territories matches the total number of territories
+    bool isConnected = (visitedNodes.size() == mapData.size());
+    std::cout << "Is the map fully connected? " << (isConnected ? "Yes" : "No") << std::endl;
+
+    // Check that the number of territories does not exceed 255
+    if (mapData.size() > 255) {
+        std::cout << "Warning: Number of territories exceeds the limit of 255." << std::endl;
+    }
+
+    return isConnected;
+}
+
+// ----------------------------------------------------------------------------------------
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ MAP LOADER --------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -728,3 +789,7 @@ Map MapLoader::loadMap(const std::string &path)
     }
     return map;
 }
+
+
+
+

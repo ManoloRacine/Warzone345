@@ -12,7 +12,7 @@ int main() {
 
     cout << "Initiating Map Driver..." << endl;
 
-    string filePath = "../res/maps/Europe.txt";
+    string filePath = "../res/maps/USAError.txt";
 
     MapLoader mapLoader;
 
@@ -21,10 +21,13 @@ int main() {
         Map loadedMap = mapLoader.loadMap(filePath);
 
 
-        loadedMap.displayInfo();
-
+        //loadedMap.displayInfo();
 
         cout << "Map loaded succesfully...";
+
+        bool isConnected = loadedMap.mapFullyConnected(loadedMap.mapData);
+        if (!isConnected) { cout << "Map is not connected"; } else { cout << "Map Connected!"; };
+
 
 
     } catch (const std::runtime_error& e) {
