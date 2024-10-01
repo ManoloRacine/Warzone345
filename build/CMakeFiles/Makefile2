@@ -73,6 +73,7 @@ preinstall:
 # The main recursive "clean" target.
 clean: CMakeFiles/Warzone345.dir/clean
 clean: CMakeFiles/MapDriver.dir/clean
+clean: CMakeFiles/run_mapdriver.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -126,6 +127,32 @@ MapDriver: CMakeFiles/MapDriver.dir/rule
 CMakeFiles/MapDriver.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/clean
 .PHONY : CMakeFiles/MapDriver.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/run_mapdriver.dir
+
+# All Build rule for target.
+CMakeFiles/run_mapdriver.dir/all: CMakeFiles/MapDriver.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=6 "Built target run_mapdriver"
+.PHONY : CMakeFiles/run_mapdriver.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/run_mapdriver.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/run_mapdriver.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 0
+.PHONY : CMakeFiles/run_mapdriver.dir/rule
+
+# Convenience name for target.
+run_mapdriver: CMakeFiles/run_mapdriver.dir/rule
+.PHONY : run_mapdriver
+
+# clean rule for target.
+CMakeFiles/run_mapdriver.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/clean
+.PHONY : CMakeFiles/run_mapdriver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

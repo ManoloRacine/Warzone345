@@ -68,44 +68,44 @@ include CMakeFiles/MapDriver.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/MapDriver.dir/flags.make
 
-CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj: CMakeFiles/MapDriver.dir/flags.make
-CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj: C:/Users/Nektarios/Documents/GitHub/Warzone345/A1_Part1/MapDriver.cpp
-CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj: CMakeFiles/MapDriver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj -MF CMakeFiles\MapDriver.dir\A1_Part1\MapDriver.cpp.obj.d -o CMakeFiles\MapDriver.dir\A1_Part1\MapDriver.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\A1_Part1\MapDriver.cpp
+CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj: CMakeFiles/MapDriver.dir/flags.make
+CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj: C:/Users/Nektarios/Documents/GitHub/Warzone345/src/Map/MapDriver.cpp
+CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj: CMakeFiles/MapDriver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj -MF CMakeFiles\MapDriver.dir\src\Map\MapDriver.cpp.obj.d -o CMakeFiles\MapDriver.dir\src\Map\MapDriver.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\MapDriver.cpp
 
-CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\A1_Part1\MapDriver.cpp > CMakeFiles\MapDriver.dir\A1_Part1\MapDriver.cpp.i
+CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\MapDriver.cpp > CMakeFiles\MapDriver.dir\src\Map\MapDriver.cpp.i
 
-CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\A1_Part1\MapDriver.cpp -o CMakeFiles\MapDriver.dir\A1_Part1\MapDriver.cpp.s
+CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\MapDriver.cpp -o CMakeFiles\MapDriver.dir\src\Map\MapDriver.cpp.s
 
-CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj: CMakeFiles/MapDriver.dir/flags.make
-CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj: C:/Users/Nektarios/Documents/GitHub/Warzone345/A1_Part1/Map.cpp
-CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj: CMakeFiles/MapDriver.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj -MF CMakeFiles\MapDriver.dir\A1_Part1\Map.cpp.obj.d -o CMakeFiles\MapDriver.dir\A1_Part1\Map.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\A1_Part1\Map.cpp
+CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj: CMakeFiles/MapDriver.dir/flags.make
+CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj: C:/Users/Nektarios/Documents/GitHub/Warzone345/src/Map/Map.cpp
+CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj: CMakeFiles/MapDriver.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj -MF CMakeFiles\MapDriver.dir\src\Map\Map.cpp.obj.d -o CMakeFiles\MapDriver.dir\src\Map\Map.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\Map.cpp
 
-CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\A1_Part1\Map.cpp > CMakeFiles\MapDriver.dir\A1_Part1\Map.cpp.i
+CMakeFiles/MapDriver.dir/src/Map/Map.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/MapDriver.dir/src/Map/Map.cpp.i"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\Map.cpp > CMakeFiles\MapDriver.dir\src\Map\Map.cpp.i
 
-CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\A1_Part1\Map.cpp -o CMakeFiles\MapDriver.dir\A1_Part1\Map.cpp.s
+CMakeFiles/MapDriver.dir/src/Map/Map.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/MapDriver.dir/src/Map/Map.cpp.s"
+	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\Map.cpp -o CMakeFiles\MapDriver.dir\src\Map\Map.cpp.s
 
 # Object files for target MapDriver
 MapDriver_OBJECTS = \
-"CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj" \
-"CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj"
+"CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj" \
+"CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj"
 
 # External object files for target MapDriver
 MapDriver_EXTERNAL_OBJECTS =
 
-MapDriver.exe: CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj
-MapDriver.exe: CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj
+MapDriver.exe: CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj
+MapDriver.exe: CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj
 MapDriver.exe: CMakeFiles/MapDriver.dir/build.make
 MapDriver.exe: CMakeFiles/MapDriver.dir/linkLibs.rsp
 MapDriver.exe: CMakeFiles/MapDriver.dir/objects1.rsp

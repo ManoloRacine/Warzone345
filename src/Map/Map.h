@@ -35,6 +35,15 @@ public:
     // Constructor
     Continent(const std::string& name, int bonus);
 
+    // Copy Constructor
+    Continent(const Continent& other);
+    
+    // Assignment Operator
+    Continent& operator=(const Continent& other);
+
+    // Stream Insertion Operator
+    friend std::ostream& operator<<(std::ostream& os, const Continent& continent);
+
     // Setters and Getters
     void setName(const std::string& n);
     std::string getName() const;
@@ -48,6 +57,7 @@ public:
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ TERRITORY ---------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 class Territory {
 private:
     // Territory Attributes
@@ -59,9 +69,18 @@ private:
     int armies = 0;
 
 public:
-    // Constructors - ADD COPY CONSTRUCTOR
+    // Constructors
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies);
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent);
+
+    // Copy Constructor
+    Territory(const Territory& other);
+
+    // Assignment Operator
+    Territory& operator=(const Territory& other);
+
+     // Stream Insertion Operator
+    friend std::ostream& operator<<(std::ostream& os, const Territory& territory);
 
     // Setters and Getters
     void setName(const std::string& name);
@@ -100,12 +119,23 @@ public:
     Scroll scrollType;
 
     vector<Continent*> Continents;
-    unordered_map<std::string, Territory*> mapData; //its just a dictionary of key = territory name, value = territory pointer. :)
+    unordered_map<std::string, Territory*> mapData; //its just a dictionary of key = territory name, value = territory pointer.
     //vector<pair<std::string, Territory*>> territoriesOfMap; // MAYBE LATER CHANGE TO THIS
     
 
     // Destructor
     ~Map();
+
+    // Constructors
+    Map() = default; // Default constructor
+    
+    Map(const Map& other); // Copy constructor
+
+    // Assignment operator
+    Map& operator=(const Map& other);
+
+    // Stream insertion operator
+    friend std::ostream& operator<<(std::ostream& os, const Map& map);
 
     // Setters
     void setAuthor(const std::string& author);

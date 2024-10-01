@@ -16,7 +16,8 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				}
 			],
@@ -32,7 +33,8 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				}
 			],
@@ -41,15 +43,22 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "MapDriver::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-MapDriver-Debug-e0aabb920c26199da5b1.json",
+					"jsonFile" : "target-MapDriver-Debug-25e0e6b5424787dc5751.json",
 					"name" : "MapDriver",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "Warzone345::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-Warzone345-Debug-5e08b28040a23dce09ec.json",
+					"jsonFile" : "target-Warzone345-Debug-82981a433e0c90ad6f9d.json",
 					"name" : "Warzone345",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "run_mapdriver::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-run_mapdriver-Debug-7c88f9f4467d13ee43f0.json",
+					"name" : "run_mapdriver",
 					"projectIndex" : 0
 				}
 			]

@@ -17,6 +17,7 @@ using std::pair;
 using std::string;
 using std::unordered_map;
 using std::vector;
+using std::basic_ostream;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ CONTINENT ---------------------------
@@ -25,6 +26,42 @@ using std::vector;
 // Construcotr
 Continent::Continent(const std::string &name, int bonus)
     : name(name), bonus(bonus) {}
+
+// Copy Constructor
+Continent::Continent(const Continent& other) 
+    : name(other.name), bonus(other.bonus) {
+    // Deep copy the territories
+    for (auto territory : other.territories) {
+        territories.push_back(new Territory(*territory));
+    }
+}
+
+// Assignment Operator
+Continent& Continent::operator=(const Continent& other) {
+    if (this != &other) { // Check for self-assignment
+        name = other.name;
+        bonus = other.bonus;
+
+        // Clear existing territories
+        for (auto territory : territories) {
+            delete territory;
+        }
+        territories.clear();
+
+        // Deep copy the territories
+        for (auto territory : other.territories) {
+            territories.push_back(new Territory(*territory));
+        }
+    }
+    return *this;
+}
+
+// Stream Insertion Operator
+std::ostream& operator<<(std::ostream& os, const Continent& continent) {
+    os << "Continent Name: " << continent.name << ", Bonus: " << continent.bonus;
+    return os;
+}
+
 
 // Setters and Getters
 
@@ -72,6 +109,39 @@ Territory::Territory(const std::string &name, const std::pair<int, int> &coordin
 // Overloaded constructor with name, coordinates, and continent
 Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent)
     : Territory(name, coordinates, continent, 0, 0) {}
+
+// Copy Constructor
+Territory::Territory(const Territory& other) 
+    : name(other.name),
+      coordinates(other.coordinates),
+      continent(other.continent), 
+      connectedTerritories(other.connectedTerritories), 
+      owner(other.owner),
+      armies(other.armies) {}
+
+
+// Assignment Operator
+Territory& Territory::operator=(const Territory& other) {
+    if (this != &other) { // Self-assignment check
+        name = other.name;
+        coordinates = other.coordinates;
+        continent = other.continent; 
+        connectedTerritories = other.connectedTerritories;
+        owner = other.owner;
+        armies = other.armies;
+    }
+    return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Territory& territory) {
+    os << "Territory Name: " << territory.name << "\n"
+       << "Coordinates: (" << territory.coordinates.first << ", "
+       << territory.coordinates.second << ")\n"
+       << "Owner: " << territory.owner << "\n"
+       << "Armies: " << territory.armies << "\n";
+    return os;
+}
+
 
 // Setters and Getters
 void Territory::setName(const std::string &name)
@@ -166,6 +236,64 @@ Map::~Map()
         delete pair.second; // Free allocated memory for territories
     }
 }
+
+// Copy Constructor
+Map::Map(const Map& other)
+    : author(other.author),
+      warn(other.warn),
+      imgPath(other.imgPath),
+      wrap(other.wrap),
+      scrollType(other.scrollType) { // Copy the scroll type
+    // Deep copy of continents and territories
+    for (const auto& continent : other.Continents) {
+        Continent* newContinent = new Continent(*continent); // Assuming you have a proper copy constructor in Continent
+        Continents.push_back(newContinent);
+    }
+    for (const auto& pair : other.mapData) {
+        mapData[pair.first] = new Territory(*pair.second); // Assuming you have a proper copy constructor in Territory
+    }
+}
+
+// Assignment Operator
+Map& Map::operator=(const Map& other) {
+    if (this != &other) { // Self-assignment check
+        // Clean up existing data
+        for (auto continent : Continents) {
+            delete continent; // Clean up existing continents
+        }
+        for (auto pair : mapData) {
+            delete pair.second; // Clean up existing territories
+        }
+
+        // Copy new data
+        author = other.author;
+        warn = other.warn;
+        imgPath = other.imgPath;
+        wrap = other.wrap;
+        scrollType = other.scrollType;
+
+        // Deep copy of continents and territories
+        for (const auto& continent : other.Continents) {
+            Continent* newContinent = new Continent(*continent);
+            Continents.push_back(newContinent);
+        }
+        for (const auto& pair : other.mapData) {
+            mapData[pair.first] = new Territory(*pair.second);
+        }
+    }
+    return *this;
+}
+
+    // Stream Insertion Operator
+    std::ostream& operator<<(std::ostream& os, const Map& map) {
+        os << "Map Author: " << map.author << "\n"
+        << "Wrap: " << (map.wrap ? "Yes" : "No") << "\n"
+        << "Territories:\n";
+        for (const auto& pair : map.mapData) {
+            os << *(pair.second) << "\n"; // Using the stream operator for Territory
+        }
+        return os;
+    }
 
 // Setters
 void Map::setAuthor(const std::string &author)

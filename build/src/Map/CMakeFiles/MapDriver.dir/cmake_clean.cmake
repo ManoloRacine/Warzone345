@@ -1,8 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj"
-  "CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj.d"
-  "CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj"
-  "CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj.d"
+  "CMakeFiles/MapDriver.dir/Map.cpp.obj"
+  "CMakeFiles/MapDriver.dir/Map.cpp.obj.d"
+  "CMakeFiles/MapDriver.dir/MapDriver.cpp.obj"
+  "CMakeFiles/MapDriver.dir/MapDriver.cpp.obj.d"
   "MapDriver.exe"
   "MapDriver.exe.manifest"
   "MapDriver.pdb"

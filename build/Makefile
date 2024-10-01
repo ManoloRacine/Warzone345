@@ -141,53 +141,18 @@ MapDriver/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/build
 .PHONY : MapDriver/fast
 
-A1_Part1/Map.obj: A1_Part1/Map.cpp.obj
-.PHONY : A1_Part1/Map.obj
+#=============================================================================
+# Target rules for targets named run_mapdriver
 
-# target to build an object file
-A1_Part1/Map.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.obj
-.PHONY : A1_Part1/Map.cpp.obj
+# Build rule for target.
+run_mapdriver: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 run_mapdriver
+.PHONY : run_mapdriver
 
-A1_Part1/Map.i: A1_Part1/Map.cpp.i
-.PHONY : A1_Part1/Map.i
-
-# target to preprocess a source file
-A1_Part1/Map.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.i
-.PHONY : A1_Part1/Map.cpp.i
-
-A1_Part1/Map.s: A1_Part1/Map.cpp.s
-.PHONY : A1_Part1/Map.s
-
-# target to generate assembly for a file
-A1_Part1/Map.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/Map.cpp.s
-.PHONY : A1_Part1/Map.cpp.s
-
-A1_Part1/MapDriver.obj: A1_Part1/MapDriver.cpp.obj
-.PHONY : A1_Part1/MapDriver.obj
-
-# target to build an object file
-A1_Part1/MapDriver.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.obj
-.PHONY : A1_Part1/MapDriver.cpp.obj
-
-A1_Part1/MapDriver.i: A1_Part1/MapDriver.cpp.i
-.PHONY : A1_Part1/MapDriver.i
-
-# target to preprocess a source file
-A1_Part1/MapDriver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.i
-.PHONY : A1_Part1/MapDriver.cpp.i
-
-A1_Part1/MapDriver.s: A1_Part1/MapDriver.cpp.s
-.PHONY : A1_Part1/MapDriver.s
-
-# target to generate assembly for a file
-A1_Part1/MapDriver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/A1_Part1/MapDriver.cpp.s
-.PHONY : A1_Part1/MapDriver.cpp.s
+# fast build rule for target.
+run_mapdriver/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/build
+.PHONY : run_mapdriver/fast
 
 main.obj: main.cpp.obj
 .PHONY : main.obj
@@ -213,6 +178,54 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+src/Map/Map.obj: src/Map/Map.cpp.obj
+.PHONY : src/Map/Map.obj
+
+# target to build an object file
+src/Map/Map.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj
+.PHONY : src/Map/Map.cpp.obj
+
+src/Map/Map.i: src/Map/Map.cpp.i
+.PHONY : src/Map/Map.i
+
+# target to preprocess a source file
+src/Map/Map.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/Map.cpp.i
+.PHONY : src/Map/Map.cpp.i
+
+src/Map/Map.s: src/Map/Map.cpp.s
+.PHONY : src/Map/Map.s
+
+# target to generate assembly for a file
+src/Map/Map.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/Map.cpp.s
+.PHONY : src/Map/Map.cpp.s
+
+src/Map/MapDriver.obj: src/Map/MapDriver.cpp.obj
+.PHONY : src/Map/MapDriver.obj
+
+# target to build an object file
+src/Map/MapDriver.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj
+.PHONY : src/Map/MapDriver.cpp.obj
+
+src/Map/MapDriver.i: src/Map/MapDriver.cpp.i
+.PHONY : src/Map/MapDriver.i
+
+# target to preprocess a source file
+src/Map/MapDriver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.i
+.PHONY : src/Map/MapDriver.cpp.i
+
+src/Map/MapDriver.s: src/Map/MapDriver.cpp.s
+.PHONY : src/Map/MapDriver.s
+
+# target to generate assembly for a file
+src/Map/MapDriver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.s
+.PHONY : src/Map/MapDriver.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -221,17 +234,18 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
+	@echo ... run_mapdriver
 	@echo ... MapDriver
 	@echo ... Warzone345
-	@echo ... A1_Part1/Map.obj
-	@echo ... A1_Part1/Map.i
-	@echo ... A1_Part1/Map.s
-	@echo ... A1_Part1/MapDriver.obj
-	@echo ... A1_Part1/MapDriver.i
-	@echo ... A1_Part1/MapDriver.s
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... src/Map/Map.obj
+	@echo ... src/Map/Map.i
+	@echo ... src/Map/Map.s
+	@echo ... src/Map/MapDriver.obj
+	@echo ... src/Map/MapDriver.i
+	@echo ... src/Map/MapDriver.s
 .PHONY : help
 
 
