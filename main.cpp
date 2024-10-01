@@ -1,10 +1,7 @@
-#include <iostream>
 
-#include "GameEngine.h"
-using namespace std;
-
-#include "GameEngineDriver.h"
 #include "CardsDriver.h"
+#include "src/GameEngine/GameEngineDriver.h"
+
 
 int main() {
     testCards();
