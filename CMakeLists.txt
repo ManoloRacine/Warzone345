@@ -3,10 +3,17 @@ project(Warzone345)
 
 set(CMAKE_CXX_STANDARD 20)
 
+
 add_executable(Warzone345 main.cpp
         src/Cards/Cards.h
         src/Cards/Cards.cpp
         src/Cards/CardsDriver.cpp
+        main.cpp
         src/GameEngine/GameEngine.h
         src/GameEngine/GameEngine.cpp
-        src/GameEngine/GameEngineDriver.cpp)
+        src/GameEngine/GameEngineDriver.cpp
+        Order.h
+        Order.cpp
+        OrderDriver.h
+        OrderDriver.cpp
+)
