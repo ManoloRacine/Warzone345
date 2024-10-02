@@ -23,7 +23,6 @@ void OrdersList::add(Order *o)
   if(o){ orders.push_back(o); } else { throw std::runtime_error("NULL value inserted in List"); }
 }
 
-
 void OrdersList::remove(int pos)
 {
   unsigned listLength = orders.size();
