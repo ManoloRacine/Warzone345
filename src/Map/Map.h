@@ -153,9 +153,10 @@ public:
     Territory* getTerritoryPtr(const std::string& name);
 
 
-    // -------- validation ----------
+   // -------- validation ----------
     void DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes);
     bool mapFullyConnected(unordered_map<std::string, Territory*> mapData);
+    bool validateUniqueness(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
 
 };
 

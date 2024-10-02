@@ -415,7 +415,8 @@ std::ostream& operator<<(std::ostream& os, const Map& map) {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-// --------------------------------- Griffin -----------------------------------------
+// ---------------------------- Griffin Sin-Chan (40278049) ------------------------------------
+
 
 // Depth-first search takes in a starting node and a set tracking the visited nodes
 void Map::DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes) {
@@ -423,16 +424,14 @@ void Map::DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes
 
     // Track the current node that is being visited
     visitedNodes.insert(territory);
-    std::cout << "Visiting: " << territory->getName() << std::endl;
-
+    
     // From the current node check the vector of adjacent territories
     for (Territory* adjacent : territory->getConnectedTerritories()) {
 
         // Error checking for max num adjacent territories
         if (adjacent->getConnectedTerritories().size() > 10) {
-            throw std::runtime_error("Max number of adjacent territories exceeded, exiting!");
+            throw std::runtime_error("Error, max number of adjacent territories exceeded, exiting!");
         }
-
         // Check if the adjacent territory has not been visited
         if (visitedNodes.find(adjacent) == visitedNodes.end()) {
             DFS(adjacent, visitedNodes);
@@ -440,6 +439,40 @@ void Map::DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes
     }
 }
 
+
+bool Map::validateUniqueness(unordered_map<std::string, Territory*> mapData,vector<Continent*> Continents) {
+ //checking that the territory is part of only one continent
+    //iteration is index in the map
+  
+    for(const auto &[name, ptrTerritory] : mapData) {
+          int k= 0;
+       
+        for (const auto & iterator : Continents) {
+        //use territories list from each cotinent, iterate trough all territories
+            if (iterator->territories.size() == 0) {
+                throw std::runtime_error("Empty Continent");
+            }
+            
+            for (int j = 0; j <= iterator->territories.size()-1; j++ ) { 
+               
+                
+                //from the map grab the value in the second position which is a territory ptr and point to territory name
+                if (name == iterator->territories[j]->getName()) {
+                        k++;
+                    if (k > 1) {
+                        throw std::runtime_error("Error, territory is part of more than one continent!");
+                        return false;
+                       
+                    }
+                }
+            } 
+        } 
+    }
+    
+    return true;
+       
+    }
+ 
 bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
     if (mapData.empty()) {
         std::cout << "Map is empty" << std::endl;
@@ -449,8 +482,8 @@ bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
     // Create an empty unordered set to store visited nodes
     std::unordered_set<Territory*> visitedNodes;
 
-    auto it = mapData.begin();
-    Territory* startNode = it->second; // Grab the first territory pointer
+    auto iteration = mapData.begin();
+    Territory* startNode = iteration->second; // Grab the first territory pointer
 
     // Start DFS from the initial territory
     DFS(startNode, visitedNodes);
@@ -464,10 +497,12 @@ bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
         std::cout << "Warning: Number of territories exceeds the limit of 255." << std::endl;
     }
 
+
     return isConnected;
 }
 
 // ----------------------------------------------------------------------------------------
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ MAP LOADER --------------------------

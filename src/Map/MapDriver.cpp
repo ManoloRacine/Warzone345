@@ -20,13 +20,16 @@ int main() {
         // Load the map using the MapLoader
         Map loadedMap = mapLoader.loadMap(filePath);
 
-
         //cout << loadedMap;
 
         cout << "Map loaded succesfully...";
 
         bool isConnected = loadedMap.mapFullyConnected(loadedMap.mapData);
         if (!isConnected) { cout << "Map is not connected"; } else { cout << "Map Connected!"; };
+
+         std::cout << endl;
+        bool territoryPartOfContinent = loadedMap.validateUniqueness(loadedMap.mapData,loadedMap.Continents);
+        if (territoryPartOfContinent) { cout << "All Territories unique"; } else { cout << "A territory was part of multiple continents"; };
 
 
     } catch (const std::runtime_error& e) {
