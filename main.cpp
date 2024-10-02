@@ -4,7 +4,7 @@
 
 
 int main() {
-   testLoadMaps();
+    testLoadMaps();
     testCards();
     testGameStates();
     return 0;

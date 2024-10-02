@@ -19,5 +19,5 @@ add_executable(Warzone345
 )
 
 # Copy resource files (maps) to the build directory
-file(COPY res/maps/Europe.txt res/maps/USA.txt res/maps/USAError.txt
+file(COPY res/maps/Africa.txt res/maps/Europe.txt res/maps/USA.txt res/maps/USA_EmptyContinent.txt res/maps/Europe_NotConnected.txt res/maps/Africa_UnconnectedSubGraph.txt
     DESTINATION ${CMAKE_BINARY_DIR}/res/maps)

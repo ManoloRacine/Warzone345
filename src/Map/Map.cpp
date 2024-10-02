@@ -487,7 +487,7 @@ bool Map::validateUniqueness(unordered_map<std::string, Territory*> mapData,vect
                 if (name == iterator->getTerritories()[j]->getName()) { //CHECK
                         k++;
                     if (k > 1) {
-                        throw std::runtime_error("Error, territory is part of more than one continent!");
+                        throw std::runtime_error("Error, territory is part of more than one continent or contienent is empty!");
                         return false;
                        
                     }
@@ -721,6 +721,9 @@ void MapLoader::processTerritoriesSection(const std::string &line, Map &map, std
         int coordX = std::stoi(x);
         int coordY = std::stoi(y);
 
+        // Validate coordinates
+        validateCoordinates(coordX, coordY);
+
         Continent *continent = findContinentByName(map, continentName);
         Territory *newTerritory = new Territory(name, {coordX, coordY}, continent);
 
@@ -784,6 +787,14 @@ void MapLoader::setupTerritoryConnections(Map &map, const std::unordered_map<Ter
         }
     }
 }
+
+// Validates coordinates for range between 0 and 1000
+void MapLoader::validateCoordinates(int x, int y) {
+    if (x < 0 || x > 1000 || y < 0 || y > 1000) {
+        throw std::runtime_error("Coordinates are out of bounds. Expected values between 0 and 1000.");
+    }
+}
+
 
 
 

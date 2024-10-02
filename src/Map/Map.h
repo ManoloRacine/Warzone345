@@ -181,6 +181,9 @@ class MapLoader {
 public:
     // Load map
     Map loadMap(const std::string& path);
+
+private:
+     // Load map helpers
     void trim(std::string &line);
     void processMapSection(const std::string &line, Map &map);
     void setScrollType(Map &map, const std::string &value);
@@ -189,9 +192,7 @@ public:
     Continent* findContinentByName(Map &map, const std::string &continentName);
     std::vector<std::string> parseConnectedTerritories(std::istringstream &iss);
     void setupTerritoryConnections(Map &map, const std::unordered_map<Territory *, std::vector<std::string>> &associationsMap);
-
-
-
+    void validateCoordinates(int x, int y);
 };
 
 #endif 
