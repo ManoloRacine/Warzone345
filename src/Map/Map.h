@@ -52,7 +52,6 @@ public:
     int getBonus() const;
 
     void addTerritory(Territory* territory);
-    void displayInfo() const;
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,8 +96,6 @@ public:
     int getArmies() const;
     const std::vector<Territory*>& getConnectedTerritories() const;
 
-    // Method to display territory information
-    void displayInfo() const;
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -155,7 +152,6 @@ public:
     void addContinent(Continent* continent);
     void addTerritory(const std::string& name, Territory* territory);
     Territory* getTerritoryPtr(const std::string& name);
-    void displayInfo() const;
 
 
     // -------- validation ----------

@@ -59,7 +59,7 @@ Continent& Continent::operator=(const Continent& other) {
 
 // Stream Insertion Operator
 std::ostream& operator<<(std::ostream& os, const Continent& continent) {
-    os << "Continent Name: " << continent.name << ", Bonus: " << continent.bonus;
+    os << "Continent Name: " << continent.getName() << ", Bonus: " << continent.getBonus();
     return os;
 }
 
@@ -94,10 +94,6 @@ void Continent::addTerritory(Territory *territory)
     }
 }
 
-void Continent::displayInfo() const
-{
-    std::cout << "Continent : " << name << ", Bonus : " << bonus << std::endl;
-}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ TERRITORY ---------------------------
@@ -132,15 +128,6 @@ Territory& Territory::operator=(const Territory& other) {
         armies = other.armies;
     }
     return *this;
-}
-
-std::ostream& operator<<(std::ostream& os, const Territory& territory) {
-    os << "Territory Name: " << territory.name << "\n"
-       << "Coordinates: (" << territory.coordinates.first << ", "
-       << territory.coordinates.second << ")\n"
-       << "Owner: " << territory.owner << "\n"
-       << "Armies: " << territory.armies << "\n";
-    return os;
 }
 
 
@@ -205,21 +192,30 @@ const std::vector<Territory *> &Territory::getConnectedTerritories() const
     return connectedTerritories;
 }
 
-void Territory::displayInfo() const
-{
-    std::cout << name << ","
-              << coordinates.first << ","
-              << coordinates.second << ","
-              << (continent ? continent->getName() : "None") << ","
-              << owner << ","
-              << armies << ","
-              << std::accumulate(connectedTerritories.begin(), connectedTerritories.end(), std::string{},
-                                 [](const std::string &a, const Territory *b)
-                                 {
-                                     return a + (a.length() > 0 ? "," : "") + b->getName();
-                                 })
-              << std::endl;
+
+//Stream Display Territory in csv format
+std::ostream& operator<<(std::ostream& os, const Territory& territory) {
+    os << territory.name << " , "
+       << territory.coordinates.first << " , "
+       << territory.coordinates.second << " , "
+       << (territory.continent ? territory.continent->getName() : "None") << " , "
+       << territory.owner << " [owner] ,"
+       << territory.armies << " [armies] ,"
+       << " Connected Territories: ";
+
+    // Concatenate the names of connected territories
+    os << std::accumulate(
+        territory.connectedTerritories.begin(),
+        territory.connectedTerritories.end(),
+        std::string{},
+        [](const std::string& a, const Territory* b) {
+            return a + (a.length() > 0 ? "," : "") + b->getName();
+        });
+
+    os << std::endl;
+    return os;
 }
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // --------------------  MAP ------------------------------
@@ -285,17 +281,6 @@ Map& Map::operator=(const Map& other) {
     return *this;
 }
 
-    // Stream Insertion Operator
-    std::ostream& operator<<(std::ostream& os, const Map& map) {
-        os << "Map Author: " << map.author << "\n"
-        << "Wrap: " << (map.wrap ? "Yes" : "No") << "\n"
-        << "Territories:\n";
-        for (const auto& pair : map.mapData) {
-            os << *(pair.second) << "\n"; // Using the stream operator for Territory
-        }
-        return os;
-    }
-
 // Setters
 void Map::setAuthor(const std::string &author)
 {
@@ -359,7 +344,7 @@ void Map::addContinent(Continent *continent)
 void Map::addTerritory(const std::string &name, Territory *territory)
 {
     if (territory != nullptr)
-    {                              // Ensure the territory pointer is valid
+    {                              
         mapData[name] = territory; // Add the territory to the hashmap with its name as the key
     }
 }
@@ -378,51 +363,50 @@ Territory *Map::getTerritoryPtr(const std::string &name)
     }
 }
 
-void Map::displayInfo() const
-{
-    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-    std::cout << "~~~~~~~~~~~~~~~~~~~~~~ MAP DATA ~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-    std::cout << "Map Author: " << getAuthor() << std::endl;
-    std::cout << "Image Path: " << getImgPath() << std::endl;
-    std::cout << "Wrap: " << (getWrap() ? "Yes" : "No") << std::endl;
-    std::cout << "Scroll Type: ";
 
-    switch (getScrollType())
-    {
-    case Map::Scroll::horizontal:
-        std::cout << "Horizontal" << std::endl;
-        break;
-    case Map::Scroll::vertical:
-        std::cout << "Vertical" << std::endl;
-        break;
-    case Map::Scroll::none:
-        std::cout << "None" << std::endl;
-        break;
+std::ostream& operator<<(std::ostream& os, const Map& map) {
+    os << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    os << "~~~~~~~~~~~~~~~~~~~~~~ MAP DATA ~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    os << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+    os << "Map Author: " << map.getAuthor() << "\n";
+    os << "Image Path: " << map.getImgPath() << "\n";
+    os << "Wrap: " << (map.getWrap() ? "Yes" : "No") << "\n";
+    
+    os << "Scroll Type: ";
+    switch (map.getScrollType()) {
+        case Map::Scroll::horizontal:
+            os << "Horizontal\n";
+            break;
+        case Map::Scroll::vertical:
+            os << "Vertical\n";
+            break;
+        case Map::Scroll::none:
+            os << "None\n";
+            break;
     }
 
-    // Display Continents and their Territories
-    std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-    std::cout << "\nContinents and Territories:" << std::endl;
+    os << std::endl;
+    os << std::endl;
 
-    for (const auto &continent : Continents)
-    {
-        continent->displayInfo();
+    for (const auto& continent : map.Continents) {
+        os << *continent << "\n";  // Using the stream operator for Continent
 
-        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
-        std::cout << "Territories in " << continent->getName() << ":" << std::endl;
-        std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+        os << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+        os << "Territories in " << continent->getName() << ":\n";
+        os << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 
-        for (const auto &pair : mapData)
-        {
-            if (pair.second->getContinent() == continent)
-            {
-                pair.second->displayInfo();
+        for (const auto& pair : map.mapData) {
+            if (pair.second->getContinent() == continent) {
+                os << *(pair.second) << "\n";  // Using the stream operator for Territory
             }
         }
-        std::cout << std::endl;
+        os << "\n";
     }
+
+    return os;
 }
+
+
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
