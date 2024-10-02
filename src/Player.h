@@ -5,7 +5,9 @@
 #include <string>
 #include "Map.h"   
 #include "Order.h"       
-#include "Cards.h"      
+#include "Cards.h"   
+
+using namespace std;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------   PLAYER  ---------------------------
@@ -13,28 +15,47 @@
 
 class Player {
 private:
-    std::vector<Territory*>* territories;  // Collection of territories
-    std::vector<Order*>* orders;           // List of orders
-    std::vector<Card*>* handOfCards;       // Hand of cards
+    string name;
+    vector<Territory*> territories;  // Collection of territories
+    OrdersList* ordersList;           // List of orders
+    Hand* hand;       // Hand of cards
 
 public:
     // Constructors
     Player();
-    Player(const Player& other); // Copy constructor
+
+    Player(const string& playerName);
+
+    // Copy constructor
+    Player(const Player& other); 
 
     // Destructor
     ~Player();
 
-    // Assignment operator
-    Player& operator=(const Player& other);
+    // Getters and Setters for Name
+    string getName() const;
+    void setName(string& newName);
+
+    // Getters and Setters for Territories
+    vector<Territory*> getTerritories() const;
+    void setTerritories(const vector<Territory*>& newTerritories);
+
+    // Getters and Setters for Orders
+    OrdersList* getOrdersList() const;
+    void setOrdersList(OrdersList* newOrdersList);
+
+    // Getters and Setters for Hand (Cards)
+    Hand* getHand() const;
+    void setHand(Hand* newHand);
+
+    // Display player information
+    void printPlayer() const;
 
     // Player methods
-    std::vector<Territory*> toDefend(vector<Territory*>);
-    std::vector<Territory*> toAttack(vector<Territory*>);
+    vector<Territory*> toDefend(vector<Territory*>);
+    vector<Territory*> toAttack(vector<Territory*>);
     void issueOrder(Order* order);
-
-    // Stream insertion operator for printing player details
-    friend std::ostream& operator<<(std::ostream& out, const Player& player);
+    void addTerritories(Territory*);
 };
 
 #endif // PLAYER_H
