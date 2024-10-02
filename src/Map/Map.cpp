@@ -580,9 +580,7 @@ Map MapLoader::loadMap(const std::string &path)
 
     while (std::getline(inputFile, line))
     {
-        // Trim whitespace
-        line.erase(0, line.find_first_not_of(" \t"));
-        line.erase(line.find_last_not_of(" \t") + 1);
+        trim(line);
 
         // Skip empty lines and comments
         if (line.empty() || line[0] == ';')
@@ -598,265 +596,183 @@ Map MapLoader::loadMap(const std::string &path)
         // Parse the contents based on the section
         if (section == "Map")
         {
-            std::istringstream iss(line);
-            std::string key, value;
-
-            try
-            {
-                // Parse key-value pairs for Map settings
-                if (line.find('=') != std::string::npos && std::getline(iss, key, '=') && std::getline(iss, value))
-                {
-
-                    // Remove potential leading/trailing spaces
-                    key.erase(0, key.find_first_not_of(" \t"));
-                    value.erase(0, value.find_first_not_of(" \t"));
-                    if (key == "author")
-                    {
-                        if (!value.empty())
-                        {
-                            map.setAuthor(value);
-                        }
-                        else
-                        {
-                            throw std::runtime_error("Missing value for 'author'.");
-                        }
-                    }
-                    else if (key == "warn")
-                    {
-                        if (value == "yes" || value == "no")
-                        {
-                            map.setWarn(value == "yes");
-                        }
-                        else
-                        {
-                            throw std::runtime_error("Invalid value for 'warn'. Expected 'yes' or 'no'.");
-                        }
-                    }
-                    else if (key == "image")
-                    {
-                        if (!value.empty())
-                        {
-                            map.setImgPath(value);
-                        }
-                        else
-                        {
-                            throw std::runtime_error("Missing value for 'image'.");
-                        }
-                    }
-                    else if (key == "wrap")
-                    {
-                        if (value == "yes" || value == "no")
-                        {
-                            map.setWrap(value == "yes");
-                        }
-                        else
-                        {
-                            throw std::runtime_error("Invalid value for 'wrap'. Expected 'yes' or 'no'.");
-                        }
-                    }
-                    else if (key == "scroll")
-                    {
-                        if (value == "horizontal")
-                        {
-                            map.setScrollType(Map::horizontal);
-                        }
-                        else if (value == "vertical")
-                        {
-                            map.setScrollType(Map::vertical);
-                        }
-                        else if (value == "none")
-                        {
-                            map.setScrollType(Map::none);
-                        }
-                        else
-                        {
-                            throw std::runtime_error("Invalid value for 'scroll'. Expected 'horizontal', 'vertical', or 'none'.");
-                        }
-                    }
-                    else
-                    {
-                        throw std::runtime_error("Unknown key: '" + key + "'");
-                    }
-                }
-                else
-                {
-                    throw std::runtime_error("Invalid line format. Expected key=value.");
-                }
-            }
-            catch (const std::exception &e)
-            {
-                std::cerr << "Error processing line in Map section: " << e.what() << std::endl;
-            }
+            processMapSection(line, map);
         }
         else if (section == "Continents")
         {
-            std::istringstream iss(line);
-            std::string name, bonusStr;
-
-            try
-            {
-                // Parse continent data
-                if (line.find('=') != std::string::npos && std::getline(iss, name, '=') && std::getline(iss, bonusStr))
-                {
-                    // Trim whitespace from name and bonus
-                    name.erase(0, name.find_first_not_of(" \t"));
-                    bonusStr.erase(0, bonusStr.find_first_not_of(" \t"));
-
-                    // Validate that name is not empty
-                    if (name.empty())
-                    {
-                        throw std::runtime_error("Continent name is missing.");
-                    }
-
-                    // Validate and convert bonus value
-                    int bonus;
-                    try
-                    {
-                        bonus = std::stoi(bonusStr); // Convert the value to an integer
-                    }
-                    catch (const std::invalid_argument &)
-                    {
-                        throw std::runtime_error("Invalid bonus value for continent '" + name + "'. Expected an integer.");
-                    }
-                    catch (const std::out_of_range &)
-                    {
-                        throw std::runtime_error("Bonus value for continent '" + name + "' is out of range.");
-                    }
-
-                    // Create a new Continent object and add it to the map
-                    Continent *newContinent = new Continent(name, bonus);
-                    map.addContinent(newContinent);
-                }
-                else
-                {
-                    throw std::runtime_error("Invalid format for continent data. Expected 'name=bonus'.");
-                }
-            }
-            catch (const std::exception &e)
-            {
-                std::cerr << "Error processing line in Continents section: " << e.what() << std::endl;
-            }
+            processContinentsSection(line, map);
         }
         else if (section == "Territories")
         {
-            std::istringstream iss(line);
-            std::string name, x, y, continentName;
-
-            try
-            {
-                // Read the territory line and extract data
-                if (std::getline(iss, name, ',') && std::getline(iss, x, ',') &&
-                    std::getline(iss, y, ',') && std::getline(iss, continentName, ','))
-                {
-
-                    // Trim whitespace
-                    name.erase(0, name.find_first_not_of(" \t"));
-                    continentName.erase(0, continentName.find_first_not_of(" \t"));
-                    x.erase(0, x.find_first_not_of(" \t"));
-                    y.erase(0, y.find_first_not_of(" \t"));
-
-                    // Validate the territory name and continent name
-                    if (name.empty())
-                    {
-                        throw std::runtime_error("Territory name is missing.");
-                    }
-                    if (continentName.empty())
-                    {
-                        throw std::runtime_error("Continent name is missing for territory '" + name + "'.");
-                    }
-
-                    // Convert coordinates to integers
-                    int coordX, coordY;
-                    try
-                    {
-                        coordX = std::stoi(x);
-                        coordY = std::stoi(y);
-                    }
-                    catch (const std::invalid_argument &)
-                    {
-                        throw std::runtime_error("Invalid coordinates for territory '" + name + "'. Expected integers.");
-                    }
-                    catch (const std::out_of_range &)
-                    {
-                        throw std::runtime_error("Coordinates for territory '" + name + "' are out of range.");
-                    }
-
-                    // Check if coordinates are within the allowed range (0-1000)
-                    if (coordX < 0 || coordX > 1000 || coordY < 0 || coordY > 1000)
-                    {
-                        throw std::runtime_error("Coordinates for territory '" + name + "' are out of bounds. "
-                                                                                        "Expected values between 0 and 1000.");
-                    }
-
-                    // Find the corresponding continent
-                    Continent *continent = nullptr;
-                    for (auto *cont : map.getContinents())
-                    {
-                        if (cont->getName() == continentName)
-                        {
-                            continent = cont;
-                            break;
-                        }
-                    }
-
-                    // Throw runtime error if continent is not found
-                    if (!continent)
-                    {
-                        throw std::runtime_error("Error: Continent '" + continentName + "' does not exist.");
-                    }
-
-                    // Create the Territory object
-                    Territory *newTerritory = new Territory(name, {coordX, coordY}, continent);
-
-                    // Add territoryPTR to map
-                    map.addTerritory(name, newTerritory);
-
-                    // Add territoryPTR to continent
-                    continent->addTerritory(newTerritory);
-
-                    std::vector<std::string> connectedList;
-
-                    // Read the remaining connected territories
-                    std::string connTerritory;
-                    while (std::getline(iss, connTerritory, ','))
-                    {
-                        // Trim whitespace
-                        connTerritory.erase(0, connTerritory.find_first_not_of(" \t"));
-                        if (!connTerritory.empty())
-                        {
-                            connectedList.push_back(connTerritory);
-                        }
-                    }
-
-                    // Insert the territory and its connections into the associations map
-                    associationsMap.insert({newTerritory, connectedList});
-                }
-                else
-                {
-                    throw std::runtime_error("Invalid format for territory data. Expected 'name,x,y,continent'.");
-                }
-            }
-            catch (const std::exception &e)
-            {
-                std::cerr << "Error processing line in Territories section: " << e.what() << std::endl;
-            }
+            processTerritoriesSection(line, map, associationsMap);
         }
         else
         {
             throw std::runtime_error("Invalid Header Name.");
         }
     }
-    inputFile.close();
 
-    // Set up the connections
+    inputFile.close();
+    setupTerritoryConnections(map, associationsMap);
+
+    return map;
+}
+
+// Helper method to trim whitespace
+void MapLoader::trim(std::string &line)
+{
+    line.erase(0, line.find_first_not_of(" \t"));
+    line.erase(line.find_last_not_of(" \t") + 1);
+}
+
+// Process the Map section
+void MapLoader::processMapSection(const std::string &line, Map &map)
+{
+    std::istringstream iss(line);
+    std::string key, value;
+
+    if (line.find('=') != std::string::npos && std::getline(iss, key, '=') && std::getline(iss, value))
+    {
+        trim(key);
+        trim(value);
+
+        if (key == "author")
+        {
+            if (!value.empty()) map.setAuthor(value);
+            else throw std::runtime_error("Missing value for 'author'.");
+        }
+        else if (key == "warn")
+        {
+            map.setWarn(value == "yes");
+        }
+        else if (key == "image")
+        {
+            if (!value.empty()) map.setImgPath(value);
+            else throw std::runtime_error("Missing value for 'image'.");
+        }
+        else if (key == "wrap")
+        {
+            map.setWrap(value == "yes");
+        }
+        else if (key == "scroll")
+        {
+            setScrollType(map, value);
+        }
+        else
+        {
+            throw std::runtime_error("Unknown key: '" + key + "'");
+        }
+    }
+    else
+    {
+        throw std::runtime_error("Invalid line format. Expected key=value.");
+    }
+}
+
+// Set scroll type for Map
+void MapLoader::setScrollType(Map &map, const std::string &value)
+{
+    if (value == "horizontal") map.setScrollType(Map::horizontal);
+    else if (value == "vertical") map.setScrollType(Map::vertical);
+    else if (value == "none") map.setScrollType(Map::none);
+    else throw std::runtime_error("Invalid value for 'scroll'.");
+}
+
+// Process the Continents section
+void MapLoader::processContinentsSection(const std::string &line, Map &map)
+{
+    std::istringstream iss(line);
+    std::string name, bonusStr;
+
+    if (line.find('=') != std::string::npos && std::getline(iss, name, '=') && std::getline(iss, bonusStr))
+    {
+        trim(name);
+        trim(bonusStr);
+
+        if (name.empty()) throw std::runtime_error("Continent name is missing.");
+
+        int bonus = std::stoi(bonusStr);
+        Continent *newContinent = new Continent(name, bonus);
+        map.addContinent(newContinent);
+    }
+    else
+    {
+        throw std::runtime_error("Invalid format for continent data. Expected 'name=bonus'.");
+    }
+}
+
+// Process the Territories section
+void MapLoader::processTerritoriesSection(const std::string &line, Map &map, std::unordered_map<Territory *, std::vector<std::string>> &associationsMap)
+{
+    std::istringstream iss(line);
+    std::string name, x, y, continentName;
+
+    if (std::getline(iss, name, ',') && std::getline(iss, x, ',') &&
+        std::getline(iss, y, ',') && std::getline(iss, continentName, ','))
+    {
+        trim(name);
+        trim(continentName);
+        trim(x);
+        trim(y);
+
+        if (name.empty()) throw std::runtime_error("Territory name is missing.");
+        if (continentName.empty()) throw std::runtime_error("Continent name is missing for territory '" + name + "'.");
+
+        int coordX = std::stoi(x);
+        int coordY = std::stoi(y);
+
+        Continent *continent = findContinentByName(map, continentName);
+        Territory *newTerritory = new Territory(name, {coordX, coordY}, continent);
+
+        map.addTerritory(name, newTerritory);
+        continent->addTerritory(newTerritory);
+
+        std::vector<std::string> connectedList = parseConnectedTerritories(iss);
+        associationsMap.insert({newTerritory, connectedList});
+    }
+    else
+    {
+        throw std::runtime_error("Invalid format for territory data. Expected 'name,x,y,continent'.");
+    }
+}
+
+// Helper to find continent by name
+Continent *MapLoader::findContinentByName(Map &map, const std::string &continentName)
+{
+    for (auto *cont : map.getContinents())
+    {
+        if (cont->getName() == continentName)
+        {
+            return cont;
+        }
+    }
+    throw std::runtime_error("Error: Continent '" + continentName + "' does not exist.");
+}
+
+// Parse connected territories
+std::vector<std::string> MapLoader::parseConnectedTerritories(std::istringstream &iss)
+{
+    std::vector<std::string> connectedList;
+    std::string connTerritory;
+
+    while (std::getline(iss, connTerritory, ','))
+    {
+        trim(connTerritory);
+        if (!connTerritory.empty()) connectedList.push_back(connTerritory);
+    }
+
+    return connectedList;
+}
+
+// Set up connections between territories
+void MapLoader::setupTerritoryConnections(Map &map, const std::unordered_map<Territory *, std::vector<std::string>> &associationsMap)
+{
     for (const auto &[currentT, connectedTerritoryNames] : associationsMap)
     {
         for (const auto &territoryName : connectedTerritoryNames)
         {
-            // Get the pointer to the territory by its name
             Territory *territoryPtr = map.getTerritoryPtr(territoryName);
 
-            // Check if the territory exists before adding it as a connection
             if (territoryPtr)
             {
                 currentT->addConnectedTerritory(territoryPtr);
@@ -867,7 +783,6 @@ Map MapLoader::loadMap(const std::string &path)
             }
         }
     }
-    return map;
 }
 
 
