@@ -1,8 +1,6 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
-#include "Cards/Cards.h"
 
 class Card;
 enum CardType : int;
@@ -23,7 +21,6 @@ private:
   friend std::ostream &operator<<(std::ostream &, const Order &);
 };
 
-//order list
 class OrdersList
 {
 private:
