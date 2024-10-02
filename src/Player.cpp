@@ -39,15 +39,19 @@ Player& Player::operator=(const Player& other) {
 }
 
 // Method to return a list of territories to defend
-std::vector<Territory*> Player::toDefend() {
-    // Placeholder for actual logic, returns a copy of the territories list
-    return *territories;
+std::vector<Territory*> Player::toDefend(vector<Territory*> defendingTerritories) {
+    for (int i = 0; i < defendingTerritories.size() - 1; i++) {
+        std::cout << defendingTerritories[i]->getName() << " defending with " << defendingTerritories[i]->getArmies();
+    }
+    return defendingTerritories;
 }
 
 // Method to return a list of territories to attack
-std::vector<Territory*> Player::toAttack() {
-    // Placeholder for actual logic, returns a copy of the territories list
-    return *territories;
+std::vector<Territory*> Player::toAttack(vector<Territory*> attackingTerritories) {
+    for (int i = 0; i < attackingTerritories.size() - 1; i++) {
+        std::cout << attackingTerritories[i]->getName() << " attacking with " << attackingTerritories[i]->getArmies();
+    }
+    return attackingTerritories;
 }
 
 // Method to issue an order
