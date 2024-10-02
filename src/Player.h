@@ -7,6 +7,10 @@
 #include "Order.h"       
 #include "Cards.h"      
 
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ------------------   PLAYER  ---------------------------
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 class Player {
 private:
     std::vector<Territory*>* territories;  // Collection of territories
@@ -25,8 +29,8 @@ public:
     Player& operator=(const Player& other);
 
     // Player methods
-    std::vector<Territory*> toDefend();
-    std::vector<Territory*> toAttack();
+    std::vector<Territory*> toDefend(vector<Territory*>);
+    std::vector<Territory*> toAttack(vector<Territory*>);
     void issueOrder(Order* order);
 
     // Stream insertion operator for printing player details
