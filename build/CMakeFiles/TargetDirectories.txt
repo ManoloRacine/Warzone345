@@ -1,3 +1,0 @@
-C:/Users/Nektarios/Documents/GitHub/Warzone345/build/CMakeFiles/Warzone345.dir
-C:/Users/Nektarios/Documents/GitHub/Warzone345/build/CMakeFiles/edit_cache.dir
-C:/Users/Nektarios/Documents/GitHub/Warzone345/build/CMakeFiles/rebuild_cache.dir
