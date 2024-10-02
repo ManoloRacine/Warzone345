@@ -8,8 +8,8 @@ add_executable(Warzone345
         src/GameEngine/GameEngine.h
         src/GameEngine/GameEngine.cpp
         src/GameEngine/GameEngineDriver.cpp
-        Order.h
-        Order.cpp
-        OrderDriver.h
-        OrderDriver.cpp
+        src/Orders/Order.h
+        src/Orders/Order.cpp
+        src/Orders/OrderDriver.h
+        src/Orders/OrderDriver.cpp
 )
