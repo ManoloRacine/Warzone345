@@ -2,66 +2,112 @@
 #include <iostream>
 #include <algorithm> // for std::copy
 
+using namespace std;
+
 // Default constructor
-Player::Player() {
-    territories = new std::vector<Territory*>();
-    orders = new std::vector<Order*>();
-    handOfCards = new std::vector<Card*>();
+Player::Player(const string& playerName)
+    : name(playerName), hand(new Hand()), ordersList(new OrdersList()) {
+    // Initialize player with empty territories, hand, and order list
 }
 
-// Copy constructor
-Player::Player(const Player& other) {
-    territories = new std::vector<Territory*>(*(other.territories));
-    orders = new std::vector<Order*>(*(other.orders));
-    handOfCards = new std::vector<Card*>(*(other.handOfCards));
+// Copy Constructor
+Player::Player(const Player& other)
+    : name(other.name), territories(other.territories), hand(new Hand(*other.hand)), ordersList(new OrdersList(*other.ordersList)) {
+    // Copy territories, hand, and ordersList from the other player
 }
 
 // Destructor
 Player::~Player() {
-    delete territories;
-    delete orders;
-    delete handOfCards;
+    vector<Territory*>().swap(territories);
+    delete ordersList;
+    delete hand;
 }
 
-// Assignment operator
-Player& Player::operator=(const Player& other) {
-    if (this == &other) return *this;
+// Getters and Setters for Name
+string Player::getName() const {
+    return name;
+}
 
-    delete territories;
-    delete orders;
-    delete handOfCards;
+void Player::setName(string& s) {
+    name = s;
+}
 
-    territories = new std::vector<Territory*>(*(other.territories));
-    orders = new std::vector<Order*>(*(other.orders));
-    handOfCards = new std::vector<Card*>(*(other.handOfCards));
+// Getters and Setters for Territories
+vector<Territory*> Player::getTerritories() const {
+    return territories;
+}
 
-    return *this;
+void Player::setTerritories(const vector<Territory*>& newTerritories) {
+    territories = newTerritories;
+}
+
+// Getters and Setters for Orders
+OrdersList* Player::getOrdersList() const {
+    return ordersList;
+}
+
+void Player::setOrdersList(OrdersList* newOrdersList) {
+    if (ordersList != nullptr) {
+        delete ordersList;
+    }
+    ordersList = newOrdersList;
+}
+
+// Getters and Setters for Hand (Cards)
+Hand* Player::getHand() const {
+    return hand;
+}
+
+void Player::setHand(Hand* newHand) {
+    if (hand != nullptr) {
+        delete hand;
+    }
+    hand = newHand;
+}
+
+
+// Display player information
+void Player::printPlayer() const {
+    cout << "Player Name: " << name << endl;
+
+    cout << "Territories: " << endl;
+    for (const Territory* territory : territories) {
+        territory->displayInfo();  // Assuming Territory has displayInfo() method
+    }
+
+    cout << "Cards in Hand: " << endl;
+    for (Card* card : hand->getCards()) {
+        cout << *card << endl;  // Assuming Card class has operator<< overloaded
+    }
+
+    cout << "Orders in Order List: " << endl;
+    for (Order* order : *ordersList->getList()) {
+        cout << *order << endl;  // Assuming Order class has operator<< overloaded
+    }
 }
 
 // Method to return a list of territories to defend
-std::vector<Territory*> Player::toDefend(vector<Territory*> defendingTerritories) {
+vector<Territory*> Player::toDefend(vector<Territory*> defendingTerritories) {
     for (int i = 0; i < defendingTerritories.size() - 1; i++) {
-        std::cout << defendingTerritories[i]->getName() << " defending with " << defendingTerritories[i]->getArmies();
+        cout << defendingTerritories[i]->getName() << " defending with " << defendingTerritories[i]->getArmies();
     }
     return defendingTerritories;
 }
 
 // Method to return a list of territories to attack
-std::vector<Territory*> Player::toAttack(vector<Territory*> attackingTerritories) {
+vector<Territory*> Player::toAttack(vector<Territory*> attackingTerritories) {
     for (int i = 0; i < attackingTerritories.size() - 1; i++) {
-        std::cout << attackingTerritories[i]->getName() << " attacking with " << attackingTerritories[i]->getArmies();
+        cout << attackingTerritories[i]->getName() << " attacking with " << attackingTerritories[i]->getArmies();
     }
     return attackingTerritories;
 }
 
 // Method to issue an order
 void Player::issueOrder(Order* order) {
-    orders->push_back(order);
+    ordersList->add(order);
 }
 
-// Stream insertion operator for Player
-std::ostream& operator<<(std::ostream& out, const Player& player) {
-    out << "Player owns " << player.territories->size() << " territories and has issued "
-        << player.orders->size() << " orders." << std::endl;
-    return out;
+// Adding a Territories
+void Player::addTerritories(Territory* territory) {
+    territories.push_back(territory);
 }
