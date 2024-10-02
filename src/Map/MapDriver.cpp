@@ -21,13 +21,12 @@ int main() {
         Map loadedMap = mapLoader.loadMap(filePath);
 
 
-        cout << loadedMap;
+        //cout << loadedMap;
 
         cout << "Map loaded succesfully...";
 
-        // bool isConnected = loadedMap.mapFullyConnected(loadedMap.mapData);
-        // if (!isConnected) { cout << "Map is not connected"; } else { cout << "Map Connected!"; };
-
+        bool isConnected = loadedMap.mapFullyConnected(loadedMap.mapData);
+        if (!isConnected) { cout << "Map is not connected"; } else { cout << "Map Connected!"; };
 
 
     } catch (const std::runtime_error& e) {

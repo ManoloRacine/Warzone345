@@ -10,6 +10,7 @@
 #include <string>
 #include <stdexcept>
 #include <numeric>
+#include <set>
 #include "Map.h"
 
 using std::cout;
@@ -716,7 +717,12 @@ Map MapLoader::loadMap(const std::string &path)
 
                     // Create the Territory object
                     Territory *newTerritory = new Territory(name, {coordX, coordY}, continent);
+
+                    // Add territoryPTR to map
                     map.addTerritory(name, newTerritory);
+
+                    // Add territoryPTR to continent
+                    continent->addTerritory(newTerritory);
 
                     std::vector<std::string> connectedList;
 

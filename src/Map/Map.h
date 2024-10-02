@@ -118,7 +118,6 @@ public:
 
     vector<Continent*> Continents;
     unordered_map<std::string, Territory*> mapData; //its just a dictionary of key = territory name, value = territory pointer.
-    //vector<pair<std::string, Territory*>> territoriesOfMap; // MAYBE LATER CHANGE TO THIS
     
 
     // Destructor
@@ -157,6 +156,7 @@ public:
     // -------- validation ----------
     void DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes);
     bool mapFullyConnected(unordered_map<std::string, Territory*> mapData);
+
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
