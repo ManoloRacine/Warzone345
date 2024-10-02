@@ -1,5 +1,12 @@
+# Ignore build directories
 /cmake-build-debug/
-/.vscode/
-/.vscode/c_cpp_properties.json
+.build/
+
+# Ignore VSCode settings
+.vscode/
+
+# Ignore specific VSCode C++ properties
+.vscode/c_cpp_properties.json
+
+# Ignore executable files
 *.exe
-/build/

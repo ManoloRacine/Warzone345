@@ -11,6 +11,9 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
+# Convert all text files in the maps directory
+RUN dos2unix res/maps/*
+
 # Create a build directory
 RUN mkdir build
 
