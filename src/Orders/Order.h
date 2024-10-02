@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "Cards.h"
 
 class Card;
 enum CardType : int;
@@ -36,6 +37,7 @@ public:
   void add(Order *o);
   void remove(int);
   void move(int, int);
+
   void execute();
 
   std::vector<Order *>* getList();
