@@ -72,29 +72,61 @@ CMakeFiles/Warzone345.dir/main.cpp.obj: CMakeFiles/Warzone345.dir/flags.make
 CMakeFiles/Warzone345.dir/main.cpp.obj: C:/Users/Nektarios/Documents/GitHub/Warzone345/main.cpp
 CMakeFiles/Warzone345.dir/main.cpp.obj: CMakeFiles/Warzone345.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Warzone345.dir/main.cpp.obj"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Warzone345.dir/main.cpp.obj -MF CMakeFiles\Warzone345.dir\main.cpp.obj.d -o CMakeFiles\Warzone345.dir\main.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\main.cpp
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Warzone345.dir/main.cpp.obj -MF CMakeFiles\Warzone345.dir\main.cpp.obj.d -o CMakeFiles\Warzone345.dir\main.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\main.cpp
 
 CMakeFiles/Warzone345.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Warzone345.dir/main.cpp.i"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\main.cpp > CMakeFiles\Warzone345.dir\main.cpp.i
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\main.cpp > CMakeFiles\Warzone345.dir\main.cpp.i
 
 CMakeFiles/Warzone345.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Warzone345.dir/main.cpp.s"
-	C:\msys64\ucrt64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\main.cpp -o CMakeFiles\Warzone345.dir\main.cpp.s
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\main.cpp -o CMakeFiles\Warzone345.dir\main.cpp.s
+
+CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj: CMakeFiles/Warzone345.dir/flags.make
+CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj: C:/Users/Nektarios/Documents/GitHub/Warzone345/src/Map/Map.cpp
+CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj: CMakeFiles/Warzone345.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj -MF CMakeFiles\Warzone345.dir\src\Map\Map.cpp.obj.d -o CMakeFiles\Warzone345.dir\src\Map\Map.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\Map.cpp
+
+CMakeFiles/Warzone345.dir/src/Map/Map.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Warzone345.dir/src/Map/Map.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\Map.cpp > CMakeFiles\Warzone345.dir\src\Map\Map.cpp.i
+
+CMakeFiles/Warzone345.dir/src/Map/Map.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Warzone345.dir/src/Map/Map.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\Map.cpp -o CMakeFiles\Warzone345.dir\src\Map\Map.cpp.s
+
+CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj: CMakeFiles/Warzone345.dir/flags.make
+CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj: C:/Users/Nektarios/Documents/GitHub/Warzone345/src/Map/MapDriver.cpp
+CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj: CMakeFiles/Warzone345.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj -MF CMakeFiles\Warzone345.dir\src\Map\MapDriver.cpp.obj.d -o CMakeFiles\Warzone345.dir\src\Map\MapDriver.cpp.obj -c C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\MapDriver.cpp
+
+CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.i"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\MapDriver.cpp > CMakeFiles\Warzone345.dir\src\Map\MapDriver.cpp.i
+
+CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.s"
+	C:\msys64\ucrt64\bin\c++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\Nektarios\Documents\GitHub\Warzone345\src\Map\MapDriver.cpp -o CMakeFiles\Warzone345.dir\src\Map\MapDriver.cpp.s
 
 # Object files for target Warzone345
 Warzone345_OBJECTS = \
-"CMakeFiles/Warzone345.dir/main.cpp.obj"
+"CMakeFiles/Warzone345.dir/main.cpp.obj" \
+"CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj" \
+"CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj"
 
 # External object files for target Warzone345
 Warzone345_EXTERNAL_OBJECTS =
 
 Warzone345.exe: CMakeFiles/Warzone345.dir/main.cpp.obj
+Warzone345.exe: CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj
+Warzone345.exe: CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj
 Warzone345.exe: CMakeFiles/Warzone345.dir/build.make
 Warzone345.exe: CMakeFiles/Warzone345.dir/linkLibs.rsp
 Warzone345.exe: CMakeFiles/Warzone345.dir/objects1.rsp
 Warzone345.exe: CMakeFiles/Warzone345.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable Warzone345.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable Warzone345.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\Warzone345.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

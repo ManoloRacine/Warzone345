@@ -63,7 +63,6 @@ CMAKE_BINARY_DIR = C:\Users\Nektarios\Documents\GitHub\Warzone345\build
 
 # The main recursive "all" target.
 all: CMakeFiles/Warzone345.dir/all
-all: CMakeFiles/MapDriver.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -72,8 +71,6 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/Warzone345.dir/clean
-clean: CMakeFiles/MapDriver.dir/clean
-clean: CMakeFiles/run_mapdriver.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -83,12 +80,12 @@ clean: CMakeFiles/run_mapdriver.dir/clean
 CMakeFiles/Warzone345.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=4,5 "Built target Warzone345"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=1,2,3,4 "Built target Warzone345"
 .PHONY : CMakeFiles/Warzone345.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/Warzone345.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 4
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/Warzone345.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 0
 .PHONY : CMakeFiles/Warzone345.dir/rule
@@ -101,58 +98,6 @@ Warzone345: CMakeFiles/Warzone345.dir/rule
 CMakeFiles/Warzone345.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/clean
 .PHONY : CMakeFiles/Warzone345.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/MapDriver.dir
-
-# All Build rule for target.
-CMakeFiles/MapDriver.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=1,2,3 "Built target MapDriver"
-.PHONY : CMakeFiles/MapDriver.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/MapDriver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/MapDriver.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 0
-.PHONY : CMakeFiles/MapDriver.dir/rule
-
-# Convenience name for target.
-MapDriver: CMakeFiles/MapDriver.dir/rule
-.PHONY : MapDriver
-
-# clean rule for target.
-CMakeFiles/MapDriver.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/clean
-.PHONY : CMakeFiles/MapDriver.dir/clean
-
-#=============================================================================
-# Target rules for target CMakeFiles/run_mapdriver.dir
-
-# All Build rule for target.
-CMakeFiles/run_mapdriver.dir/all: CMakeFiles/MapDriver.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles --progress-num=6 "Built target run_mapdriver"
-.PHONY : CMakeFiles/run_mapdriver.dir/all
-
-# Build rule for subdir invocation for target.
-CMakeFiles/run_mapdriver.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 CMakeFiles/run_mapdriver.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\Nektarios\Documents\GitHub\Warzone345\build\CMakeFiles 0
-.PHONY : CMakeFiles/run_mapdriver.dir/rule
-
-# Convenience name for target.
-run_mapdriver: CMakeFiles/run_mapdriver.dir/rule
-.PHONY : run_mapdriver
-
-# clean rule for target.
-CMakeFiles/run_mapdriver.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/clean
-.PHONY : CMakeFiles/run_mapdriver.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

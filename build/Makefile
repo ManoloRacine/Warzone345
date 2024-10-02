@@ -128,32 +128,6 @@ Warzone345/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/build
 .PHONY : Warzone345/fast
 
-#=============================================================================
-# Target rules for targets named MapDriver
-
-# Build rule for target.
-MapDriver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 MapDriver
-.PHONY : MapDriver
-
-# fast build rule for target.
-MapDriver/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/build
-.PHONY : MapDriver/fast
-
-#=============================================================================
-# Target rules for targets named run_mapdriver
-
-# Build rule for target.
-run_mapdriver: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 run_mapdriver
-.PHONY : run_mapdriver
-
-# fast build rule for target.
-run_mapdriver/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\run_mapdriver.dir\build.make CMakeFiles/run_mapdriver.dir/build
-.PHONY : run_mapdriver/fast
-
 main.obj: main.cpp.obj
 .PHONY : main.obj
 
@@ -183,7 +157,7 @@ src/Map/Map.obj: src/Map/Map.cpp.obj
 
 # target to build an object file
 src/Map/Map.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/Map.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/src/Map/Map.cpp.obj
 .PHONY : src/Map/Map.cpp.obj
 
 src/Map/Map.i: src/Map/Map.cpp.i
@@ -191,7 +165,7 @@ src/Map/Map.i: src/Map/Map.cpp.i
 
 # target to preprocess a source file
 src/Map/Map.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/Map.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/src/Map/Map.cpp.i
 .PHONY : src/Map/Map.cpp.i
 
 src/Map/Map.s: src/Map/Map.cpp.s
@@ -199,7 +173,7 @@ src/Map/Map.s: src/Map/Map.cpp.s
 
 # target to generate assembly for a file
 src/Map/Map.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/Map.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/src/Map/Map.cpp.s
 .PHONY : src/Map/Map.cpp.s
 
 src/Map/MapDriver.obj: src/Map/MapDriver.cpp.obj
@@ -207,7 +181,7 @@ src/Map/MapDriver.obj: src/Map/MapDriver.cpp.obj
 
 # target to build an object file
 src/Map/MapDriver.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.obj
 .PHONY : src/Map/MapDriver.cpp.obj
 
 src/Map/MapDriver.i: src/Map/MapDriver.cpp.i
@@ -215,7 +189,7 @@ src/Map/MapDriver.i: src/Map/MapDriver.cpp.i
 
 # target to preprocess a source file
 src/Map/MapDriver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.i
 .PHONY : src/Map/MapDriver.cpp.i
 
 src/Map/MapDriver.s: src/Map/MapDriver.cpp.s
@@ -223,7 +197,7 @@ src/Map/MapDriver.s: src/Map/MapDriver.cpp.s
 
 # target to generate assembly for a file
 src/Map/MapDriver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\MapDriver.dir\build.make CMakeFiles/MapDriver.dir/src/Map/MapDriver.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Warzone345.dir\build.make CMakeFiles/Warzone345.dir/src/Map/MapDriver.cpp.s
 .PHONY : src/Map/MapDriver.cpp.s
 
 # Help Target
@@ -234,8 +208,6 @@ help:
 	@echo ... depend
 	@echo ... edit_cache
 	@echo ... rebuild_cache
-	@echo ... run_mapdriver
-	@echo ... MapDriver
 	@echo ... Warzone345
 	@echo ... main.obj
 	@echo ... main.i

@@ -3,16 +3,15 @@ project(Warzone345)
 
 set(CMAKE_CXX_STANDARD 20)
 
-#Main executable
-add_executable(Warzone345 main.cpp)
-
-#MapDriver executable
-add_executable(MapDriver src/Map/MapDriver.cpp src/Map/Map.cpp)
-
-
-add_custom_target(run_mapdriver
-    COMMAND MapDriver ${CMAKE_SOURCE_DIR}/res/maps/USA.txt
-    DEPENDS MapDriver
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/Map
-    COMMENT "Running MapDriver..."
+# Add source files and headers for the main executable
+add_executable(Warzone345
+    main.cpp
+    src/Map/Map.h
+    src/Map/Map.cpp
+    src/Map/MapDriver.cpp
+    src/Map/MapDriver.h
 )
+
+# Copy resource files (maps) to the build directory
+file(COPY res/maps/Europe.txt res/maps/USA.txt res/maps/USAError.txt
+    DESTINATION ${CMAKE_BINARY_DIR}/res/maps)

@@ -8,33 +8,35 @@
 using std::cout;
 using std::string;
 
-int main() {
+void testLoadMaps() {
+    std::cout << "----------------------------------------" << std::endl; 
+    std::cout << "Initiating testLoadMaps..." << std::endl;
 
-    cout << "Initiating Map Driver..." << endl;
+    std::vector<std::string> map_files {
+        "../res/maps/USA.txt",
+        "../res/maps/USAError.txt",
+        "../res/maps/Europe.txt"
+    };
 
-    string filePath = "../res/maps/USA.txt";
+    // Loop over each map file path in the vector
+    for (const std::string& filePath : map_files) {
+        try {
+            // Initialize MapLoader and attempt to load the map
+            MapLoader mapLoader;
+            Map loadedMap = mapLoader.loadMap(filePath);
 
-    MapLoader mapLoader;
+            std::cout << "Map loaded successfully from: " << filePath << std::endl;
+            std::cout << loadedMap; // Display loaded map data
 
-    try {
-        // Load the map using the MapLoader
-        Map loadedMap = mapLoader.loadMap(filePath);
+            // Validate the loaded map
+            std::cout << "is Map valid = " << (loadedMap.validate() ? "True" : "False") << std::endl;
 
-        //cout << loadedMap;
+        } catch (const std::runtime_error& e) {
+            // Catch any errors and print the error message
+            std::cout << "Map Format is Invalid for file " << filePath << ": " << e.what() << std::endl;
+        }
 
-        cout << "Map loaded succesfully...";
-
-        bool isConnected = loadedMap.mapFullyConnected(loadedMap.mapData);
-        if (!isConnected) { cout << "Map is not connected"; } else { cout << "Map Connected!"; };
-
-         std::cout << endl;
-        bool territoryPartOfContinent = loadedMap.validateUniqueness(loadedMap.mapData,loadedMap.Continents);
-        if (territoryPartOfContinent) { cout << "All Territories unique"; } else { cout << "A territory was part of multiple continents"; };
-
-
-    } catch (const std::runtime_error& e) {
-        cout << "Error: " << e.what() << endl;
+        std::cout << "----------------------------------------" << std::endl; 
     }
-
-    return 0;
 }
+

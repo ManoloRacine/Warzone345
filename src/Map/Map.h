@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+//#include "Player.h"
 
 using std::cout;
 using std::endl;
@@ -26,12 +27,12 @@ class Territory;
 
 class Continent {
 private:
+    // Continent Attributes
     std::string name;
     int bonus;
+    vector<Territory*> territories;
 
 public:
-
-    vector<Territory*> territories;
 
     // Constructor
     Continent(const std::string& name, int bonus);
@@ -52,6 +53,7 @@ public:
     int getBonus() const;
 
     void addTerritory(Territory* territory);
+    std::vector<Territory*> getTerritories() const;
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,12 +67,15 @@ private:
     std::pair<int, int> coordinates;
     Continent* continent; 
     std::vector<Territory*> connectedTerritories; 
-    int owner = -1;  
+    //TO BE CHANGED
+    int owner = -1;
+    //Player* = nullptr;  
     int armies = 0;
 
 public:
     // Constructors
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies);
+    //Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, Player* owner, int armies);  // TO BE CHANGED
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent);
 
     // Copy Constructor
@@ -79,7 +84,7 @@ public:
     // Assignment Operator
     Territory& operator=(const Territory& other);
 
-     // Stream Insertion Operator
+    // Stream Insertion Operator
     friend std::ostream& operator<<(std::ostream& os, const Territory& territory);
 
     // Setters and Getters
@@ -90,35 +95,39 @@ public:
     void setContinent(Continent* con);  
     Continent* getContinent() const;  
     void addConnectedTerritory(Territory* territory);  
-    void setOwner(int newOwner);
-    int getOwner() const;
     void setArmies(int numArmies);
     int getArmies() const;
     const std::vector<Territory*>& getConnectedTerritories() const;
 
+    // TO BE CHANGED 
+    void setOwner(int newOwner);
+    // void setOwner(Player* newOwner)
+    int getOwner() const;
+    // Player* getOwner() const;
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // --------------------  MAP ------------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class Map {
-private:
-    std::string author;
-    bool warn;
-    std::string imgPath;
-    bool wrap;
 
 public:
     enum Scroll {
         horizontal,
         vertical,
-        none 
+        none
     };
-    Scroll scrollType;
 
+private:
+    std::string author;
+    bool warn;
+    std::string imgPath;
+    bool wrap;
+    Scroll scrollType;
     vector<Continent*> Continents;
     unordered_map<std::string, Territory*> mapData; //its just a dictionary of key = territory name, value = territory pointer.
     
+public:
 
     // Destructor
     ~Map();
@@ -147,6 +156,9 @@ public:
     std::string getImgPath() const;
     bool getWrap() const;
     Scroll getScrollType() const;
+    vector<Continent*> getContinents() const;
+    unordered_map<std::string, Territory*> getMapData() const;
+
 
     void addContinent(Continent* continent);
     void addTerritory(const std::string& name, Territory* territory);
@@ -157,6 +169,7 @@ public:
     void DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes);
     bool mapFullyConnected(unordered_map<std::string, Territory*> mapData);
     bool validateUniqueness(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
+    bool validate();
 
 };
 

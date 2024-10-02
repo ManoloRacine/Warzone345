@@ -95,18 +95,31 @@ void Continent::addTerritory(Territory *territory)
     }
 }
 
+ std::vector<Territory*> Continent::getTerritories() const {
+    return this->territories;
+}
+
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ TERRITORY ---------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+//TO BE CHANGED
+
 // Constructor
 Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent, int owner, int armies)
     : name(name), coordinates(coordinates), continent(continent), owner(owner), armies(armies) {}
 
+    // Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent, Player* owner, int armies)
+    // : name(name), coordinates(coordinates), continent(continent), owner(owner), armies(armies) {}
+
 // Overloaded constructor with name, coordinates, and continent
 Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent)
     : Territory(name, coordinates, continent, 0, 0) {}
+
+    // Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent)
+    // : Territory(name, coordinates, continent, nullptr, 0) {}
 
 // Copy Constructor
 Territory::Territory(const Territory& other) 
@@ -168,16 +181,6 @@ void Territory::addConnectedTerritory(Territory *territory)
     connectedTerritories.push_back(territory);
 }
 
-void Territory::setOwner(int newOwner)
-{
-    owner = newOwner;
-}
-
-int Territory::getOwner() const
-{
-    return owner;
-}
-
 void Territory::setArmies(int numArmies)
 {
     armies = numArmies;
@@ -201,6 +204,7 @@ std::ostream& operator<<(std::ostream& os, const Territory& territory) {
        << territory.coordinates.second << " , "
        << (territory.continent ? territory.continent->getName() : "None") << " , "
        << territory.owner << " [owner] ,"
+       //<< territory.owner.getName() << " [owner] ,"   //TO BE CHANGED
        << territory.armies << " [armies] ,"
        << " Connected Territories: ";
 
@@ -216,6 +220,18 @@ std::ostream& operator<<(std::ostream& os, const Territory& territory) {
     os << std::endl;
     return os;
 }
+
+
+//To be CHANGED
+void Territory::setOwner(int newOwner)
+{   owner = newOwner; }
+
+// void Territory::setOwner(Player* newOwner){ this->newOwner = newOwner}
+
+int Territory::getOwner() const {
+    return owner; }
+
+//Player* Territory::getOwner() const { return owner}
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -241,14 +257,14 @@ Map::Map(const Map& other)
       warn(other.warn),
       imgPath(other.imgPath),
       wrap(other.wrap),
-      scrollType(other.scrollType) { // Copy the scroll type
+      scrollType(other.scrollType) {
     // Deep copy of continents and territories
     for (const auto& continent : other.Continents) {
-        Continent* newContinent = new Continent(*continent); // Assuming you have a proper copy constructor in Continent
+        Continent* newContinent = new Continent(*continent); 
         Continents.push_back(newContinent);
     }
     for (const auto& pair : other.mapData) {
-        mapData[pair.first] = new Territory(*pair.second); // Assuming you have a proper copy constructor in Territory
+        mapData[pair.first] = new Territory(*pair.second);
     }
 }
 
@@ -334,6 +350,10 @@ Map::Scroll Map::getScrollType() const
     return scrollType;
 }
 
+std::vector<Continent*> Map::getContinents() const{
+    return this->Continents;
+}
+
 void Map::addContinent(Continent *continent)
 {
     if (continent != nullptr)
@@ -362,6 +382,11 @@ Territory *Map::getTerritoryPtr(const std::string &name)
     {
         return nullptr;
     }
+}
+
+// get MapData ( all territories)
+unordered_map<std::string, Territory*> Map::getMapData() const{
+    return this->mapData;
 }
 
 
@@ -408,8 +433,6 @@ std::ostream& operator<<(std::ostream& os, const Map& map) {
 }
 
 
-
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ MAP VALIDATION ----------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -443,21 +466,25 @@ void Map::DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes
 bool Map::validateUniqueness(unordered_map<std::string, Territory*> mapData,vector<Continent*> Continents) {
  //checking that the territory is part of only one continent
     //iteration is index in the map
+
+    if (Continents.size() > 32) {
+            throw std::runtime_error("Error, max number of continents exceeded, exiting!");
+        }
   
     for(const auto &[name, ptrTerritory] : mapData) {
           int k= 0;
        
         for (const auto & iterator : Continents) {
         //use territories list from each cotinent, iterate trough all territories
-            if (iterator->territories.size() == 0) {
+            if (iterator->getTerritories().size() == 0) { //CHECK
                 throw std::runtime_error("Empty Continent");
             }
             
-            for (int j = 0; j <= iterator->territories.size()-1; j++ ) { 
+            for (int j = 0; j <= iterator->getTerritories().size()-1; j++ ) {  //CHECK
                
                 
                 //from the map grab the value in the second position which is a territory ptr and point to territory name
-                if (name == iterator->territories[j]->getName()) {
+                if (name == iterator->getTerritories()[j]->getName()) { //CHECK
                         k++;
                     if (k > 1) {
                         throw std::runtime_error("Error, territory is part of more than one continent!");
@@ -490,7 +517,6 @@ bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
 
     // Check if the number of visited territories matches the total number of territories
     bool isConnected = (visitedNodes.size() == mapData.size());
-    std::cout << "Is the map fully connected? " << (isConnected ? "Yes" : "No") << std::endl;
 
     // Check that the number of territories does not exceed 255
     if (mapData.size() > 255) {
@@ -500,6 +526,35 @@ bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
 
     return isConnected;
 }
+
+
+
+bool Map::validate() {
+    try {
+        // Check for uniqueness of territories across continents
+        if (!validateUniqueness(this->mapData, this->Continents)) {
+            std::cout << "Validation failed: Territories are not unique across continents!" << std::endl;
+            return false;
+        }
+
+        // Check if the map is fully connected
+        if (!mapFullyConnected(this->mapData)) {
+            std::cout << "Validation failed: Map is not fully connected!" << std::endl;
+            return false;
+        }
+
+        //ADD CHECK FOR SUBGRAPHS
+
+        // If all checks pass, return true
+        return true;
+    }
+    catch (const std::runtime_error& e) {
+        std::cout << "Validation failed: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+
 
 // ----------------------------------------------------------------------------------------
 
@@ -603,15 +658,15 @@ Map MapLoader::loadMap(const std::string &path)
                     {
                         if (value == "horizontal")
                         {
-                            map.setScrollType(Map::Scroll::horizontal);
+                            map.setScrollType(Map::horizontal);
                         }
                         else if (value == "vertical")
                         {
-                            map.setScrollType(Map::Scroll::vertical);
+                            map.setScrollType(Map::vertical);
                         }
                         else if (value == "none")
                         {
-                            map.setScrollType(Map::Scroll::none);
+                            map.setScrollType(Map::none);
                         }
                         else
                         {
@@ -735,7 +790,7 @@ Map MapLoader::loadMap(const std::string &path)
 
                     // Find the corresponding continent
                     Continent *continent = nullptr;
-                    for (auto *cont : map.Continents)
+                    for (auto *cont : map.getContinents())
                     {
                         if (cont->getName() == continentName)
                         {
