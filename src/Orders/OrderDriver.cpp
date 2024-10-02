@@ -1,6 +1,6 @@
-#include "Orders.h"
-#include "OrdersDriver.h"
-#include "GameEngine.h"
+#include "Order.h"
+#include "OrderDriver.h"
+#include "src/GameEngine.h"
 
 void testOrdersLists()
 {
