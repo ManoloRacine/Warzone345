@@ -1,3 +1,4 @@
+
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ---- Written By: Nektarios Zampetoulakis (40211948) ----
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -5,11 +6,11 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <string>
 #include <stdexcept>
 #include <numeric>
-#include <unordered_set>
 #include "Map.h"
 
 using std::cout;
@@ -18,6 +19,7 @@ using std::pair;
 using std::string;
 using std::unordered_map;
 using std::vector;
+using std::basic_ostream;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ CONTINENT ---------------------------
@@ -27,9 +29,46 @@ using std::vector;
 Continent::Continent(const std::string &name, int bonus)
     : name(name), bonus(bonus) {}
 
+// Copy Constructor
+Continent::Continent(const Continent& other) 
+    : name(other.name), bonus(other.bonus) {
+    // Deep copy the territories
+    for (auto territory : other.territories) {
+        territories.push_back(new Territory(*territory));
+    }
+}
+
+// Assignment Operator
+Continent& Continent::operator=(const Continent& other) {
+    if (this != &other) { // Check for self-assignment
+        name = other.name;
+        bonus = other.bonus;
+
+        // Clear existing territories
+        for (auto territory : territories) {
+            delete territory;
+        }
+        territories.clear();
+
+        // Deep copy the territories
+        for (auto territory : other.territories) {
+            territories.push_back(new Territory(*territory));
+        }
+    }
+    return *this;
+}
+
+// Stream Insertion Operator
+std::ostream& operator<<(std::ostream& os, const Continent& continent) {
+    os << "Continent Name: " << continent.name << ", Bonus: " << continent.bonus;
+    return os;
+}
+
+
 // Setters and Getters
 
-void Continent::setName(const std::string &n) {
+void Continent::setName(const std::string &n)
+{
     name = n;
 }
 
@@ -72,6 +111,39 @@ Territory::Territory(const std::string &name, const std::pair<int, int> &coordin
 // Overloaded constructor with name, coordinates, and continent
 Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent)
     : Territory(name, coordinates, continent, 0, 0) {}
+
+// Copy Constructor
+Territory::Territory(const Territory& other) 
+    : name(other.name),
+      coordinates(other.coordinates),
+      continent(other.continent), 
+      connectedTerritories(other.connectedTerritories), 
+      owner(other.owner),
+      armies(other.armies) {}
+
+
+// Assignment Operator
+Territory& Territory::operator=(const Territory& other) {
+    if (this != &other) { // Self-assignment check
+        name = other.name;
+        coordinates = other.coordinates;
+        continent = other.continent; 
+        connectedTerritories = other.connectedTerritories;
+        owner = other.owner;
+        armies = other.armies;
+    }
+    return *this;
+}
+
+std::ostream& operator<<(std::ostream& os, const Territory& territory) {
+    os << "Territory Name: " << territory.name << "\n"
+       << "Coordinates: (" << territory.coordinates.first << ", "
+       << territory.coordinates.second << ")\n"
+       << "Owner: " << territory.owner << "\n"
+       << "Armies: " << territory.armies << "\n";
+    return os;
+}
+
 
 // Setters and Getters
 void Territory::setName(const std::string &name)
@@ -167,6 +239,64 @@ Map::~Map()
     }
 }
 
+// Copy Constructor
+Map::Map(const Map& other)
+    : author(other.author),
+      warn(other.warn),
+      imgPath(other.imgPath),
+      wrap(other.wrap),
+      scrollType(other.scrollType) { // Copy the scroll type
+    // Deep copy of continents and territories
+    for (const auto& continent : other.Continents) {
+        Continent* newContinent = new Continent(*continent); // Assuming you have a proper copy constructor in Continent
+        Continents.push_back(newContinent);
+    }
+    for (const auto& pair : other.mapData) {
+        mapData[pair.first] = new Territory(*pair.second); // Assuming you have a proper copy constructor in Territory
+    }
+}
+
+// Assignment Operator
+Map& Map::operator=(const Map& other) {
+    if (this != &other) { // Self-assignment check
+        // Clean up existing data
+        for (auto continent : Continents) {
+            delete continent; // Clean up existing continents
+        }
+        for (auto pair : mapData) {
+            delete pair.second; // Clean up existing territories
+        }
+
+        // Copy new data
+        author = other.author;
+        warn = other.warn;
+        imgPath = other.imgPath;
+        wrap = other.wrap;
+        scrollType = other.scrollType;
+
+        // Deep copy of continents and territories
+        for (const auto& continent : other.Continents) {
+            Continent* newContinent = new Continent(*continent);
+            Continents.push_back(newContinent);
+        }
+        for (const auto& pair : other.mapData) {
+            mapData[pair.first] = new Territory(*pair.second);
+        }
+    }
+    return *this;
+}
+
+    // Stream Insertion Operator
+    std::ostream& operator<<(std::ostream& os, const Map& map) {
+        os << "Map Author: " << map.author << "\n"
+        << "Wrap: " << (map.wrap ? "Yes" : "No") << "\n"
+        << "Territories:\n";
+        for (const auto& pair : map.mapData) {
+            os << *(pair.second) << "\n"; // Using the stream operator for Territory
+        }
+        return os;
+    }
+
 // Setters
 void Map::setAuthor(const std::string &author)
 {
@@ -193,11 +323,6 @@ void Map::setScrollType(Scroll scrollType)
     this->scrollType = scrollType;
 }
 
-void Map::setNumTerritories(int numTerritories)
-{
-    this->numTerritories = numTerritories;
-}
-
 // Getters
 std::string Map::getAuthor() const
 {
@@ -222,10 +347,6 @@ bool Map::getWrap() const
 Map::Scroll Map::getScrollType() const
 {
     return scrollType;
-}
-
-unordered_map<std::string, Territory*> Map::getMapData() const {
-    return mapData;
 }
 
 void Map::addContinent(Continent *continent)
@@ -303,6 +424,102 @@ void Map::displayInfo() const
         std::cout << std::endl;
     }
 }
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// ------------------ MAP VALIDATION ----------------------
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+// ---------------------------- Griffin Sin-Chan (40278049) ------------------------------------
+
+// Depth-first search takes in a starting node and a set tracking the visited nodes
+void Map::DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes) {
+    if (!territory) return; // Check for null pointer
+
+    // Track the current node that is being visited
+    visitedNodes.insert(territory);
+    std::cout << "Visiting: " << territory->getName() << std::endl;
+
+    // From the current node check the vector of adjacent territories
+    for (Territory* adjacent : territory->getConnectedTerritories()) {
+
+        // Error checking for max num adjacent territories
+        if (adjacent->getConnectedTerritories().size() > 10) {
+            throw std::runtime_error("Error, max number of adjacent territories exceeded, exiting!");
+        }
+        // Check if the adjacent territory has not been visited
+        if (visitedNodes.find(adjacent) == visitedNodes.end()) {
+            DFS(adjacent, visitedNodes);
+        }
+    }
+}
+bool Map::validateUniqueness(unordered_map<std::string, Territory*> mapData,vector<Continent*> Continents) {
+ //checking that the territory is part of only one continent
+    std::cout << "\n INSIDE AT THE START";
+    //iteration is index in the map
+  
+    for(const auto &[name, ptrTerritory] : mapData) {
+          int k= 0;
+       
+        for (const auto & iterator : Continents) {
+        //use territories list from each cotinent, iterate trough all territories
+            if (iterator->territories.size() == 0) {
+                throw std::runtime_error("Empty Continent");
+            }
+            
+            for (int j = 0; j <= iterator->territories.size()-1; j++ ) { 
+               
+                
+                //from the map grab the value in the second position which is a territory ptr and point to territory name
+                if (name == iterator->territories[j]->getName()) {
+                     std::cout<<name<< " is part of "<<iterator->getName()<< endl;
+                        k++;
+                    if (k > 1) {
+                        std::cout<<"Error, territory is part of more than one continent!";
+                        return false;
+                       
+                    }
+                }
+            } 
+        } 
+    }
+    
+     std::cout << "\n INSIDE AT THE ENDING";
+    
+    return true;
+       
+    }
+ 
+bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
+    if (mapData.empty()) {
+        std::cout << "Map is empty" << std::endl;
+        return false; // Indicate the map is not connected
+    }
+
+    // Create an empty unordered set to store visited nodes
+    std::unordered_set<Territory*> visitedNodes;
+
+    auto iteration = mapData.begin();
+    Territory* startNode = iteration->second; // Grab the first territory pointer
+
+    // Start DFS from the initial territory
+    DFS(startNode, visitedNodes);
+
+    // Check if the number of visited territories matches the total number of territories
+    bool isConnected = (visitedNodes.size() == mapData.size());
+    std::cout << "Is the map fully connected? " << (isConnected ? "Yes" : "No") << std::endl;
+
+    // Check that the number of territories does not exceed 255
+    if (mapData.size() > 255) {
+        std::cout << "Warning: Number of territories exceeds the limit of 255." << std::endl;
+    }
+
+
+    return isConnected;
+}
+
+// ----------------------------------------------------------------------------------------
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ MAP LOADER --------------------------
@@ -553,6 +770,7 @@ Map MapLoader::loadMap(const std::string &path)
                     // Create the Territory object
                     Territory *newTerritory = new Territory(name, {coordX, coordY}, continent);
                     map.addTerritory(name, newTerritory);
+                    continent->addTerritory(newTerritory);
 
                     std::vector<std::string> connectedList;
 
@@ -609,49 +827,3 @@ Map MapLoader::loadMap(const std::string &path)
     }
     return map;
 }
-//Map Validation Written By Griffin Sin-Chan (40278049)
-//Depth first search takes in a starting node and a has a list tracking the visited nodes
-void DFS(Territory *territory, std::unordered_set<Territory*>& visitedNodes) {
-    //track the current node that is being visited
-    visitedNodes.insert(territory);
-    
-    //From the current node check the vector of adjacent territories
-    for (Territory* adjacent : territory->getConnectedTerritories()) {
-        
-        //This is error checking for max num adjacent territories
-        if (adjacent->getConnectedTerritories().size()> 10) {
-           //throw std::runtime_error("Max number of adjacent territories exceeded, exiting!");
-        } 
-
-        std::cout<<"Visiting: " << territory->getName()<<std::endl;
-            
-        if (visitedNodes.find(adjacent) == visitedNodes.end()){
-            DFS(adjacent,visitedNodes);
-        }
-    }
-}
-
-void mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
-   
-    if (mapData.empty()) {
-    std::cout<<"Map is empty";
-    return;
-    }
-
-    //create an empty unordered set to store visited nodes
-    std::unordered_set<Territory*> visitedNodes;
-
-    auto it = mapData.begin();
-
-    //grab the territory pointer from map data which is stored in the maps second position
-    Territory* startNode = it->second;
-    DFS(startNode,visitedNodes);
-
-    //using the size of the vector in mapData check if that number matches the number of visited territories
-    std::cout<<(visitedNodes.size() == mapData.size());
-    //check that num territories do not exceed 255
-    std::cout<<(mapData.size() <= 255);
-    return;
-    
-}
-

@@ -1,3 +1,4 @@
+
 #ifndef MAP_H
 #define MAP_H
 
@@ -5,10 +6,10 @@
 #include <fstream>
 #include <sstream>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include <string>
 #include <stdexcept>
-#include <unordered_set>
 
 using std::cout;
 using std::endl;
@@ -36,11 +37,21 @@ public:
     // Constructor
     Continent(const std::string& name, int bonus);
 
+    // Copy Constructor
+    Continent(const Continent& other);
+
+    // Assignment Operator
+    Continent& operator=(const Continent& other);
+
+    // Stream Insertion Operator
+    friend std::ostream& operator<<(std::ostream& os, const Continent& continent);
+
     // Setters and Getters
     void setName(const std::string& n);
     std::string getName() const;
     void setBonus(int b);
     int getBonus() const;
+
 
     void addTerritory(Territory* territory);
     void displayInfo() const;
@@ -49,6 +60,7 @@ public:
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ TERRITORY ---------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 class Territory {
 private:
     // Territory Attributes
@@ -63,6 +75,15 @@ public:
     // Constructors
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies);
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent);
+
+    // Copy Constructor
+    Territory(const Territory& other);
+
+    // Assignment Operator
+    Territory& operator=(const Territory& other);
+
+     // Stream Insertion Operator
+    friend std::ostream& operator<<(std::ostream& os, const Territory& territory);
 
     // Setters and Getters
     void setName(const std::string& name);
@@ -91,7 +112,6 @@ private:
     bool warn;
     std::string imgPath;
     bool wrap;
-    int numTerritories;
 
 public:
     enum Scroll {
@@ -102,11 +122,23 @@ public:
     Scroll scrollType;
 
     vector<Continent*> Continents;
-    unordered_map<std::string, Territory*> mapData;
-
+    unordered_map<std::string, Territory*> mapData; //its just a dictionary of key = territory name, value = territory pointer.
+    //vector<pair<std::string, Territory*>> territoriesOfMap; // MAYBE LATER CHANGE TO THIS
+    
 
     // Destructor
     ~Map();
+
+    // Constructors
+    Map() = default; // Default constructor
+    
+    Map(const Map& other); // Copy constructor
+
+    // Assignment operator
+    Map& operator=(const Map& other);
+
+    // Stream insertion operator
+    friend std::ostream& operator<<(std::ostream& os, const Map& map);
 
     // Setters
     void setAuthor(const std::string& author);
@@ -114,7 +146,6 @@ public:
     void setImgPath(const std::string& imgPath);
     void setWrap(bool wrap);
     void setScrollType(Scroll scrollType);
-    void setNumTerritories(const int numTerritories);
 
     // Getters
     std::string getAuthor() const;
@@ -122,17 +153,18 @@ public:
     std::string getImgPath() const;
     bool getWrap() const;
     Scroll getScrollType() const;
-    int getNumTerritories() const;
-    unordered_map<std::string, Territory*> getMapData() const;
-
 
     void addContinent(Continent* continent);
     void addTerritory(const std::string& name, Territory* territory);
     Territory* getTerritoryPtr(const std::string& name);
     void displayInfo() const;
 
-    void DFS(Territory *territory, std::unordered_set<Territory*>& visitedNodes);
-    void mapFullyConnected(unordered_map<std::string, Territory*> mapData);
+
+    // -------- validation ----------
+    void DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes);
+    bool mapFullyConnected(unordered_map<std::string, Territory*> mapData);
+    bool validateUniqueness(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
+    
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
