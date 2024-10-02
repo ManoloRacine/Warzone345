@@ -1,41 +1,52 @@
+#include <iostream>
 #include "Player.h"
 #include "Map.h"
+#include "Cards.h"
 #include "Order.h"
-#include <iostream>
+#include <vector>
 
-void testPlayers() {
-    Player player;
+using namespace std;
 
-    // Create some dummy territories and orders
-    Territory* territory1 = new Territory("Territory 1");
-    Territory* territory2 = new Territory("Territory 2");
-    Territory* territory3 = new Territory("Territory 3");
-    Territory* territory4 = new Territory("Territory 4");
-    vector<Territory*> territories = { {territory1},{territory2} };
-    vector<Territory*> territories2 = { {territory4},{territory3} };
+void testPlayer() {
+    // Create a deck and some cards
+    Deck* deck = new Deck();
+    deck->generateDeck();
 
-    player.toDefend(territories).push_back(territory1);
-    player.toAttack(territories2).push_back(territory2);
+    // Create continents and territories
+    Continent* asia = new Continent("Asia", 5);
+    Territory* china = new Territory("China", { 0, 0 }, asia);
+    Territory* india = new Territory("India", { 1, 0 }, asia);
+    asia->addTerritory(china);
+    asia->addTerritory(india);
 
-    Order* order1 = new Order("Deploy Order");
-    player.issueOrder(order1);
+    // Create a player
+    Player* player = new Player();
 
-    // Test player methods
-    std::cout << "Territories to defend:" << std::endl;
-    for (Territory* t : player.toDefend()) {
-        std::cout << t->getName() << std::endl;
-    }
+    // Adding Things to the player
+    player->addTerritories(china);
+    player->getHand()->draw(deck);
+    player->getHand()->draw(deck);
 
-    std::cout << "Territories to attack:" << std::endl;
-    for (Territory* t : player.toAttack()) {
-        std::cout << t->getName() << std::endl;
-    }
+    // Issue some orders
+    player->issueOrder(new Deploy());
+    player->issueOrder(new Airlift());
 
-    std::cout << "Orders issued:" << std::endl;
-    std::cout << player << std::endl;
+    // To defend
+    player->toDefend(player->getTerritories());
+
+    // To Attack
+    player->toAttack(asia->territories);
+
+    // Display player information
+    std::cout << player;
+
+    // Clean up
+    delete deck;
+    delete player;
+    delete asia;  // Deleting the continent also deletes its territories
 }
 
 int main() {
-    testPlayers();
+    testPlayer();
     return 0;
 }
