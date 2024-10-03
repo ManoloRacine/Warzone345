@@ -3,9 +3,9 @@
 
 #include <vector>
 #include <string>
-#include "Map.h"   
-#include "Order.h"       
-#include "Cards.h"   
+#include "Map/Map.h"
+#include "Orders/Order.h"
+#include "Cards/Cards.h"
 
 using namespace std;
 
@@ -27,7 +27,7 @@ public:
     Player(const string& playerName);
 
     // Copy constructor
-    Player(const Player& other); 
+    Player(const Player& other);
 
     // Destructor
     ~Player();
@@ -47,6 +47,10 @@ public:
     // Getters and Setters for Hand (Cards)
     Hand* getHand() const;
     void setHand(Hand* newHand);
+
+    // Stream insertion operator
+    friend std::ostream& operator<<(std::ostream& os, const Player& player);
+
 
     // Display player information
     void printPlayer() const;

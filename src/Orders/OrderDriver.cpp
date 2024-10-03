@@ -4,11 +4,7 @@
 
 void testOrdersLists()
 {
-    auto gameEngine = new GameEngine;
-    auto player = new Player(gameEngine, new Hand());
-    gameEngine->addPlayer(player);
-
-    auto orderList = player->getOrdersListObject();
+    auto orderList = new OrdersList();
 
     std::cout << "> Order Addition" << std::endl;
 

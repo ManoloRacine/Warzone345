@@ -1,4 +1,4 @@
-#include "Player.h"
+#include "PLayer/Player.h"
 #include <iostream>
 #include <algorithm> // for std::copy
 
@@ -65,14 +65,18 @@ void Player::setHand(Hand* newHand) {
     hand = newHand;
 }
 
+// Stream insertion operator
+std::ostream& operator<<(std::ostream& os, const Player& player) {
+    os << "Player territories: " << player.getTerritories().size() << " | Orders: " << player.ordersList->getList() << " | Cards in hand: " << player.hand->getCards().size() << "\n";
+    return os;
+}
 
 // Display player information
 void Player::printPlayer() const {
     cout << "Player Name: " << name << endl;
 
-    cout << "Territories: " << endl;
-    for (const Territory* territory : territories) {
-        territory->getName();  // Assuming Territory has displayInfo() method
+    for (int i = 0; i < territories.size(); i++) {
+        cout << "Territories: \n" << territories[i]->getName() << "\n";
     }
 
     cout << "Cards in Hand: " << endl;
@@ -88,16 +92,16 @@ void Player::printPlayer() const {
 
 // Method to return a list of territories to defend
 vector<Territory*> Player::toDefend(vector<Territory*> defendingTerritories) {
-    for (int i = 0; i < defendingTerritories.size() - 1; i++) {
-        cout << defendingTerritories[i]->getName() << " defending with " << defendingTerritories[i]->getArmies();
+    for (int i = 0; i < defendingTerritories.size(); i++) {
+        cout << defendingTerritories[i]->getName() << " defending with " << defendingTerritories[i]->getArmies() << "\n";
     }
     return defendingTerritories;
 }
 
 // Method to return a list of territories to attack
 vector<Territory*> Player::toAttack(vector<Territory*> attackingTerritories) {
-    for (int i = 0; i < attackingTerritories.size() - 1; i++) {
-        cout << attackingTerritories[i]->getName() << " attacking with " << attackingTerritories[i]->getArmies();
+    for (int i = 0; i < attackingTerritories.size(); i++) {
+        cout << attackingTerritories[i]->getName() << " attacking with " << attackingTerritories[i]->getArmies() << "\n";
     }
     return attackingTerritories;
 }

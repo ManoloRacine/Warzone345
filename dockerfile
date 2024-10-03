@@ -11,6 +11,8 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . .
 
+RUN apt-get update && apt-get install -y cmake gdb dos2unix
+
 # Convert all text files in the maps directory
 RUN dos2unix res/maps/*
 

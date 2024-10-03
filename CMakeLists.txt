@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.25.1)
 project(Warzone345)
 
 set(CMAKE_CXX_STANDARD 20)
-
 include_directories(src)
 
 add_executable(Warzone345 main.cpp
@@ -20,7 +19,12 @@ add_executable(Warzone345 main.cpp
         src/Map/Map.cpp
         src/Map/MapDriver.cpp
         src/Map/MapDriver.h
-        src/Players/Player.cpp
-        src/Players/PlayerDriver.cpp
-        src/Players/Player.h
+        src/Player/Player.cpp
+        src/Player/PlayerDriver.cpp
+        src/Player/Player.h
+        src/Player/PlayerDriver.h
 )
+
+# Copy resource files (maps) to the build directory
+file(COPY res/maps/Europe.txt res/maps/USA.txt res/maps/USAError.txt
+        DESTINATION ${CMAKE_BINARY_DIR}/res/maps)
