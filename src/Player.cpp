@@ -72,7 +72,7 @@ void Player::printPlayer() const {
 
     cout << "Territories: " << endl;
     for (const Territory* territory : territories) {
-        territory->displayInfo();  // Assuming Territory has displayInfo() method
+        territory->getName();  // Assuming Territory has displayInfo() method
     }
 
     cout << "Cards in Hand: " << endl;
