@@ -308,7 +308,8 @@ Order* UserInputOrder::create(const std::string& orderType)
 // orders factor
 
 
-Order* OrdersFactory::CreateOrder(CardType cardType) {
+
+/*Order* OrdersFactory::CreateOrder(CardType cardType) {
   switch(cardType){
     case CT_Bomb:
       return new Bomb();
@@ -323,4 +324,4 @@ Order* OrdersFactory::CreateOrder(CardType cardType) {
     default:
       throw std::runtime_error("unknown CardType value");
   }
-}
+}*/
