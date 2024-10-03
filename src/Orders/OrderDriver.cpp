@@ -9,7 +9,9 @@ void testOrdersLists()
     gameEngine->addPlayer(player);
 
     auto orderList = player->getOrdersListObject();
-    std::cout << "-> Order Addition" << std::endl;
+
+    std::cout << "> Order Addition" << std::endl;
+
     orderList->add(UserInputOrder::create("Deploy"));
     orderList->add(UserInputOrder::create("Advance"));
     orderList->add(UserInputOrder::create("Bomb"));
@@ -17,14 +19,14 @@ void testOrdersLists()
     orderList->add(UserInputOrder::create("Airlift"));
     orderList->add(UserInputOrder::create("Negotiate"));
 
-    std::cout << "-> Move 4 with 2 and remove the new 2" << std::endl;
+    std::cout << "> move with 2 & remove 2" << std::endl;
     orderList->move(4, 2);
     orderList->remove(2);
 
     auto list = *orderList->getList();
-    std::cout << "-> Orders can be validated" << std::endl;
-    std::cout << "Example: First Order is valid: " << (orderList->getList()->at(0)->validate() ? "True": "False") << endl;
+    std::cout << "> Order validation" << std::endl;
+    std::cout << "> Example: first order valid? " << (orderList->getList()->at(0)->validate() ? "True": "False") << endl;
 
-    std::cout << "-> List order execution" << std::endl;
+    std::cout << "> List order execution" << std::endl;
     orderList->execute();
 }

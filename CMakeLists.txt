@@ -3,6 +3,8 @@ project(Warzone345)
 
 set(CMAKE_CXX_STANDARD 20)
 
+include_directories(src)
+
 add_executable(Warzone345 main.cpp
         src/Cards/Cards.h
         src/Cards/Cards.cpp

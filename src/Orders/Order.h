@@ -23,6 +23,7 @@ private:
   friend std::ostream &operator<<(std::ostream &, const Order &);
 };
 
+//order list
 class OrdersList
 {
 private:
@@ -38,7 +39,6 @@ public:
   void add(Order *o);
   void remove(int);
   void move(int, int);
-
   void execute();
 
   std::vector<Order *>* getList();
