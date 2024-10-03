@@ -12,9 +12,12 @@ add_executable(Warzone345 main.cpp
         src/GameEngine/GameEngine.h
         src/GameEngine/GameEngine.cpp
         src/GameEngine/GameEngineDriver.cpp
+        src/Orders/Order.h
+        src/Orders/Order.cpp
+        src/Orders/OrderDriver.h
+        src/Orders/OrderDriver.cpp
         src/Map/Map.h
         src/Map/Map.cpp
         src/Map/MapDriver.cpp
         src/Map/MapDriver.h
 )
-
