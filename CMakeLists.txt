@@ -15,6 +15,9 @@ add_executable(Warzone345
         src/Map/Map.cpp
         src/Map/MapDriver.cpp
         src/Map/MapDriver.h
+        src/Players/Player.cpp
+        src/Players/PlayerDriver.cpp
+        src/Players/Player.h
 )
 
 # Copy resource files (maps) to the build directory
