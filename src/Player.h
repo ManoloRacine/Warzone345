@@ -48,6 +48,10 @@ public:
     Hand* getHand() const;
     void setHand(Hand* newHand);
 
+    // Stream insertion operator
+    friend std::ostream& operator<<(std::ostream& os, const Player& player);  
+
+
     // Display player information
     void printPlayer() const;
 
