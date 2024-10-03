@@ -35,7 +35,7 @@ void testPlayer() {
     player->toDefend(player->getTerritories());
 
     // To Attack
-    player->toAttack(asia->territories);
+    player->toAttack(asia->getTerritories());
 
     // Display player information
     std::cout << player;
