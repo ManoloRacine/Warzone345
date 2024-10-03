@@ -303,25 +303,3 @@ Order* UserInputOrder::create(const std::string& orderType)
   else if (orderType == "Negotiate") { return new Negotiate(); }
   else { throw std::runtime_error("invalid OrderType: " + orderType ); }
 }
-
-
-// orders factor
-
-
-
-/*Order* OrdersFactory::CreateOrder(CardType cardType) {
-  switch(cardType){
-    case CT_Bomb:
-      return new Bomb();
-    case CT_Reinforcement:
-      return new Deploy();
-    case CT_Blockade:
-      return new Blockade();
-    case CT_Airlift:
-      return new Airlift();
-    case CT_Diplomacy:
-      return new Negotiate();
-    default:
-      throw std::runtime_error("unknown CardType value");
-  }
-}*/
