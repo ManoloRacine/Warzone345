@@ -1,16 +1,15 @@
-#include "src/Map/MapDriver.h"
+
 #include "src/Cards/CardsDriver.h"
 #include "src/GameEngine/GameEngineDriver.h"
 #include "src/Orders/OrderDriver.h"
 
-#define quote(x) #x
 
-using namespace std;
 
-#include "GameEngineDriver.h"
+#include "src/GameEngine/GameEngineDriver.h"
+#include "src/Orders/OrderDriver.h"
+
 
 int main() {
-    testLoadMaps();
     testCards();
     testGameStates();
     testOrdersLists();

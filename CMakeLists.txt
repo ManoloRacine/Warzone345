@@ -3,14 +3,19 @@ project(Warzone345)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Warzone345
-        main.cpp
+include_directories(src)
+
+add_executable(Warzone345 main.cpp
         src/Cards/Cards.h
         src/Cards/Cards.cpp
         src/Cards/CardsDriver.cpp
         src/GameEngine/GameEngine.h
         src/GameEngine/GameEngine.cpp
         src/GameEngine/GameEngineDriver.cpp
+        src/Orders/Order.h
+        src/Orders/Order.cpp
+        src/Orders/OrderDriver.h
+        src/Orders/OrderDriver.cpp
         src/Map/Map.h
         src/Map/Map.cpp
         src/Map/MapDriver.cpp
@@ -19,7 +24,3 @@ add_executable(Warzone345
         src/Players/PlayerDriver.cpp
         src/Players/Player.h
 )
-
-# Copy resource files (maps) to the build directory
-file(COPY res/maps/Europe.txt res/maps/USA.txt res/maps/USAError.txt
-    DESTINATION ${CMAKE_BINARY_DIR}/res/maps)
