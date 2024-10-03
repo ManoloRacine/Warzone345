@@ -8,7 +8,6 @@ add_executable(Warzone345
         src/Cards/Cards.h
         src/Cards/Cards.cpp
         src/Cards/CardsDriver.cpp
-        main.cpp
         src/GameEngine/GameEngine.h
         src/GameEngine/GameEngine.cpp
         src/GameEngine/GameEngineDriver.cpp

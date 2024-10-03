@@ -303,3 +303,4 @@ Order* UserInputOrder::create(const std::string& orderType)
   else if (orderType == "Negotiate") { return new Negotiate(); }
   else { throw std::runtime_error("invalid OrderType: " + orderType ); }
 }
+
