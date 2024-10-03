@@ -20,8 +20,8 @@ void testOrdersLists()
     orderList->add(UserInputOrder::create("Negotiate"));
 
     std::cout << "> move with 2 & remove 2" << std::endl;
-    orderList->move(4, 2);
-    orderList->remove(2);
+    orderList->move(2, 1);
+    orderList->remove(1);
 
     auto list = *orderList->getList();
     std::cout << "> Order validation" << std::endl;
