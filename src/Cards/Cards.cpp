@@ -5,10 +5,47 @@
 #include "Cards.h"
 
 #include <algorithm>
-#include <cstdlib>
 #include <iostream>
 using namespace std;
 #include <random>
+
+Deck::Deck(const Deck &deck) {
+    cards = deck.cards;
+}
+
+Hand::Hand(const Hand &hand) {
+    cards = hand.cards;
+}
+
+Card::Card(const Card &card) {
+    original_deck = card.original_deck;
+}
+
+Card &Card::operator=(const Card &other) {
+    if (this != &other) {
+        original_deck = other.original_deck;
+    }
+
+    return *this;
+}
+
+Hand &Hand::operator=(const Hand &other) {
+    if (this != &other) {
+        cards = other.cards;
+    }
+
+    return *this;
+}
+
+Deck &Deck::operator=(const Deck &other) {
+    if (this != &other) {
+        cards = other.cards;
+    }
+
+    return *this;
+}
+
+
 
 void BombCard::play() {
     original_deck->putIntoDeck(this);
@@ -17,7 +54,6 @@ void BombCard::play() {
 std::string BombCard::print() const{
     return "bomb";
 }
-
 
 void ReinforcementCard::play() {
     original_deck->putIntoDeck(this);
@@ -50,7 +86,6 @@ void DiplomacyCard::play() {
 std::string DiplomacyCard::print()  const {
     return "diplomacy";
 }
-
 
 Card::Card(Deck *deck) {
     original_deck = deck;
@@ -85,7 +120,6 @@ void Hand::draw(Deck *deck) {
 std::vector<Card *> Hand::getCards() {
     return cards;
 }
-
 
 Card *Deck::draw() {
     if (cards.empty()) {
@@ -134,6 +168,19 @@ void Deck::generateDeck() {
 std::ostream& operator<<(std::ostream& os, const Card &card) {
     return os << card.print();
 }
+std::ostream& operator<<(std::ostream& os, const Hand &hand) {
+    for (auto const& it : hand.cards) {
+        os << it->print() << std::endl;
+    }
+    return os;
+}
+std::ostream& operator<<(std::ostream& os, const Deck &deck) {
+    for (auto const& it : deck.cards) {
+        os << it->print() << std::endl;
+    }
+    return os;
+}
+
 
 
 
