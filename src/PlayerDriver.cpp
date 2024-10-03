@@ -53,8 +53,3 @@ void testPlayer() {
     delete asia;
     delete europe;
 }
-
-int main() {
-    testPlayer();
-    return 0;
-}
