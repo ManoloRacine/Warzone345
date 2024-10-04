@@ -3,28 +3,29 @@ project(Warzone345)
 
 set(CMAKE_CXX_STANDARD 20)
 
-# Add source files and headers for the main executable
+# Include directories for header files
+include_directories(
+        ${PROJECT_SOURCE_DIR}/src
+        ${PROJECT_SOURCE_DIR}/src/Cards
+        ${PROJECT_SOURCE_DIR}/src/GameEngine
+        ${PROJECT_SOURCE_DIR}/src/Map
+        ${PROJECT_SOURCE_DIR}/src/Orders
+        ${PROJECT_SOURCE_DIR}/src/Player
+)
+
+# Add source files for the main executable
 add_executable(Warzone345
-    main.cpp
-    src/Cards/Cards.h
-    src/Cards/Cards.cpp
-    src/Cards/CardsDriver.cpp
-    src/GameEngine/GameEngine.h
-    src/GameEngine/GameEngine.cpp
-    src/GameEngine/GameEngineDriver.cpp
-    src/Map/Map.h
-    src/Map/Map.cpp
-    src/Map/MapDriver.cpp
-    src/Map/MapDriver.h
-    src/Orders/Order.h
-    src/Orders/Order.cpp
-    src/Orders/OrderDriver.h
-    src/Orders/OrderDriver.cpp
-    src/Orders/Order.cpp
-    src/Player/Player.h
-    src/Player/Player.cpp
-    src/Player/PlayerDriver.h
-    src/Player/PlayerDriver.cpp
+        main.cpp
+        src/Cards/Cards.cpp
+        src/Cards/CardsDriver.cpp
+        src/GameEngine/GameEngine.cpp
+        src/GameEngine/GameEngineDriver.cpp
+        src/Map/Map.cpp
+        src/Map/MapDriver.cpp
+        src/Orders/Order.cpp
+        src/Orders/OrderDriver.cpp
+        src/Player/Player.cpp
+        src/Player/PlayerDriver.cpp
 )
 
 # Copy resource files (maps) to the build directory
