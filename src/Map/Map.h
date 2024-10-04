@@ -18,6 +18,7 @@ using std::pair;
 using std::vector;
 using std::unordered_map;
 
+
 // Forward declarations
 class Territory;
 
@@ -165,7 +166,7 @@ public:
     bool mapFullyConnected(unordered_map<std::string, Territory*> mapData);
     bool validateUniqueness(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
     bool subGraphCheck(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
-    void DFSsubGraph(Territory* territory, std::unordered_set<Territory*> visitedNodes, Continent* Continent);
+    void SubGraphDFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes, Continent* Continent);
     bool validate();
 
 };

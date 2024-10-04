@@ -466,15 +466,15 @@ bool Map::validateUniqueness(unordered_map<std::string, Territory*> mapData,vect
        
         for (const auto & iterator : Continents) {
         //use territories list from each cotinent, iterate trough all territories
-            if (iterator->getTerritories().size() == 0) { //CHECK
+            if (iterator->getTerritories().size() == 0) { 
                 throw std::runtime_error("Empty Continent");
             }
             
-            for (int j = 0; j <= iterator->getTerritories().size()-1; j++ ) {  //CHECK
+            for (int j = 0; j <= iterator->getTerritories().size()-1; j++ ) { 
                
                 
                 //from the map grab the value in the second position which is a territory ptr and point to territory name
-                if (name == iterator->getTerritories()[j]->getName()) { //CHECK
+                if (name == iterator->getTerritories()[j]->getName()) {
                         k++;
                     if (k > 1) {
                         throw std::runtime_error("Error, territory is part of more than one continent or contienent is empty!");
@@ -517,47 +517,49 @@ bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
     return isConnected;
 }
 
-void Map::DFSsubGraph(Territory* territory, std::unordered_set<Territory*> visitedNodes, Continent* Continent) {
+void Map::SubGraphDFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes, Continent* Continent) {
     if (!territory) return; // Check for null pointer
 
-    // Track the current node that is being visited
+    // Track the current node that is being visited and store it in a vector
     visitedNodes.insert(territory);
-    std::cout << "Visiting: " << territory->getName() <<"Part of Continent: "<< Continent->getName()<< std::endl;
-
+    
     // From the current node check the vector of adjacent territories
-    for (Territory* adjacent : Continent->getTerritories()) {
-
-
-        // Check if the adjacent territory has not been visited
-        if (visitedNodes.find(adjacent) == visitedNodes.end()) {
-            DFSsubGraph(adjacent, visitedNodes, Continent);
+    for (Territory* adjacent : territory->getConnectedTerritories()) {
+        
+        //iterate through continent terriroties
+        for (const auto & iterator : Continent->getTerritories()) {
+            //check that the adjacency lists match 
+            if (adjacent->getName() == iterator->getName()) {
+                // Check if the adjacent territory has not been visited
+                if (visitedNodes.find(adjacent) == visitedNodes.end()) {
+                SubGraphDFS(adjacent, visitedNodes, Continent);
+                }
+            }
         }
     }
-    return;
 }
 
-
+ 
 bool Map::subGraphCheck(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents) {
 
-    bool valid = false;
+    bool valid;
     //loop through all of the continents
-    for(int i = 0; i <= getContinents().size()-1; i++) {
+    for(int i = 0; i <= Continents.size()-1; i++) {
 
-        std::unordered_set<Territory*> visitedNodes;
+        std::unordered_set<Territory*> visitedNodes = {};
 
-        if (getContinents()[i]->getTerritories()[0]->getConnectedTerritories().size() == 0) {
+        if (Continents[i]->getTerritories()[0]->getConnectedTerritories().size() == 0) {
             std::cout <<"Continent territory is disconnected";
             return false;
         }
         //takes in the current continents first territory as the starting node, 
         //has a empty vector to track visited nodes
         //Gives the current continent
-        DFSsubGraph(Continents[i]->getTerritories()[0], visitedNodes,Continents[i]);
+        SubGraphDFS(Continents[i]->getTerritories()[0], visitedNodes,Continents[i]);
 
         bool isConnected = (visitedNodes.size() == Continents[i]->getTerritories().size());
         valid = isConnected;
-    std::cout << "Is the continent connected? " << (isConnected ? "Yes" : "No") << std::endl;
-    if (valid = false) {
+    if (valid == false) {
         return false;
     }
     }
@@ -575,14 +577,14 @@ bool Map::validate() {
             return false;
         }
 
-        // // Check if the map is fully connected
-        // if (!mapFullyConnected(this->mapData)) {
-        //     std::cout << "Validation failed: Map is not fully connected!" << std::endl;
-        //     return false;
-        // }
+        // Check if the map is fully connected
+        if (!mapFullyConnected(this->mapData)) {
+             std::cout << "Validation failed: Map is not fully connected!" << std::endl;
+             return false;
+         }
 
         //ADD CHECK FOR SUBGRAPHS
-        if (!subGraphCheck(this->mapData,this->Continents)) {
+       if (!subGraphCheck(this->mapData,this->Continents)) {
             std::cout << "Validation failed: Map subgraph is not fully connected!" << std::endl;
             return false;
         }
