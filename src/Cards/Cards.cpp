@@ -9,32 +9,12 @@
 using namespace std;
 #include <random>
 
+Deck::Deck() {
+
+}
+
 Deck::Deck(const Deck &deck) {
     cards = deck.cards;
-}
-
-Hand::Hand(const Hand &hand) {
-    cards = hand.cards;
-}
-
-Card::Card(const Card &card) {
-    original_deck = card.original_deck;
-}
-
-Card &Card::operator=(const Card &other) {
-    if (this != &other) {
-        original_deck = other.original_deck;
-    }
-
-    return *this;
-}
-
-Hand &Hand::operator=(const Hand &other) {
-    if (this != &other) {
-        cards = other.cards;
-    }
-
-    return *this;
 }
 
 Deck &Deck::operator=(const Deck &other) {
@@ -45,52 +25,86 @@ Deck &Deck::operator=(const Deck &other) {
     return *this;
 }
 
+//Generates an equal amount of the five different card types and shuffles them
+void Deck::generateDeck() {
+    std::vector<Card*> cardsToShuffle;
+
+    //reserve the space for the final number of cards in the deck
+    cardsToShuffle.reserve(50);
 
 
-void BombCard::play() {
-    original_deck->putIntoDeck(this);
+    for (int i = 0; i < 10; i++) {
+        cardsToShuffle.push_back(new BombCard(this));
+    }
+    for (int i = 0; i < 10; i++) {
+        cardsToShuffle.push_back(new ReinforcementCard(this));
+    }
+    for (int i = 0; i < 10; i++) {
+        cardsToShuffle.push_back(new BlockadeCard(this));
+    }
+    for (int i = 0; i < 10; i++) {
+        cardsToShuffle.push_back(new AirliftCard(this));
+    }
+    for (int i = 0; i < 10; i++) {
+        cardsToShuffle.push_back(new DiplomacyCard(this));
+    }
+
+    //randomizer generation
+    std::random_device rd;
+    std::mt19937 gen {rd()};
+
+    std::ranges::shuffle(cardsToShuffle, gen);
+
+    for (Card* card : cardsToShuffle) {
+        cards.push(card);
+    }
+
 }
 
-std::string BombCard::print() const{
-    return "bomb";
+//Draws the top card from the deck
+Card *Deck::draw() {
+    if (cards.empty()) {
+        std::cout << "deck is empty" << std::endl;
+        return nullptr;
+    }
+    Card* card = cards.front();
+    cards.pop();
+    return card;
 }
 
-void ReinforcementCard::play() {
-    original_deck->putIntoDeck(this);
+//Puts back the card into at the bottom of the deck
+void Deck::putIntoDeck(Card* card_to_put_back) {
+    cards.push(card_to_put_back);
 }
 
-std::string ReinforcementCard::print()  const {
-    return "reinforcement";
+//Prints out all the cards in the deck
+std::ostream& operator<<(std::ostream& os, const Deck &deck) {
+    std::queue<Card*> cardsToPrint = deck.cards;
+    while (!cardsToPrint.empty()) {
+        Card* card = cardsToPrint.front();
+        cardsToPrint.pop();
+        os << card->print();
+    }
+    return os;
 }
 
-void BlockadeCard::play() {
-    original_deck->putIntoDeck(this);
+Hand::Hand() {
+
 }
 
-std::string BlockadeCard::print()  const {
-    return "blockade";
+Hand::Hand(const Hand &hand) {
+    cards = hand.cards;
 }
 
-void AirliftCard::play() {
-    original_deck->putIntoDeck(this);
+Hand &Hand::operator=(const Hand &other) {
+    if (this != &other) {
+        cards = other.cards;
+    }
+
+    return *this;
 }
 
-std::string AirliftCard::print()  const {
-    return "airlift";
-}
-
-void DiplomacyCard::play() {
-    original_deck->putIntoDeck(this);
-}
-
-std::string DiplomacyCard::print()  const {
-    return "diplomacy";
-}
-
-Card::Card(Deck *deck) {
-    original_deck = deck;
-}
-
+//Plays the card, and removes it from the hand
 void Hand::play(Card *cardToPlay) {
     cardToPlay->play();
 
@@ -104,6 +118,7 @@ void Hand::play(Card *cardToPlay) {
     }
 }
 
+//Draws a card from the deck and adds it to the hand
 void Hand::draw(Deck *deck) {
     Card* card_drawn = deck->draw();
 
@@ -121,65 +136,83 @@ std::vector<Card *> Hand::getCards() {
     return cards;
 }
 
-Card *Deck::draw() {
-    if (cards.empty()) {
-        std::cout << "deck is empty" << std::endl;
-        return nullptr;
-    }
-    Card* card = cards.front();
-    cards.pop();
-    return card;
-}
-
-void Deck::putIntoDeck(Card* card_to_put_back) {
-    cards.push(card_to_put_back);
-}
-
-void Deck::generateDeck() {
-    std::vector<Card*> cardsToShuffle;
-    cardsToShuffle.reserve(50);
-    for (int i = 0; i < 10; i++) {
-        cardsToShuffle.push_back(new BombCard(this));
-    }
-    for (int i = 0; i < 10; i++) {
-        cardsToShuffle.push_back(new ReinforcementCard(this));
-    }
-    for (int i = 0; i < 10; i++) {
-        cardsToShuffle.push_back(new BlockadeCard(this));
-    }
-    for (int i = 0; i < 10; i++) {
-        cardsToShuffle.push_back(new AirliftCard(this));
-    }
-    for (int i = 0; i < 10; i++) {
-        cardsToShuffle.push_back(new DiplomacyCard(this));
-    }
-
-    std::random_device rd;
-    std::mt19937 gen {rd()};
-
-    std::ranges::shuffle(cardsToShuffle, gen);
-
-    for (Card* card : cardsToShuffle) {
-        cards.push(card);
-    }
-
-}
-
-std::ostream& operator<<(std::ostream& os, const Card &card) {
-    return os << card.print();
-}
+//Prints out all the cards in the hand
 std::ostream& operator<<(std::ostream& os, const Hand &hand) {
     for (auto const& it : hand.cards) {
         os << it->print() << std::endl;
     }
     return os;
 }
-std::ostream& operator<<(std::ostream& os, const Deck &deck) {
-    for (auto const& it : deck.cards) {
-        os << it->print() << std::endl;
-    }
-    return os;
+
+
+
+Card::Card(const Card &card) {
+    original_deck = card.original_deck;
 }
+
+Card &Card::operator=(const Card &other) {
+    if (this != &other) {
+        original_deck = other.original_deck;
+    }
+
+    return *this;
+}
+
+//Plays the card and puts it back into its original deck
+void BombCard::play() {
+    original_deck->putIntoDeck(this);
+}
+
+std::string BombCard::print() const{
+    return "bomb";
+}
+
+//Plays the card and puts it back into its original deck
+void ReinforcementCard::play() {
+    original_deck->putIntoDeck(this);
+}
+
+std::string ReinforcementCard::print()  const {
+    return "reinforcement";
+}
+
+//Plays the card and puts it back into its original deck
+void BlockadeCard::play() {
+    original_deck->putIntoDeck(this);
+}
+
+std::string BlockadeCard::print()  const {
+    return "blockade";
+}
+
+//Plays the card and puts it back into its original deck
+void AirliftCard::play() {
+    original_deck->putIntoDeck(this);
+}
+
+std::string AirliftCard::print()  const {
+    return "airlift";
+}
+
+//Plays the card and puts it back into its original deck
+void DiplomacyCard::play() {
+    original_deck->putIntoDeck(this);
+}
+
+std::string DiplomacyCard::print()  const {
+    return "diplomacy";
+}
+
+Card::Card(Deck *deck) {
+    original_deck = deck;
+}
+
+//Prints out the string given by the print() method that is overloaded by each card type
+std::ostream& operator<<(std::ostream& os, const Card &card) {
+    return os << card.print();
+}
+
+
 
 
 

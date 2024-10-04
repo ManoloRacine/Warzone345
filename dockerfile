@@ -3,7 +3,7 @@ FROM gcc:latest
 
 # Install CMake
 RUN apt-get update && apt-get install -y cmake
-RUN apt-get -y install gdb
+RUN apt-get -y install gdb dos2unix
 
 # Set the working directory inside the container
 WORKDIR /app

@@ -7,6 +7,7 @@
 #include <iostream>
 using namespace std;
 
+//Changes current game engine state based on input
 void StartState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "loadmap") {
         game_engine->setState(MapLoadedState::getInstance());
@@ -20,12 +21,14 @@ string StartState::getName() {
     return "start state";
 }
 
+//returns a singleton representing this state
 GameState& StartState::getInstance() {
     static StartState instance;
     return instance;
 }
 
 
+//Changes current game engine state based on input
 void MapLoadedState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "loadmap") {
         game_engine->setState(MapLoadedState::getInstance());
@@ -42,11 +45,14 @@ string MapLoadedState::getName() {
     return "map loaded state";
 }
 
+//returns a singleton representing this state
 GameState& MapLoadedState::getInstance() {
     static MapLoadedState instance;
     return instance;
 }
 
+
+//Changes current game engine state based on input
 void MapValidatedState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "addplayer") {
         game_engine->setState(PlayersAddedState::getInstance());
@@ -56,6 +62,7 @@ void MapValidatedState::changeState(GameEngine *game_engine, string state_input)
     }
 }
 
+//returns a singleton representing this state
 GameState & MapValidatedState::getInstance() {
     static MapValidatedState instance;
     return instance;
@@ -65,6 +72,8 @@ string MapValidatedState::getName() {
     return "map validated state";
 }
 
+
+//Changes current game engine state based on input
 void PlayersAddedState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "addplayer") {
         game_engine->setState(PlayersAddedState::getInstance());
@@ -77,6 +86,7 @@ void PlayersAddedState::changeState(GameEngine *game_engine, string state_input)
     }
 }
 
+//returns a singleton representing this state
 GameState & PlayersAddedState::getInstance() {
     static PlayersAddedState instance;
     return instance;
@@ -86,6 +96,8 @@ string PlayersAddedState::getName() {
     return "players added state";
 }
 
+
+//Changes current game engine state based on input
 void AssignReinforcementState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "issueorder") {
         game_engine->setState(IssueOrdersState::getInstance());
@@ -95,6 +107,7 @@ void AssignReinforcementState::changeState(GameEngine *game_engine, string state
     }
 }
 
+//returns a singleton representing this state
 GameState & AssignReinforcementState::getInstance() {
     static AssignReinforcementState instance;
     return instance;
@@ -104,6 +117,8 @@ string AssignReinforcementState::getName() {
     return "assign reinforcement";
 }
 
+
+//Changes current game engine state based on input
 void IssueOrdersState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "issueorder") {
         game_engine->setState(IssueOrdersState::getInstance());
@@ -116,6 +131,7 @@ void IssueOrdersState::changeState(GameEngine *game_engine, string state_input) 
     }
 }
 
+//returns a singleton representing this state
 GameState & IssueOrdersState::getInstance() {
     static IssueOrdersState instance;
     return instance;
@@ -125,6 +141,8 @@ string IssueOrdersState::getName() {
     return "issue orders";
 }
 
+
+//Changes current game engine state based on input
 void ExecuteOrdersState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "execorder") {
         game_engine->setState(ExecuteOrdersState::getInstance());
@@ -140,6 +158,7 @@ void ExecuteOrdersState::changeState(GameEngine *game_engine, string state_input
     }
 }
 
+//returns a singleton representing this state
 GameState & ExecuteOrdersState::getInstance() {
     static ExecuteOrdersState instance;
     return instance;
@@ -149,6 +168,8 @@ string ExecuteOrdersState::getName() {
     return "execute orders";
 }
 
+
+//Changes current game engine state based on input
 void WinState::changeState(GameEngine *game_engine, string state_input) {
     if (state_input == "play") {
         game_engine->setState(StartState::getInstance());
@@ -161,6 +182,7 @@ void WinState::changeState(GameEngine *game_engine, string state_input) {
     }
 }
 
+//returns a singleton representing this state
 GameState & WinState::getInstance() {
     static WinState instance;
     return instance;
@@ -169,6 +191,7 @@ GameState & WinState::getInstance() {
 string WinState::getName() {
     return "win";
 }
+
 
 
 GameEngine::GameEngine() {
@@ -187,4 +210,20 @@ void GameEngine::setState(GameState &new_state) {
     gameEngineState = &new_state;
 }
 
+GameEngine::GameEngine(const GameEngine &gameEngine) {
+    gameEngineState = gameEngine.gameEngineState;
+}
+
+GameEngine & GameEngine::operator=(const GameEngine &other) {
+    if (this != &other) {
+        gameEngineState = other.gameEngineState;
+    }
+
+    return *this;
+}
+
+std::ostream & operator<<(std::ostream &os, const GameEngine &gameEngine) {
+    os << gameEngine.getCurrentState()->getName();
+    return os;
+}
 

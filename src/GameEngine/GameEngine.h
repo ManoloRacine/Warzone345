@@ -79,6 +79,9 @@ class GameEngine {
     GameState* getCurrentState() const;
     void setState(GameState& new_state);
     void changeState(string state_input);
+    GameEngine(const GameEngine& gameEngine);
+    GameEngine& operator=(const GameEngine& gameEngine);
+    friend std::ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
 
     private:
     GameState* gameEngineState;
