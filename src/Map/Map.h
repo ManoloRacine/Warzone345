@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
-//#include "Player.h"
+#include "Player/Player.h"
 
 using std::cout;
 using std::endl;
@@ -67,15 +67,13 @@ private:
     std::pair<int, int> coordinates;
     Continent* continent; 
     std::vector<Territory*> connectedTerritories; 
-    //TO BE CHANGED
-    int owner = -1;
-    //Player* = nullptr;  
+    Player* owner = nullptr;  
     int armies = 0;
 
 public:
     // Constructors
-    Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies);
-    //Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, Player* owner, int armies);  // TO BE CHANGED
+    Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, Player* owner, int armies);
+
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent);
 
     // Copy Constructor
@@ -99,11 +97,8 @@ public:
     int getArmies() const;
     const std::vector<Territory*>& getConnectedTerritories() const;
 
-    // TO BE CHANGED 
-    void setOwner(int newOwner);
-    // void setOwner(Player* newOwner)
-    int getOwner() const;
-    // Player* getOwner() const;
+    void setOwner(Player* newOwner);
+    Player* getOwner() const;
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -169,6 +164,8 @@ public:
     void DFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes);
     bool mapFullyConnected(unordered_map<std::string, Territory*> mapData);
     bool validateUniqueness(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
+    bool subGraphCheck(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
+    void DFSsubGraph(Territory* territory, std::unordered_set<Territory*> visitedNodes, Continent* Continent);
     bool validate();
 
 };
@@ -181,6 +178,18 @@ class MapLoader {
 public:
     // Load map
     Map loadMap(const std::string& path);
+
+private:
+     // Load map helpers
+    void trim(std::string &line);
+    void processMapSection(const std::string &line, Map &map);
+    void setScrollType(Map &map, const std::string &value);
+    void processContinentsSection(const std::string &line, Map &map);
+    void processTerritoriesSection(const std::string &line, Map &map, std::unordered_map<Territory *, std::vector<std::string>> &associationsMap);
+    Continent* findContinentByName(Map &map, const std::string &continentName);
+    std::vector<std::string> parseConnectedTerritories(std::istringstream &iss);
+    void setupTerritoryConnections(Map &map, const std::unordered_map<Territory *, std::vector<std::string>> &associationsMap);
+    void validateCoordinates(int x, int y);
 };
 
 #endif 

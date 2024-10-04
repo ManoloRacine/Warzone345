@@ -13,10 +13,14 @@ void testLoadMaps() {
     std::cout << "Initiating testLoadMaps..." << std::endl;
 
     std::vector<std::string> map_files {
-        "../res/maps/USA.txt",
-        "../res/maps/USAError.txt",
-        "../res/maps/Europe.txt"
-    };
+    "../res/maps/USA.txt",
+    "../res/maps/USA_EmptyContinent.txt",
+    "../res/maps/Europe.txt",
+    "../res/maps/Africa.txt",
+    "../res/maps/Europe_NotConnected.txt",
+    "../res/maps/Africa_UnconnectedSubGraph.txt"
+};
+
 
     // Loop over each map file path in the vector
     for (const std::string& filePath : map_files) {
@@ -26,7 +30,7 @@ void testLoadMaps() {
             Map loadedMap = mapLoader.loadMap(filePath);
 
             std::cout << "Map loaded successfully from: " << filePath << std::endl;
-            std::cout << loadedMap; // Display loaded map data
+            //std::cout << loadedMap; // Display loaded map data
 
             // Validate the loaded map
             std::cout << "is Map valid = " << (loadedMap.validate() ? "True" : "False") << std::endl;
