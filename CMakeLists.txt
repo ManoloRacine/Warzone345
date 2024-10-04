@@ -21,6 +21,10 @@ add_executable(Warzone345
     src/Orders/OrderDriver.h
     src/Orders/OrderDriver.cpp
     src/Orders/Order.cpp
+    src/Player/Player.h
+    src/Player/Player.cpp
+    src/Player/PlayerDriver.h
+    src/Player/PlayerDriver.cpp
 )
 
 # Copy resource files (maps) to the build directory
