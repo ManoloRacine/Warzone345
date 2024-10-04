@@ -1,8 +1,9 @@
 # Use the GCC base image
 FROM gcc:latest
 
-# Install CMake, gdb, and dos2unix
-RUN apt-get update && apt-get install -y cmake gdb dos2unix
+# Install CMake
+RUN apt-get update && apt-get install -y cmake
+RUN apt-get -y install gdb dos2unix
 
 # Set the working directory inside the container
 WORKDIR /app
