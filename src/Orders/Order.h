@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <vector>
-#include "Cards/Cards.h"
+#include "../Cards/Cards.h"
 
 class Card;
 enum CardType : int;
@@ -69,8 +69,7 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-
-airlift
+//airlift
 class Airlift : public Order
 {
 public:
@@ -85,7 +84,7 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-blockade
+//blockade
 class Blockade : public Order
 {
 public:
