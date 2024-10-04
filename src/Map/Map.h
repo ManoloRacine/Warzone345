@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
-//#include "Player.h"
+#include "Player/Player.h"
 
 using std::cout;
 using std::endl;
@@ -67,15 +67,13 @@ private:
     std::pair<int, int> coordinates;
     Continent* continent; 
     std::vector<Territory*> connectedTerritories; 
-    //TO BE CHANGED
-    int owner = -1;
-    //Player* = nullptr;  
+    Player* owner = nullptr;  
     int armies = 0;
 
 public:
     // Constructors
-    Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, int owner, int armies);
-    //Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, Player* owner, int armies);  // TO BE CHANGED
+    Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent, Player* owner, int armies);
+
     Territory(const std::string& name, const std::pair<int, int>& coordinates, Continent* continent);
 
     // Copy Constructor
@@ -99,11 +97,8 @@ public:
     int getArmies() const;
     const std::vector<Territory*>& getConnectedTerritories() const;
 
-    // TO BE CHANGED 
-    void setOwner(int newOwner);
-    // void setOwner(Player* newOwner)
-    int getOwner() const;
-    // Player* getOwner() const;
+    void setOwner(Player* newOwner);
+    Player* getOwner() const;
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

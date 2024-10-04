@@ -108,18 +108,14 @@ void Continent::addTerritory(Territory *territory)
 //TO BE CHANGED
 
 // Constructor
-Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent, int owner, int armies)
+
+    Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent, Player* owner, int armies)
     : name(name), coordinates(coordinates), continent(continent), owner(owner), armies(armies) {}
 
-    // Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent, Player* owner, int armies)
-    // : name(name), coordinates(coordinates), continent(continent), owner(owner), armies(armies) {}
-
 // Overloaded constructor with name, coordinates, and continent
-Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent)
-    : Territory(name, coordinates, continent, 0, 0) {}
 
-    // Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent)
-    // : Territory(name, coordinates, continent, nullptr, 0) {}
+    Territory::Territory(const std::string &name, const std::pair<int, int> &coordinates, Continent *continent)
+    : Territory(name, coordinates, continent, nullptr, 0) {}
 
 // Copy Constructor
 Territory::Territory(const Territory& other) 
@@ -203,8 +199,7 @@ std::ostream& operator<<(std::ostream& os, const Territory& territory) {
        << territory.coordinates.first << " , "
        << territory.coordinates.second << " , "
        << (territory.continent ? territory.continent->getName() : "None") << " , "
-       << territory.owner << " [owner] ,"
-       //<< territory.owner.getName() << " [owner] ,"   //TO BE CHANGED
+       << (territory.owner ? territory.owner->getName() : "None") << " [owner] ," 
        << territory.armies << " [armies] ,"
        << " Connected Territories: ";
 
@@ -222,16 +217,11 @@ std::ostream& operator<<(std::ostream& os, const Territory& territory) {
 }
 
 
-//To be CHANGED
-void Territory::setOwner(int newOwner)
-{   owner = newOwner; }
 
-// void Territory::setOwner(Player* newOwner){ this->newOwner = newOwner}
+void Territory::setOwner(Player* owner){ this->owner = owner;};
 
-int Territory::getOwner() const {
-    return owner; }
 
-//Player* Territory::getOwner() const { return owner}
+Player* Territory::getOwner() const { return owner;};
 
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
