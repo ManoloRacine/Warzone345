@@ -14,11 +14,11 @@ void testLoadMaps() {
 
     std::vector<std::string> map_files {
     "../res/maps/USA.txt",
-   // "../res/maps/USA_EmptyContinent.txt",
-  //  "../res/maps/Europe.txt",
-   // "../res/maps/Africa.txt",
-   // "../res/maps/Europe_NotConnected.txt",
-    //"../res/maps/Africa_UnconnectedSubGraph.txt"
+    "../res/maps/USA_EmptyContinent.txt",
+    "../res/maps/Europe.txt",
+    "../res/maps/Africa.txt",
+    "../res/maps/Europe_NotConnected.txt",
+    "../res/maps/Africa_UnconnectedSubGraph.txt"
 };
 
 

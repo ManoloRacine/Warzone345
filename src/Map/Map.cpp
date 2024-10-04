@@ -527,53 +527,22 @@ bool Map::mapFullyConnected(unordered_map<std::string, Territory*> mapData) {
     return isConnected;
 }
 
-void Map::DFSsubGraph(Territory* territory, std::unordered_set<Territory*> visitedNodes, Continent* Continent) {
-    if (!territory) return; // Check for null pointer
-
-
-    //Creating a new vector of lands common between Continents Territories and Territories found on the adjacency list
-    vector<Territory*> commonLands;
-    for (int i = 0; i < territory->getConnectedTerritories().size(); i++) {
-        for (int j = 0; j < Continent->getTerritories().size(); j++) {
-            //if a common land is found store it in the vector and stop inner loop
-            if (territory->getConnectedTerritories()[i]->getName() == Continent->getTerritories()[j]->getName()) {
-                commonLands.push_back(territory->getConnectedTerritories()[i]);
-                break;
-            }
-        }
-    }
-    // Track the current node that is being visited
-    visitedNodes.insert(territory);
-    std::cout << "Visiting: " << territory->getName() <<"Part of Continent: "<< Continent->getName()<< std::endl;
-
-    // From the current node check the vector of adjacent territories
-    for (Territory* adjacent : commonLands) {
-       
-            // Check if the adjacent territory has not been visited
-            if (visitedNodes.find(adjacent) == visitedNodes.end()) {
-            DFSsubGraph(adjacent, visitedNodes, Continent);
-        }
-        
-    
-    }
-    return;
-}
-
-void Map::SubGraphDFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes, Continent* Continent, vector<Territory*> &traversal) {
+void Map::SubGraphDFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes, Continent* Continent) {
     if (!territory) return; // Check for null pointer
 
     // Track the current node that is being visited and store it in a vector
     visitedNodes.insert(territory);
-    traversal.push_back(territory);
     
     // From the current node check the vector of adjacent territories
     for (Territory* adjacent : territory->getConnectedTerritories()) {
         
+        //iterate through continent terriroties
         for (const auto & iterator : Continent->getTerritories()) {
+            //check that the adjacency lists match 
             if (adjacent->getName() == iterator->getName()) {
                 // Check if the adjacent territory has not been visited
                 if (visitedNodes.find(adjacent) == visitedNodes.end()) {
-                SubGraphDFS(adjacent, visitedNodes, Continent, traversal);
+                SubGraphDFS(adjacent, visitedNodes, Continent);
                 }
             }
         }
@@ -588,7 +557,6 @@ bool Map::subGraphCheck(unordered_map<std::string, Territory*> mapData, vector<C
     for(int i = 0; i <= Continents.size()-1; i++) {
 
         std::unordered_set<Territory*> visitedNodes = {};
-        vector<Territory*> traversal;
 
         if (Continents[i]->getTerritories()[0]->getConnectedTerritories().size() == 0) {
             std::cout <<"Continent territory is disconnected";
@@ -597,14 +565,10 @@ bool Map::subGraphCheck(unordered_map<std::string, Territory*> mapData, vector<C
         //takes in the current continents first territory as the starting node, 
         //has a empty vector to track visited nodes
         //Gives the current continent
-        SubGraphDFS(Continents[i]->getTerritories()[0], visitedNodes,Continents[i], traversal);
-        cout<<"Traversal size is " <<traversal.size()<< endl;
-        cout<<"Continents size is " <<Continents[i]->getTerritories().size()<< endl;
-        cout<<"---------------------------------------";
+        SubGraphDFS(Continents[i]->getTerritories()[0], visitedNodes,Continents[i]);
 
-        bool isConnected = (traversal.size() == Continents[i]->getTerritories().size());
+        bool isConnected = (visitedNodes.size() == Continents[i]->getTerritories().size());
         valid = isConnected;
-    std::cout << "Is the continent connected? " << (isConnected ? "Yes" : "No") << std::endl;
     if (valid == false) {
         return false;
     }
