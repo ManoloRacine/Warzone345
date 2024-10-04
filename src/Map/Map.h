@@ -9,7 +9,8 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
-#include "Player/Player.h"
+#include "../Player/Player.h"
+class Player;
 
 using std::cout;
 using std::endl;
@@ -17,6 +18,8 @@ using std::string;
 using std::pair;
 using std::vector;
 using std::unordered_map;
+
+
 
 
 // Forward declarations
