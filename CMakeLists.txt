@@ -16,6 +16,11 @@ add_executable(Warzone345
     src/Map/Map.cpp
     src/Map/MapDriver.cpp
     src/Map/MapDriver.h
+    src/Orders/Order.h
+    src/Orders/Order.cpp
+    src/Orders/OrderDriver.h
+    src/Orders/OrderDriver.cpp
+    src/Orders/Order.cpp
 )
 
 # Copy resource files (maps) to the build directory
