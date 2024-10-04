@@ -5,11 +5,11 @@
 ### Team Name: T19
 
 **Team Members:**
-- Jaxon Alexander
-- Ryad Alla
-- Manolo Racine
-- Griffin Sin-Chan
-- Nektarios Zampetoulakis
+- Jaxon Alexander 40278732
+- Ryad Alla 40227731
+- Manolo Racine 
+- Griffin Sin-Chan 40278049
+- Nektarios Zampetoulakis 40211948
 
 ---
 
