@@ -9,9 +9,7 @@
 using namespace std;
 #include <random>
 
-Deck::Deck() {
-
-}
+Deck::Deck() = default;
 
 Deck::Deck(const Deck &deck) {
     cards = deck.cards;
@@ -88,9 +86,7 @@ std::ostream& operator<<(std::ostream& os, const Deck &deck) {
     return os;
 }
 
-Hand::Hand() {
-
-}
+Hand::Hand() = default;
 
 Hand::Hand(const Hand &hand) {
     cards = hand.cards;
