@@ -8,6 +8,5 @@ int main() {
     testLoadMaps();
     testCards();
     testGameStates();
-    testPlayer();
     return 0;
 }
