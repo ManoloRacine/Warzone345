@@ -20,7 +20,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Card& card);
     virtual std::string print() const = 0;
 protected:
-    Deck* original_deck;
+    Deck* originalDeck;
 };
 
 class BombCard : public Card {
@@ -76,7 +76,7 @@ class Deck {
     Deck(const Deck& deck);
     Deck& operator=(const Deck& deck);
     friend std::ostream& operator<<(std::ostream& os, const Deck& deck);
-    void putIntoDeck(Card* card_to_put_back);
+    void putIntoDeck(Card* cardToPutBack);
 private:
     std::queue<Card*> cards;
 };

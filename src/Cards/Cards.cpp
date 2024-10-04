@@ -73,8 +73,8 @@ Card *Deck::draw() {
 }
 
 //Puts back the card into at the bottom of the deck
-void Deck::putIntoDeck(Card* card_to_put_back) {
-    cards.push(card_to_put_back);
+void Deck::putIntoDeck(Card* cardToPutBack) {
+    cards.push(cardToPutBack);
 }
 
 //Prints out all the cards in the deck
@@ -120,16 +120,16 @@ void Hand::play(Card *cardToPlay) {
 
 //Draws a card from the deck and adds it to the hand
 void Hand::draw(Deck *deck) {
-    Card* card_drawn = deck->draw();
+    Card* cardDrawn = deck->draw();
 
-    if (card_drawn == nullptr) {
+    if (cardDrawn == nullptr) {
         std::cout << "no card drawn";
         return;
     }
 
-    std::cout << *card_drawn << " card drawn" << std::endl;
+    std::cout << *cardDrawn << " card drawn" << std::endl;
 
-    cards.push_back(card_drawn);
+    cards.push_back(cardDrawn);
 }
 
 std::vector<Card *> Hand::getCards() {
@@ -147,12 +147,12 @@ std::ostream& operator<<(std::ostream& os, const Hand &hand) {
 
 
 Card::Card(const Card &card) {
-    original_deck = card.original_deck;
+    originalDeck = card.originalDeck;
 }
 
 Card &Card::operator=(const Card &other) {
     if (this != &other) {
-        original_deck = other.original_deck;
+        originalDeck = other.originalDeck;
     }
 
     return *this;
@@ -160,7 +160,7 @@ Card &Card::operator=(const Card &other) {
 
 //Plays the card and puts it back into its original deck
 void BombCard::play() {
-    original_deck->putIntoDeck(this);
+    originalDeck->putIntoDeck(this);
 }
 
 std::string BombCard::print() const{
@@ -169,7 +169,7 @@ std::string BombCard::print() const{
 
 //Plays the card and puts it back into its original deck
 void ReinforcementCard::play() {
-    original_deck->putIntoDeck(this);
+    originalDeck->putIntoDeck(this);
 }
 
 std::string ReinforcementCard::print()  const {
@@ -178,7 +178,7 @@ std::string ReinforcementCard::print()  const {
 
 //Plays the card and puts it back into its original deck
 void BlockadeCard::play() {
-    original_deck->putIntoDeck(this);
+    originalDeck->putIntoDeck(this);
 }
 
 std::string BlockadeCard::print()  const {
@@ -187,7 +187,7 @@ std::string BlockadeCard::print()  const {
 
 //Plays the card and puts it back into its original deck
 void AirliftCard::play() {
-    original_deck->putIntoDeck(this);
+    originalDeck->putIntoDeck(this);
 }
 
 std::string AirliftCard::print()  const {
@@ -196,7 +196,7 @@ std::string AirliftCard::print()  const {
 
 //Plays the card and puts it back into its original deck
 void DiplomacyCard::play() {
-    original_deck->putIntoDeck(this);
+    originalDeck->putIntoDeck(this);
 }
 
 std::string DiplomacyCard::print()  const {
@@ -204,7 +204,7 @@ std::string DiplomacyCard::print()  const {
 }
 
 Card::Card(Deck *deck) {
-    original_deck = deck;
+    originalDeck = deck;
 }
 
 //Prints out the string given by the print() method that is overloaded by each card type

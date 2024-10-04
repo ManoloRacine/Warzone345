@@ -8,9 +8,9 @@
 using namespace std;
 
 //Changes current game engine state based on input
-void StartState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "loadmap") {
-        game_engine->setState(MapLoadedState::getInstance());
+void StartState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "loadmap") {
+        gameEngine->setState(MapLoadedState::getInstance());
     }
     else {
         cout << "Invalid input" << endl;
@@ -29,12 +29,12 @@ GameState& StartState::getInstance() {
 
 
 //Changes current game engine state based on input
-void MapLoadedState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "loadmap") {
-        game_engine->setState(MapLoadedState::getInstance());
+void MapLoadedState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "loadmap") {
+        gameEngine->setState(MapLoadedState::getInstance());
     }
-    else if (state_input == "validatemap") {
-        game_engine->setState(MapValidatedState::getInstance());
+    else if (stateInput == "validatemap") {
+        gameEngine->setState(MapValidatedState::getInstance());
     }
     else {
         cout << "Invalid input" << endl;
@@ -53,9 +53,9 @@ GameState& MapLoadedState::getInstance() {
 
 
 //Changes current game engine state based on input
-void MapValidatedState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "addplayer") {
-        game_engine->setState(PlayersAddedState::getInstance());
+void MapValidatedState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "addplayer") {
+        gameEngine->setState(PlayersAddedState::getInstance());
     }
     else {
         cout << "Invalid input" << endl;
@@ -74,12 +74,12 @@ string MapValidatedState::getName() {
 
 
 //Changes current game engine state based on input
-void PlayersAddedState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "addplayer") {
-        game_engine->setState(PlayersAddedState::getInstance());
+void PlayersAddedState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "addplayer") {
+        gameEngine->setState(PlayersAddedState::getInstance());
     }
-    else if (state_input == "assigncountries") {
-        game_engine->setState(AssignReinforcementState::getInstance());
+    else if (stateInput == "assigncountries") {
+        gameEngine->setState(AssignReinforcementState::getInstance());
     }
     else {
         cout << "Invalid input" << endl;
@@ -98,9 +98,9 @@ string PlayersAddedState::getName() {
 
 
 //Changes current game engine state based on input
-void AssignReinforcementState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "issueorder") {
-        game_engine->setState(IssueOrdersState::getInstance());
+void AssignReinforcementState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "issueorder") {
+        gameEngine->setState(IssueOrdersState::getInstance());
     }
     else {
         cout << "Invalid input" << endl;
@@ -119,12 +119,12 @@ string AssignReinforcementState::getName() {
 
 
 //Changes current game engine state based on input
-void IssueOrdersState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "issueorder") {
-        game_engine->setState(IssueOrdersState::getInstance());
+void IssueOrdersState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "issueorder") {
+        gameEngine->setState(IssueOrdersState::getInstance());
     }
-    else if (state_input == "endissueorders") {
-        game_engine->setState(ExecuteOrdersState::getInstance());
+    else if (stateInput == "endissueorders") {
+        gameEngine->setState(ExecuteOrdersState::getInstance());
     }
     else {
         cout << "Invalid input" << endl;
@@ -143,15 +143,15 @@ string IssueOrdersState::getName() {
 
 
 //Changes current game engine state based on input
-void ExecuteOrdersState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "execorder") {
-        game_engine->setState(ExecuteOrdersState::getInstance());
+void ExecuteOrdersState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "execorder") {
+        gameEngine->setState(ExecuteOrdersState::getInstance());
     }
-    else if (state_input == "endexecorders") {
-        game_engine->setState(AssignReinforcementState::getInstance());
+    else if (stateInput == "endexecorders") {
+        gameEngine->setState(AssignReinforcementState::getInstance());
     }
-    else if (state_input == "win") {
-        game_engine->setState(WinState::getInstance());
+    else if (stateInput == "win") {
+        gameEngine->setState(WinState::getInstance());
     }
     else {
         cout << "Invalid input" << endl;
@@ -170,11 +170,11 @@ string ExecuteOrdersState::getName() {
 
 
 //Changes current game engine state based on input
-void WinState::changeState(GameEngine *game_engine, string state_input) {
-    if (state_input == "play") {
-        game_engine->setState(StartState::getInstance());
+void WinState::changeState(GameEngine *gameEngine, string stateInput) {
+    if (stateInput == "play") {
+        gameEngine->setState(StartState::getInstance());
     }
-    else if (state_input == "end") {
+    else if (stateInput == "end") {
         exit(0);
     }
     else {
@@ -202,12 +202,12 @@ GameState* GameEngine::getCurrentState() const {
     return gameEngineState;
 }
 
-void GameEngine::changeState(string state_input) {
-    gameEngineState->changeState(this, state_input);
+void GameEngine::changeState(string stateInput) {
+    gameEngineState->changeState(this, stateInput);
 }
 
-void GameEngine::setState(GameState &new_state) {
-    gameEngineState = &new_state;
+void GameEngine::setState(GameState &newState) {
+    gameEngineState = &newState;
 }
 
 GameEngine::GameEngine(const GameEngine &gameEngine) {
