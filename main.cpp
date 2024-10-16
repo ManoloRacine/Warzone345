@@ -4,19 +4,17 @@
 #include "src/Orders/OrderDriver.h"
 #include "src/Player/PlayerDriver.h"
 #include <iostream>
+
+#include "Command/Command.h"
+#include "CommandProcessing/CommandProcessor.h"
 using namespace std;
 
 
 int main() {
-    std::cout << "\n STARTING LOAD MAPS TEST \n" << endl;
-    testLoadMaps();
-    std::cout << "\n STARTING CARDS TEST \n" << endl;
-    testCards();
-    std::cout << "\n STARTING ORDERS LISTS TEST \n" << endl;
-    testOrdersLists();
-    std::cout << "\n STARTING PLAYER TEST \n" << endl;
-    testPlayer();
-    std::cout << "\n STARTING GAME STATES TEST \n" << endl;
-    testGameStates();
+    CommandProcessor commandProcessor;
+    GameEngine gameEngine;
+    Command* command = commandProcessor.getCommand(&gameEngine);
+    cout << command->getCommand() << endl;
+    cout << command->getType() << endl;
     return 0;
 }

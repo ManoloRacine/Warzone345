@@ -7,13 +7,18 @@
 #include <iostream>
 using namespace std;
 
+State GameState::getState() {
+    return state;
+}
+
+
 //Changes current game engine state based on input
 void StartState::changeState(GameEngine *gameEngine, string stateInput) {
     if (stateInput == "loadmap") {
         gameEngine->setState(MapLoadedState::getInstance());
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 
@@ -37,7 +42,7 @@ void MapLoadedState::changeState(GameEngine *gameEngine, string stateInput) {
         gameEngine->setState(MapValidatedState::getInstance());
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 
@@ -58,7 +63,7 @@ void MapValidatedState::changeState(GameEngine *gameEngine, string stateInput) {
         gameEngine->setState(PlayersAddedState::getInstance());
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 
@@ -78,11 +83,11 @@ void PlayersAddedState::changeState(GameEngine *gameEngine, string stateInput) {
     if (stateInput == "addplayer") {
         gameEngine->setState(PlayersAddedState::getInstance());
     }
-    else if (stateInput == "assigncountries") {
+    else if (stateInput == "gamestart") {
         gameEngine->setState(AssignReinforcementState::getInstance());
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 
@@ -103,7 +108,7 @@ void AssignReinforcementState::changeState(GameEngine *gameEngine, string stateI
         gameEngine->setState(IssueOrdersState::getInstance());
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 
@@ -127,7 +132,7 @@ void IssueOrdersState::changeState(GameEngine *gameEngine, string stateInput) {
         gameEngine->setState(ExecuteOrdersState::getInstance());
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 
@@ -154,7 +159,7 @@ void ExecuteOrdersState::changeState(GameEngine *gameEngine, string stateInput) 
         gameEngine->setState(WinState::getInstance());
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 
@@ -178,7 +183,7 @@ void WinState::changeState(GameEngine *gameEngine, string stateInput) {
         exit(0);
     }
     else {
-        cout << "Invalid input" << endl;
+        throw stateInput;
     }
 }
 

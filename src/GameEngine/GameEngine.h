@@ -11,10 +11,25 @@ using namespace std;
 
 class GameEngine;
 
+
+enum State {
+    Start,
+    MapLoaded,
+    MapValidated,
+    PlayersAdded,
+    AssignReinforcement,
+    IssueOrders,
+    ExecuteOrders,
+    Win
+};
+
 class GameState {
     public:
     virtual void changeState(GameEngine* gameEngine, string stateInput) = 0;
     virtual string getName() = 0;
+    State getState();
+private:
+    State state;
 };
 
 class StartState : public GameState {
@@ -22,6 +37,8 @@ class StartState : public GameState {
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = Start;
 };
 
 class MapLoadedState : public GameState {
@@ -29,6 +46,8 @@ class MapLoadedState : public GameState {
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = MapLoaded;
 };
 
 class MapValidatedState : public GameState {
@@ -36,6 +55,8 @@ public:
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = MapValidated;
 };
 
 class PlayersAddedState : public GameState {
@@ -43,6 +64,8 @@ public:
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = PlayersAdded;
 };
 
 class AssignReinforcementState : public GameState {
@@ -50,6 +73,8 @@ public:
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = AssignReinforcement;
 };
 
 class IssueOrdersState : public GameState {
@@ -57,6 +82,8 @@ public:
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = IssueOrders;
 };
 
 class ExecuteOrdersState : public GameState {
@@ -64,6 +91,8 @@ public:
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = ExecuteOrders;
 };
 
 class WinState : public GameState {
@@ -71,6 +100,8 @@ public:
     void changeState(GameEngine* gameEngine, string stateInput) override;
     static GameState& getInstance();
     string getName() override;
+private:
+    State state = Win;
 };
 
 class GameEngine {
@@ -86,6 +117,7 @@ class GameEngine {
     private:
     GameState* gameEngineState;
 };
+
 
 
 
