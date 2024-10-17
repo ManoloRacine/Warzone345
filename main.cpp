@@ -11,7 +11,7 @@ using namespace std;
 
 
 int main() {
-    CommandProcessor commandProcessor;
+    FileCommandProcessorAdapter commandProcessor("../res/CommandFiles/test.txt");
     GameEngine gameEngine;
     Command* command = commandProcessor.getCommand(&gameEngine);
     cout << command->getCommand() << endl;

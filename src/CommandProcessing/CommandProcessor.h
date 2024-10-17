@@ -4,6 +4,7 @@
 
 #ifndef COMMANDPROCESSING_H
 #define COMMANDPROCESSING_H
+#include <fstream>
 #include <GameEngine.h>
 #include <vector>
 
@@ -12,14 +13,35 @@
 
 class CommandProcessor {
     private:
-        Command* readCommand();
+        virtual Command* readCommand();
         void saveCommand(Command* command);
         void validate(GameEngine* gameEngine, Command* command);
         vector<Command*> commands;
+    protected:
+        Command* getCommandFromString(string commandString);
     public:
         Command* getCommand(GameEngine* gameEngine);
 
 };
+
+class FileLineReader {
+    private:
+        string filePath;
+        int currentLine;
+    public:
+        explicit FileLineReader(string filePath);
+        string readLineFromFile();
+};
+
+class FileCommandProcessorAdapter : public CommandProcessor {
+    private:
+        Command* readCommand() override;
+        FileLineReader* fileLineReader;
+    public:
+        explicit FileCommandProcessorAdapter(string filePath);
+};
+
+
 
 
 

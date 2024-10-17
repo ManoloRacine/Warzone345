@@ -12,13 +12,7 @@ using namespace std;
 #include <boost/algorithm/string.hpp>
 using namespace boost::algorithm;
 
-
-
-Command *CommandProcessor::readCommand() {
-    string commandString;
-
-    getline(cin, commandString);
-
+Command *CommandProcessor::getCommandFromString(string commandString) {
     vector<string> splitCommand;
     split(splitCommand, commandString, is_any_of(" "));
 
@@ -46,6 +40,15 @@ Command *CommandProcessor::readCommand() {
     }
 
     return new Command(commandString, Invalid);
+}
+
+
+Command *CommandProcessor::readCommand() {
+    string commandString;
+
+    getline(cin, commandString);
+
+    return getCommandFromString(commandString);
 }
 
 
@@ -125,5 +128,46 @@ Command *CommandProcessor::getCommand(GameEngine *gameEngine) {
     saveCommand(command);
     return command;
 }
+
+Command *FileCommandProcessorAdapter::readCommand() {
+    string commandString = fileLineReader->readLineFromFile();
+
+    return getCommandFromString(commandString);
+}
+
+string FileLineReader::readLineFromFile() {
+    ifstream file(filePath);
+
+    string line;
+
+    int lineBeingRead = 1;
+
+    while (getline(file, line)) {
+        if (lineBeingRead == currentLine) {
+            currentLine++;
+            file.close();
+            return line;
+        }
+        lineBeingRead++;
+    }
+
+    file.close();
+
+    //TODO throw error or something
+}
+
+FileLineReader::FileLineReader(string filePath) {
+    this->filePath = filePath;
+    currentLine = 1;
+}
+
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filePath) {
+    fileLineReader = new FileLineReader(filePath);
+}
+
+
+
+
+
 
 
