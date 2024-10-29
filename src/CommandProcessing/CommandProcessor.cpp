@@ -75,13 +75,12 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
     split(splitCommand, command->getCommand(), ' ');
     State currentGameState = gameEngine->getCurrentState()->getState();
     CommandType commandType = command->getType();
-    bool commandValid = false;
 
     switch (commandType) {
         case ValidateMap:
             if (currentGameState == MapLoaded) {
                 command->saveEffect("Map was validated");
-                commandValid = true;
+                command->setSuccess(true);
                 gameEngine->changeState("validatemap");
             }
             break;
@@ -89,7 +88,7 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
         case GameStart:
             if (currentGameState == PlayersAdded) {
                 command->saveEffect("Game was started");
-                commandValid = true;
+                command->setSuccess(true);
                 gameEngine->changeState("gamestart");
             }
             break;
@@ -97,7 +96,7 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
         case Replay:
             if (currentGameState == Win) {
                 command->saveEffect("Replay started");
-                commandValid = true;
+                command->setSuccess(true);
                 gameEngine->changeState("play");
             }
             break;
@@ -105,7 +104,7 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
         case Quit:
             if (currentGameState == Win) {
                 command->saveEffect("Game was ended");
-                commandValid = true;
+                command->setSuccess(true);
                 gameEngine->changeState("end");
             }
             break;
@@ -113,7 +112,7 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
         case LoadMap:
             if (currentGameState == Start || currentGameState == MapLoaded) {
                 command->saveEffect("Map was loaded");
-                commandValid = true;
+                command->setSuccess(true);
                 gameEngine->changeState("loadmap");
             }
             break;
@@ -121,22 +120,21 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
         case AddPlayer:
             if (currentGameState == MapValidated || currentGameState == PlayersAdded) {
                 command->saveEffect("Player was added");
-                commandValid = true;
+                command->setSuccess(true);
                 gameEngine->changeState("addplayer");
             }
             break;
+
+        case Invalid:
+            command->saveEffect("Invalid command");
+            command->setSuccess(false);
+            return;
 
         default:
             throw std::runtime_error("Command not recognized: " + std::to_string(commandType));
     }
 
-    // Handle command validity
-    if (!commandValid) {
-        command->saveEffect("Invalid game state for command: " + gameEngine->getCurrentState()->getName());
-        command->setSuccess(false);
-    } else {
-        command->setSuccess(true);
-    }
+
 }
 
 

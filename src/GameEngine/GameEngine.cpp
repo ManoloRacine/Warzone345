@@ -16,6 +16,17 @@ State GameState::getState() {
     return state;
 }
 
+GameState::GameState(State state) : state(state) {}
+
+StartState::StartState() : GameState(Start) {}
+MapLoadedState::MapLoadedState() : GameState(MapLoaded) {}
+MapValidatedState::MapValidatedState() : GameState(MapValidated) {}
+PlayersAddedState::PlayersAddedState() : GameState(PlayersAdded) {}
+AssignReinforcementState::AssignReinforcementState() : GameState(AssignReinforcement) {}
+IssueOrdersState::IssueOrdersState() : GameState(IssueOrders) {}
+ExecuteOrdersState::ExecuteOrdersState() : GameState(ExecuteOrders) {}
+WinState::WinState() : GameState(Win) {}
+
 //Changes current game engine state based on input
 void StartState::changeState(GameEngine *gameEngine, string stateInput) {
     if (stateInput == "loadmap") {
@@ -33,6 +44,7 @@ string StartState::getName() {
 //returns a singleton representing this state
 GameState& StartState::getInstance() {
     static StartState instance;
+    instance.state = Start;
     return instance;
 }
 
@@ -262,7 +274,6 @@ void GameEngine::startupPhase() {
 
         if (command->getType() == Quit) {
             std::cout << "Exiting the game." << std::endl;
-            delete command; // Clean up command
             break;
         }
 
@@ -351,8 +362,6 @@ void GameEngine::startupPhase() {
         } else if (command->getType() == Invalid) {
             std::cout << "Invalid command!" << std::endl;
         }
-        // Clean up command
-        delete command;
     }
 }
 

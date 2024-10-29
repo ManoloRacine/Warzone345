@@ -33,8 +33,10 @@ class GameState {
     virtual void changeState(GameEngine* gameEngine, string stateInput) = 0;
     virtual string getName() = 0;
     State getState();
-private:
+protected:
     State state;
+
+    GameState(State state);
 };
 
 class StartState : public GameState {
@@ -43,7 +45,7 @@ class StartState : public GameState {
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = Start;
+    StartState();
 };
 
 class MapLoadedState : public GameState {
@@ -52,7 +54,7 @@ class MapLoadedState : public GameState {
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = MapLoaded;
+    MapLoadedState();
 };
 
 class MapValidatedState : public GameState {
@@ -61,7 +63,7 @@ public:
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = MapValidated;
+    MapValidatedState();
 };
 
 class PlayersAddedState : public GameState {
@@ -70,7 +72,7 @@ public:
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = PlayersAdded;
+    PlayersAddedState();
 };
 
 class AssignReinforcementState : public GameState {
@@ -79,7 +81,7 @@ public:
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = AssignReinforcement;
+    AssignReinforcementState();
 };
 
 class IssueOrdersState : public GameState {
@@ -88,7 +90,7 @@ public:
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = IssueOrders;
+    IssueOrdersState();
 };
 
 class ExecuteOrdersState : public GameState {
@@ -97,7 +99,7 @@ public:
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = ExecuteOrders;
+    ExecuteOrdersState();
 };
 
 class WinState : public GameState {
@@ -106,7 +108,7 @@ public:
     static GameState& getInstance();
     string getName() override;
 private:
-    State state = Win;
+    WinState();
 };
 
 class GameEngine {
