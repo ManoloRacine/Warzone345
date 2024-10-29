@@ -31,7 +31,4 @@ class Command {
         void saveEffect(string effect);
 
 };
-
-
-
 #endif //COMMAND_H

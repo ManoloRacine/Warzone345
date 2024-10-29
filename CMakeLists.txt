@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.25.1)
 project(Warzone345)
 
-set(BOOST_ROOT "/usr")
-set(BOOST_INCLUDEDIR "/usr/include")
-set(BOOST_LIBRARYDIR "/usr/lib/x86_64-linux-gnu")
+#set(BOOST_ROOT "/usr")
+#set(BOOST_INCLUDEDIR "/usr/include")
+#set(BOOST_LIBRARYDIR "/usr/lib/x86_64-linux-gnu")
 
 # Find Boost Libraries
-find_package(Boost 1.74.0 REQUIRED)
+#find_package(Boost 1.74.0 REQUIRED)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -21,7 +21,7 @@ include_directories(
 )
 
 # Include Boost headers
-include_directories(${Boost_INCLUDE_DIRS})
+#include_directories(${Boost_INCLUDE_DIRS})
 
 
 # Add source files for the main executable
@@ -44,8 +44,9 @@ add_executable(Warzone345
 )
 
 # Link Boost libraries to your executable
-target_link_libraries(Warzone345 ${Boost_LIBRARIES})
+#target_link_libraries(Warzone345 ${Boost_LIBRARIES})
+target_link_libraries(Warzone345)
 
 # Copy resource files (maps) to the build directory
-file(COPY res/maps/Africa.txt res/maps/Europe.txt res/maps/USA.txt res/maps/USA_EmptyContinent.txt res/maps/Europe_NotConnected.txt res/maps/Africa_UnconnectedSubGraph.txt
+file(COPY res/maps/africa.txt res/maps/europe.txt res/maps/usa.txt res/maps/usa_emptycontinent.txt res/maps/europe_notconnected.txt res/maps/africa_unconnectedsubgraph.txt
     DESTINATION ${CMAKE_BINARY_DIR}/res/maps)

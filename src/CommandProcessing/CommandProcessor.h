@@ -5,11 +5,12 @@
 #ifndef COMMANDPROCESSING_H
 #define COMMANDPROCESSING_H
 #include <fstream>
-#include <GameEngine.h>
+#include "../GameEngine/GameEngine.h"
+#include "../Command/Command.h"
 #include <vector>
 
-#include "Command/Command.h"
 
+class GameEngine;
 
 class CommandProcessor {
     private:
@@ -19,9 +20,9 @@ class CommandProcessor {
         vector<Command*> commands;
     protected:
         Command* getCommandFromString(string commandString);
+        friend class GameEngine;
     public:
         Command* getCommand(GameEngine* gameEngine);
-
 };
 
 class FileLineReader {
@@ -40,9 +41,4 @@ class FileCommandProcessorAdapter : public CommandProcessor {
     public:
         explicit FileCommandProcessorAdapter(string filePath);
 };
-
-
-
-
-
 #endif //COMMANDPROCESSING_H

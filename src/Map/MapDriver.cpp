@@ -13,27 +13,29 @@ void testLoadMaps() {
     std::cout << "Initiating testLoadMaps..." << std::endl;
 
     std::vector<std::string> map_files {
-    "../res/maps/USA.txt",
-    "../res/maps/USA_EmptyContinent.txt",
-    "../res/maps/Europe.txt",
-    "../res/maps/Africa.txt",
-    "../res/maps/Europe_NotConnected.txt",
-    "../res/maps/Africa_UnconnectedSubGraph.txt"
+    "../res/maps/usa.txt",
+    // "../res/maps/usa_emptycontinent.txt",
+    // "../res/maps/europe.txt",
+    // "../res/maps/africa.txt",
+    // "../res/maps/europe_notconnected.txt",
+    // "../res/maps/africa_unconnectedsubgraph.txt"
 };
-
 
     // Loop over each map file path in the vector
     for (const std::string& filePath : map_files) {
         try {
             // Initialize MapLoader and attempt to load the map
             MapLoader mapLoader;
-            Map loadedMap = mapLoader.loadMap(filePath);
+            Map loadedMap;
+            mapLoader.loadMap(loadedMap,filePath);
 
             std::cout << "Map loaded successfully from: " << filePath << std::endl;
-            //std::cout << loadedMap; // Display loaded map data
+            std::cout << loadedMap; // Display loaded map data
+
+            bool result = loadedMap.validate();
 
             // Validate the loaded map
-            std::cout << "is Map valid = " << (loadedMap.validate() ? "True" : "False") << std::endl;
+            std::cout << "is Map valid = " << (result ? "True" : "False") << std::endl;
 
         } catch (const std::runtime_error& e) {
             // Catch any errors and print the error message

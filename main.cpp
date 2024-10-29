@@ -11,10 +11,13 @@ using namespace std;
 
 
 int main() {
-    FileCommandProcessorAdapter commandProcessor("../res/CommandFiles/test.txt");
-    GameEngine gameEngine;
-    Command* command = commandProcessor.getCommand(&gameEngine);
-    cout << command->getCommand() << endl;
-    cout << command->getType() << endl;
+    // FileCommandProcessorAdapter commandProcessor("../res/CommandFiles/test.txt");
+    // GameEngine gameEngine;
+    // Command* command = commandProcessor.getCommand(&gameEngine);
+    // cout << command->getCommand() << endl;
+    // cout << command->getType() << endl;
+
+    testStartupPhase();
+    //testLoadMaps();
     return 0;
 }

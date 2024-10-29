@@ -131,8 +131,9 @@ public:
     // Destructor
     ~Map();
 
-    // Constructors
-    Map() = default; // Default constructor
+    // Default Constructor
+    Map()
+        : author(""), warn(false), imgPath(""), wrap(false), scrollType(none) {}
     
     Map(const Map& other); // Copy constructor
 
@@ -181,7 +182,7 @@ class MapLoader {
 
 public:
     // Load map
-    Map loadMap(const std::string& path);
+    void loadMap(Map &map,const std::string& path);
 
 private:
      // Load map helpers

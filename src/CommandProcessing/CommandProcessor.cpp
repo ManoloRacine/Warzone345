@@ -3,18 +3,38 @@
 //
 
 #include "CommandProcessor.h"
-
 #include <iostream>
-#include <ranges>
+#include <sstream>  // For std::istringstream
 #include <string>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-#include <boost/algorithm/string.hpp>
-using namespace boost::algorithm;
+// Custom split function to replace boost::algorithm::split
+void split(vector<string>& result, const string& input, const char delimiter = ' ') {
+    result.clear();
+    istringstream stream(input);
+    string token;
+    while (getline(stream, token, delimiter)) {
+        if (!token.empty()) {
+            result.push_back(token);
+        }
+    }
+}
+
+// Function to convert a string to lowercase
+string toLower(const string& str) {
+    string lowerStr = str;
+    transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), [](unsigned char c) {
+        return tolower(c);
+    });
+    return lowerStr;
+}
 
 Command *CommandProcessor::getCommandFromString(string commandString) {
     vector<string> splitCommand;
-    split(splitCommand, commandString, is_any_of(" "));
+    commandString = toLower(commandString);
+    split(splitCommand, commandString, ' ');
 
     if (splitCommand.size() == 1) {
         if (splitCommand.at(0) == "validatemap") {
@@ -40,87 +60,89 @@ Command *CommandProcessor::getCommandFromString(string commandString) {
     }
 
     return new Command(commandString, Invalid);
-}
 
+}
 
 Command *CommandProcessor::readCommand() {
     string commandString;
-
     getline(cin, commandString);
-
+    commandString = toLower(commandString);
     return getCommandFromString(commandString);
 }
 
-
 void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
     vector<string> splitCommand;
-    split(splitCommand, command->getCommand(), is_any_of(" "));
-
+    split(splitCommand, command->getCommand(), ' ');
     State currentGameState = gameEngine->getCurrentState()->getState();
     CommandType commandType = command->getType();
+    bool commandValid = false;
 
     switch (commandType) {
         case ValidateMap:
             if (currentGameState == MapLoaded) {
                 command->saveEffect("Map was validated");
-                command->setSuccess(true);
+                commandValid = true;
                 gameEngine->changeState("validatemap");
-                return;
             }
-        break;
+            break;
+
         case GameStart:
             if (currentGameState == PlayersAdded) {
                 command->saveEffect("Game was started");
-                command->setSuccess(true);
+                commandValid = true;
                 gameEngine->changeState("gamestart");
-                return;
             }
-        break;
+            break;
+
         case Replay:
             if (currentGameState == Win) {
                 command->saveEffect("Replay started");
-                command->setSuccess(true);
+                commandValid = true;
                 gameEngine->changeState("play");
-                return;
             }
-        break;
+            break;
+
         case Quit:
             if (currentGameState == Win) {
                 command->saveEffect("Game was ended");
-                command->setSuccess(true);
+                commandValid = true;
                 gameEngine->changeState("end");
-                return;
             }
-        break;
+            break;
+
         case LoadMap:
             if (currentGameState == Start || currentGameState == MapLoaded) {
                 command->saveEffect("Map was loaded");
-                command->setSuccess(true);
+                commandValid = true;
                 gameEngine->changeState("loadmap");
-                return;
             }
-        break;
+            break;
+
         case AddPlayer:
             if (currentGameState == MapValidated || currentGameState == PlayersAdded) {
                 command->saveEffect("Player was added");
-                command->setSuccess(true);
+                commandValid = true;
                 gameEngine->changeState("addplayer");
-                return;
             }
-        default:
-            throw std::runtime_error("Command not recognized, when it should have been checked previously");
+            break;
 
+        default:
+            throw std::runtime_error("Command not recognized: " + std::to_string(commandType));
     }
 
-    command->saveEffect("invalid game state for command : " + gameEngine->getCurrentState()->getName());
-    command->setSuccess(false);
-
+    // Handle command validity
+    if (!commandValid) {
+        command->saveEffect("Invalid game state for command: " + gameEngine->getCurrentState()->getName());
+        command->setSuccess(false);
+    } else {
+        command->setSuccess(true);
+    }
 }
+
 
 void CommandProcessor::saveCommand(Command* command) {
     commands.push_back(command);
 }
-
 
 Command *CommandProcessor::getCommand(GameEngine *gameEngine) {
     Command* command = readCommand();
@@ -131,15 +153,12 @@ Command *CommandProcessor::getCommand(GameEngine *gameEngine) {
 
 Command *FileCommandProcessorAdapter::readCommand() {
     string commandString = fileLineReader->readLineFromFile();
-
     return getCommandFromString(commandString);
 }
 
 string FileLineReader::readLineFromFile() {
     ifstream file(filePath);
-
     string line;
-
     int lineBeingRead = 1;
 
     while (getline(file, line)) {
@@ -152,8 +171,9 @@ string FileLineReader::readLineFromFile() {
     }
 
     file.close();
+    // TODO throw error or something
 
-    //TODO throw error or something
+    return 0;
 }
 
 FileLineReader::FileLineReader(string filePath) {
@@ -164,10 +184,4 @@ FileLineReader::FileLineReader(string filePath) {
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filePath) {
     fileLineReader = new FileLineReader(filePath);
 }
-
-
-
-
-
-
 

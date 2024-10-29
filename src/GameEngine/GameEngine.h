@@ -6,9 +6,13 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 #include <string>
+#include "../Command/Command.h"
+#include "../CommandProcessing/CommandProcessor.h"
+#include "../Map/Map.h"
 
 using namespace std;
 
+// Forward declaration
 class GameEngine;
 
 
@@ -114,11 +118,13 @@ class GameEngine {
     GameEngine& operator=(const GameEngine& gameEngine);
     friend std::ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
 
+    void startupPhase(); //A2-Part2
+    vector<string> getTxtFiles(const string& directoryPath); //A2-Part2
+    vector<Player*> playerList; //A2-Part2 ( we need to store players somewhere)
+    void assignTerritoriesToPlayers(Map& map, std::vector<Player*>& players); //A2-Part2
+
     private:
     GameState* gameEngineState;
 };
-
-
-
 
 #endif //GAMEENGINE_H
