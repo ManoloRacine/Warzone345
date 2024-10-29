@@ -2,18 +2,19 @@
 // Created by manol on 9/21/2024.
 //
 // FSM pattern referenced from https://www.aleksandrhovhannisyan.com/blog/implementing-a-finite-state-machine-in-cpp/
-
+#include <algorithm> // For std::shuffle
+#include <random>    // For std::random_device and std::mt19937
 #include "GameEngine.h"
 #include <iostream>
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include <filesystem>
+
 using namespace std;
 
 State GameState::getState() {
     return state;
 }
-
 
 //Changes current game engine state based on input
 void StartState::changeState(GameEngine *gameEngine, string stateInput) {
@@ -34,7 +35,6 @@ GameState& StartState::getInstance() {
     static StartState instance;
     return instance;
 }
-
 
 //Changes current game engine state based on input
 void MapLoadedState::changeState(GameEngine *gameEngine, string stateInput) {
@@ -250,12 +250,15 @@ void GameEngine::startupPhase() {
     MapLoader mapLoader;
     Map loadedMap;
 
+
     // Define the path to the maps directory
     const std::string mapDirectory = "../res/maps/";
+    printAllMaps(mapDirectory);
 
     while (true) {
         Command* command = commandProcessor.getCommand(this);
         std::cout << "getCommand(): " << command->getCommand() << std::endl; // Output the command
+
 
         if (command->getType() == Quit) {
             std::cout << "Exiting the game." << std::endl;
@@ -273,14 +276,20 @@ void GameEngine::startupPhase() {
                 std::string selectedMap = mapDirectory + filename; // Construct the full path
                 std::cout << "Loading map from: " << selectedMap << std::endl;
 
-                // Load map logic
-                try {
-                    mapLoader.loadMap(loadedMap,selectedMap);
-                    std::cout << "Map loaded successfully!" << std::endl;
-                    //cout << loadedMap;
-                    isMapLoaded = true;
-                } catch (const std::exception& e) {
-                    std::cerr << "Error loading map: " << e.what() << std::endl;
+                if (isMapLoaded) { cout << "Map Already Loaded." << endl;
+                } else {
+                    // Load map logic
+                    try {
+                        mapLoader.loadMap(loadedMap,selectedMap);
+                        std::cout << "Map loaded successfully!" << std::endl;
+                        isMapLoaded = true;
+                        //Set gameMap to loaded map
+                        gameMap = new Map(loadedMap);
+                        cout << "Current State: " << *this << endl;
+
+                    } catch (const std::exception& e) {
+                        std::cerr << "Error loading map: " << e.what() << std::endl;
+                    }
                 }
             } else {
                 std::cerr << "Error: No filename provided for LoadMap command." << std::endl;
@@ -291,6 +300,7 @@ void GameEngine::startupPhase() {
                 bool result = loadedMap.validate(); // Call the validate method
                 isMapValid = result;
                 std::cout << (result ? "Map is valid." : "Map is invalid.") << std::endl;
+                cout << "Current State: " << *this << endl;
             } else {
                 std::cout << "No map loaded. Please load a map first." << std::endl;
             }
@@ -318,17 +328,26 @@ void GameEngine::startupPhase() {
             }
         } else if (command->getType() == GameStart) {
             if (isMapLoaded && isMapValid && enoughPlayers ) {
-                std::cout << "Starting the game..." << std::endl;
+                std::cout << "Preparing Game..." << std::endl;
+                // a) Assign all territories
                 assignTerritoriesToPlayers(loadedMap,playerList);
+                // b) Determine order of play
+                determineOrderOfPlay(playerList);
+                // c) Give all player 50 reinforcement units to start
+                setReinforcementPools(playerList);
+                // d) let each player draw 2 initial cards
+                draw2cards(playerList);
+                cout << "Game Set Up Succesfull..." << endl;
+                cout << "Starting Game..." << endl;
+                cout << "Current State: " << *this << endl;
 
             } else if(!isMapLoaded) {
-                cout << "Map not loaded" << endl;
+                cout << "Can't proceed: Map not loaded" << endl;
             }else if(!isMapValid) {
-                cout << "Map not validated" << endl;
+                cout << "Can't proceed: Map not validated" << endl;
             }else if (!enoughPlayers) {
-                cout << "Not enough players" << endl;
+                cout << "Can't proceed: Not enough players" << endl;
             }
-            // Start game logic here
         } else if (command->getType() == Invalid) {
             std::cout << "Invalid command!" << std::endl;
         }
@@ -360,3 +379,86 @@ void GameEngine::assignTerritoriesToPlayers(Map& map, vector<Player*>& players) 
         playerIndex = (playerIndex + 1) % totalPlayers;
     }
 }
+
+// Randomly shuffle player list to determine order of play
+void GameEngine::determineOrderOfPlay(std::vector<Player*>& players) {
+    // Initialize a random number generator
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    cout << "Shuffling player order..." << endl;
+
+    // Shuffle the players vector to randomize the order
+    std::shuffle(players.begin(), players.end(), g);
+}
+// Give all player 50 reinforcement units to start
+void GameEngine::setReinforcementPools(std::vector<Player*>& players) {
+
+    cout << "Adding reinforcements..." << endl;
+
+    for(const auto& player : players) {
+        player->setReinforcements(50);
+    }
+}
+
+//let each player draw 2 initial cards from the deck using the deck’s draw() method
+void GameEngine::draw2cards(std::vector<Player*>& players) {
+
+    this->gameDeck = new Deck();
+    gameDeck->generateDeck();
+
+    cout<< "CURRENT GAME DECK: " << *gameDeck << endl;
+
+    for(const auto& player : players) {
+        cout << player->getName() << " Draws two cards..." << endl;
+        player->getHand()->draw(gameDeck);
+        player->getHand()->draw(gameDeck);
+
+    }
+
+}
+
+
+void GameEngine::printAllMaps(const std::string& mapDirectory) {
+    std::filesystem::path dir(mapDirectory);
+
+    // Check if the directory exists
+    if (!std::filesystem::exists(dir) || !std::filesystem::is_directory(dir)) {
+        std::cerr << "Directory does not exist: " << mapDirectory << std::endl;
+        return;
+    }
+
+    std::cout << "Available maps in directory '" << mapDirectory << "':" << std::endl;
+
+    std::vector<std::string> mapFiles; // Vector to store map filenames
+
+    // Iterate through the directory
+    for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+        if (entry.is_regular_file()) { // Check if the entry is a regular file
+            mapFiles.push_back(entry.path().filename().string()); // Store the file name
+        }
+    }
+
+    // Print map filenames as a CSV
+    if (!mapFiles.empty()) {
+        std::cout << "Maps: ";
+        for (size_t i = 0; i < mapFiles.size(); ++i) {
+            std::cout << mapFiles[i];
+            if (i < mapFiles.size() - 1) {
+                std::cout << ", "; // Add a comma for all but the last element
+            }
+        }
+        std::cout << std::endl; // New line after printing all maps
+    } else {
+        std::cout << "No maps found in directory." << std::endl;
+    }
+}
+
+
+
+
+
+
+
+
+

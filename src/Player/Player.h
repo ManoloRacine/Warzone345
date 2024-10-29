@@ -17,6 +17,7 @@ private:
     vector<Territory*> territories;  // Collection of territories
     OrdersList* ordersList;           // List of orders
     Hand* hand;       // Hand of cards
+    int reinforcementPool; //Needed for A2-Part2 - Nek
 
 public:
     // Constructors
@@ -32,7 +33,11 @@ public:
 
     // Getters and Setters for Name
     string getName() const;
-    void setName(string& newName);
+    void setName(const string& newName);
+
+    // Getters and Setters for Reinforcemnts -ADDED IN P2-A2 - Nektarios
+    inline int getReinforcements() const { return this->reinforcementPool;};
+    inline void setReinforcements(const int& newReinforcments) { this->reinforcementPool = newReinforcments; };
 
     // Getters and Setters for Territories
     vector<Territory*> getTerritories() const;

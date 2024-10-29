@@ -9,6 +9,7 @@
 #include "../Command/Command.h"
 #include "../CommandProcessing/CommandProcessor.h"
 #include "../Map/Map.h"
+#include "../Cards/Cards.h"
 
 using namespace std;
 
@@ -118,10 +119,18 @@ class GameEngine {
     GameEngine& operator=(const GameEngine& gameEngine);
     friend std::ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
 
+    //------------- A2-P2 CHANGES --------------- ( by Nektarios )
     void startupPhase(); //A2-Part2
-    vector<string> getTxtFiles(const string& directoryPath); //A2-Part2
-    vector<Player*> playerList; //A2-Part2 ( we need to store players somewhere)
-    void assignTerritoriesToPlayers(Map& map, std::vector<Player*>& players); //A2-Part2
+    vector<Player*> playerList; // ( we need to store players somewhere)
+    void assignTerritoriesToPlayers(Map& map, std::vector<Player*>& players);
+    void determineOrderOfPlay(std::vector<Player*>& players);
+    void setReinforcementPools(std::vector<Player*>& players);
+    Map * gameMap; // Also need a map object
+    inline void setMap(Map& map) { this->gameMap = &map; };
+    Deck * gameDeck;
+    void draw2cards(std::vector<Player*>& players);
+    void printAllMaps(const std::string& mapDirectory);
+    //---------------------------------------
 
     private:
     GameState* gameEngineState;

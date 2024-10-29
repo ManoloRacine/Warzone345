@@ -28,7 +28,7 @@ string Player::getName() const {
     return name;
 }
 
-void Player::setName(string& s) {
+void Player::setName(const string& s) {
     name = s;
 }
 
