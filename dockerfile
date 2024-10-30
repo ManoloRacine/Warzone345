@@ -5,8 +5,7 @@ FROM gcc:latest
 RUN apt-get update && apt-get install -y cmake \
         gdb \
         dos2unix \
-        gfortran- \
-        libboost-all-dev
+        gfortran-
 
 # Set the working directory inside the container
 WORKDIR /app
