@@ -470,8 +470,15 @@ void GameEngine::reinforcementPhase(std::vector<Player*>& players, std::vector<C
     //Distribute normal number of troops to all players
     cout << "Adding reinforcements..." << endl;
     for(const auto& player : players) {
+        //# of territories owned divided by 3, rounded down
+        int numTroops = ((player->getTerritories().size())/3);
+        player->setReinforcements(numTroops);
+
+        //set minimal troops for player if less than 3
+        if (numTroops < 3) {
         player->setReinforcements(3);
-        cout << player->getName() <<" recieves 3 troops." << endl; 
+        }
+        cout << player->getName() <<" recieves " << player->getReinforcements() << " troops." << endl; 
     }
 
     //Check for continent bonus
