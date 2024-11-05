@@ -134,6 +134,11 @@ class GameEngine {
     void printAllMaps(const std::string& mapDirectory);
     //---------------------------------------
 
+    //------------- A2-P3 CHANGES -------------- ( by Griffin)
+    void reinforcementPhase(std::vector<Player*>& players, std::vector<Continent*>& continents);
+    void issueOrdersPhase(std::vector<Player*>& players);
+    
+
     private:
     GameState* gameEngineState;
 };

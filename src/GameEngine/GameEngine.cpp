@@ -463,6 +463,57 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
     }
 }
 
+//----------------A2-PART3-Griffin-Sin-Chan---------------//
+
+void GameEngine::reinforcementPhase(std::vector<Player*>& players, std::vector<Continent*>& continents) {
+
+    //Distribute normal number of troops to all players
+    cout << "Adding reinforcements..." << endl;
+    for(const auto& player : players) {
+        player->setReinforcements(3);
+        cout << player->getName() <<" recieves 3 troops." << endl; 
+    }
+
+    //Check for continent bonus
+    //loop throuh all continents
+    for(int i = 0; i < continents.size(); i++) {
+        //player ptr to track the current owner of the territory
+        //bool to say if the territories are owned by the same player
+        Player* tempOwnerPtr = nullptr;
+        bool sameOwner = false;
+        //loop through all the territories of the current continent
+        for (int j = 0; j < continents[i]->getTerritories().size(); j++) {
+            //On the first iteration nullptr is changed to the current territories owner
+            if (tempOwnerPtr == nullptr) {
+                tempOwnerPtr = continents[i]->getTerritories()[j]->getOwner();
+            }
+            //Check to see if the previous territories owner is the same as the current territories owner
+            if (tempOwnerPtr != continents[i]->getTerritories()[j]->getOwner()) {
+                //if not true they are not the same owner and break out of the loop
+                sameOwner = false;
+                break;
+            }
+            else {
+                //the previous owner was the same as the current
+                //the loop goes through all of the continents territories
+                sameOwner = true;
+            }
+        }
+        //if all territories share the same owner give the continent bonus
+        if (sameOwner) {
+            //total troops = current troops + continent bonus
+            int totalTroops = (tempOwnerPtr->getReinforcements() + continents[i]->getBonus());
+            tempOwnerPtr->setReinforcements(totalTroops);
+            cout << tempOwnerPtr->getName() <<" recieves a bonus of " << continents[i]->getBonus()<< "troops." <<endl; 
+        }
+    } 
+}
+
+void GameEngine::issueOrdersPhase(std::vector<Player*>& players) {
+    
+}
+
+
 
 
 
