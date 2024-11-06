@@ -12,8 +12,7 @@ class Card;
 enum CardType : int;
 
 // orders
-class Order
-{
+class Order{
 public:
   virtual std::string getLabel() const = 0;
   virtual bool validate() const = 0;
@@ -28,8 +27,7 @@ private:
 };
 
 //order list
-class OrdersList
-{
+class OrdersList{
 private:
   std::vector<Order *> orders{};
 
@@ -52,11 +50,22 @@ private:
   friend std::ostream &operator<<(std::ostream &, const OrdersList &);
 };
 
+//deploy
+class Deploy : public Order{
+public:
+  std::string getLabel() const override;
+  bool validate() const override;
+  void execute() const override;
+  ~Deploy() override;
 
+private:
+  const static std::string label;
+  Order *clone() const override;
+  std::ostream &orderCout(std::ostream &) const override;
+};
 
 //advance
-class Advance : public Order
-{
+class Advance : public Order{
 public:
   std::string getLabel() const override;
   bool validate() const override;
@@ -70,8 +79,7 @@ private:
 };
 
 //airlift
-class Airlift : public Order
-{
+class Airlift : public Order{
 public:
   std::string getLabel() const override;
   bool validate() const override;
@@ -85,8 +93,7 @@ private:
 };
 
 //blockade
-class Blockade : public Order
-{
+class Blockade : public Order{
 public:
   std::string getLabel() const override;
   bool validate() const override;
@@ -101,8 +108,7 @@ private:
 
 
 // bomb
-class Bomb : public Order
-{
+class Bomb : public Order{
 public:
   std::string getLabel() const override;
   bool validate() const override;
@@ -115,23 +121,9 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-//deploy
-class Deploy : public Order
-{
-public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Deploy() override;
 
-private:
-  const static std::string label;
-  Order *clone() const override;
-  std::ostream &orderCout(std::ostream &) const override;
-};
-
-class Negotiate : public Order
-{
+//Negotiate
+class Negotiate : public Order{
 public:
   std::string getLabel() const override;
   bool validate() const override;
@@ -144,14 +136,12 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-class UserInputOrder
-{
+class UserInputOrder{
 public:
   static Order *create(const std::string&) ;
 };
 
 class OrdersFactory {
-
 public:
   static Order* CreateOrder(CardType cardType);
 

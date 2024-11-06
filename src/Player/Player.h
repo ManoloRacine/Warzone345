@@ -18,6 +18,8 @@ private:
     OrdersList* ordersList;           // List of orders
     Hand* hand;       // Hand of cards
     int reinforcementPool; //Needed for A2-Part2 - Nek
+    vector<Territory*> territoriesToDefend; //For toDefend gets wiped every execute orders
+    vector<Territory*> territoriesToAttack; //For toAttack gets wiped every execute orders
 
 public:
     // Constructors
@@ -51,16 +53,23 @@ public:
     Hand* getHand() const;
     void setHand(Hand* newHand);
 
+    // Getters and Setters for territoriestoDefend
+    vector<Territory*> getTerritoriesToDefend() const;
+    void setTerritoriesToDefend(const vector<Territory*>& newTerritoriesToDefend);
+
+    // Getters and Setters for territoriestoAttack
+    vector<Territory*> getTerritoriesToAttack() const;
+    void setTerritoriesToAttack(const vector<Territory*>& newTerritoriesToAttack);
+
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Player& player);  
-
 
     // Display player information
     void printPlayer() const;
 
     // Player methods
-    vector<Territory*> toDefend(vector<Territory*>);
-    vector<Territory*> toAttack(vector<Territory*>);
+    vector<Territory*> toDefend(Territory*);
+    vector<Territory*> toAttack(Territory*);
     void issueOrder(Order* order);
     void addTerritories(Territory*);
 };
