@@ -20,6 +20,7 @@ private:
     int reinforcementPool; //Needed for A2-Part2 - Nek
     vector<Territory*> territoriesToDefend; //For toDefend gets wiped every execute orders
     vector<Territory*> territoriesToAttack; //For toAttack gets wiped every execute orders
+    bool conqueredATerritory; //To give card at end of turn
 
 public:
     // Constructors
@@ -60,6 +61,10 @@ public:
     // Getters and Setters for territoriestoAttack
     vector<Territory*> getTerritoriesToAttack() const;
     void setTerritoriesToAttack(const vector<Territory*>& newTerritoriesToAttack);
+
+    // Getters and Setters for conqueredATerritory
+    bool getConqueredATerritory() const;
+    void setConqueredATerritory(const bool& captured);
 
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Player& player);  

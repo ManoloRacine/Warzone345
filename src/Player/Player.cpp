@@ -83,6 +83,16 @@ void Player::setTerritoriesToAttack(const vector<Territory*>& newTerritoriesToAt
     territoriesToAttack = newTerritoriesToAttack;
 }
 
+// Getters and Setters for conqueredATerritory
+bool Player::getConqueredATerritory() const {
+    return conqueredATerritory;
+}
+
+void Player::setConqueredATerritory(const bool& captured) {
+    name = captured;
+}
+
+
 // Stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Player& player) {
     os << "Player territories: " << player.getTerritories().size() << " | Orders: " << player.ordersList->getList() << " | Cards in hand: " << player.hand->getCards().size() << "\n";
