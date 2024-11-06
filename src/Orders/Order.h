@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include "../Cards/Cards.h"
+#include "../Player/Player.h"
 
 class Card;
 enum CardType : int;
@@ -15,7 +16,6 @@ enum CardType : int;
 class Order{
 public:
   virtual std::string getLabel() const = 0;
-  virtual bool validate() const = 0;
   virtual void execute() const = 0;
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
@@ -54,7 +54,7 @@ private:
 class Deploy : public Order{
 public:
   std::string getLabel() const override;
-  bool validate() const override;
+  bool validate(Player* player, int armies, Territory* target);
   void execute() const override;
   ~Deploy() override;
 
@@ -68,7 +68,7 @@ private:
 class Advance : public Order{
 public:
   std::string getLabel() const override;
-  bool validate() const override;
+  bool validate(Player* player, int armies, Territory* source, Territory* target);
   void execute() const override;
   ~Advance() override;
 
@@ -82,7 +82,7 @@ private:
 class Airlift : public Order{
 public:
   std::string getLabel() const override;
-  bool validate() const override;
+  bool validate(Player* player, int armies, Territory* source, Territory* target);
   void execute() const override;
   ~Airlift() override;
 
@@ -96,7 +96,7 @@ private:
 class Blockade : public Order{
 public:
   std::string getLabel() const override;
-  bool validate() const override;
+  bool validate(Player* player, Territory* source);
   void execute() const override;
   ~Blockade() override;
 
@@ -111,7 +111,7 @@ private:
 class Bomb : public Order{
 public:
   std::string getLabel() const override;
-  bool validate() const override;
+  bool validate(Player* player, Territory* target);
   void execute() const override;
   ~Bomb() override;
 
@@ -126,7 +126,7 @@ private:
 class Negotiate : public Order{
 public:
   std::string getLabel() const override;
-  bool validate() const override;
+  bool validate(Player* user, Player* target);
   void execute() const override;
   ~Negotiate() override;
 
