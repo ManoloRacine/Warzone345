@@ -77,6 +77,7 @@ public:
     vector<Territory*> toAttack(Territory*);
     void issueOrder(Order* order);
     void addTerritories(Territory*);
+    bool removeTerritories(Territory*);
 };
 
 #endif // PLAYER_H

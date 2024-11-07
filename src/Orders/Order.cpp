@@ -166,13 +166,8 @@ const std::string Advance::label = "Advance";
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end()){
-      if(source->getOwner() == target->getOwner()){
-        
-      }
-      else if(source->getOwner() != target->getOwner()){
-
-      }
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() && armies <= source->getArmies()){
+    execute(player, armies, source, target);
   }
   else
     cout << "Order Invalid" << endl;
@@ -180,12 +175,60 @@ bool Advance::validate(Player* player, int armies, Territory* source, Territory*
 }
 //Overriden execute function that performs the execution
 void Advance::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
+    if(user == targeted){
+      user->toDefend(target);
+      source->setArmies(source->getArmies()-armies);
+      target->setArmies(target->getArmies()+armies);
+    }
+    else if(user != targeted){
+      user->toAttack(target);
+      int attackingUnits = armies;
+      int defendingUnits = target->getArmies();
+      int attackingLosses = 0;
+      int defendingLosses = 0;
 
-  std::cout << "Troops Advanced" << std::endl;
+       for (int i = 0; i < attackingUnits; ++i) {
+         if (rand() % 100 < 60) {
+            defendingLosses++;
+         }
+        }
+      for (int j = 0; j < defendingUnits; ++j) {
+         if (rand() % 100 < 70) {
+            attackingLosses++;
+          }
+      }
+
+      if(source->getArmies()-attackingLosses >= 0){
+        source->setArmies(source->getArmies()-attackingLosses);
+      }
+      else{
+        source->setArmies(0);
+      }
+      if(target->getArmies()-defendingLosses >= 0){
+        target->setArmies(target->getArmies()-defendingLosses);
+      }
+      else{
+        target->setArmies(0);
+      }
+
+      if(target->getArmies() == 0){
+        target->setOwner(user);
+        targeted->removeTerritories(target);
+        user->addTerritories(target);
+
+        target->setArmies(attackingUnits-attackingLosses);
+        source->setArmies(source->getArmies()-(attackingUnits-attackingLosses));
+        cout << "Territory " << target->getName() << " conquered by " << user->getName() << endl;
+      }
+      else{
+        cout << "Attack Failed " << target->getName() << " remains in " << user->getName() << "'s possession." << endl;
+      }
+
+    }
 }
 //Helper Fnction for execute
 void Advance::execute(Player* player, int armies, Territory* source, Territory* target){
-  execute(player, player, armies, source, target);
+  execute(player, target->getOwner(), armies, source, target);
 }
 //Overrriden Execute
 void Advance::execute(){

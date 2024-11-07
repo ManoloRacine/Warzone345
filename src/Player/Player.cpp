@@ -144,3 +144,17 @@ void Player::issueOrder(Order* order) {
 void Player::addTerritories(Territory* territory) {
     territories.push_back(territory);
 }
+
+//removing a Territory
+bool Player::removeTerritories(Territory* territory){
+ auto it = std::find(territories.begin(), territories.end(), territory);
+        
+     if (it != territories.end()) {
+        territories.erase(it);  // Remove the territory if found
+        return true;
+     } else {
+        std::cout << "Territory not found." << std::endl;
+        return false;
+   }
+    
+}
