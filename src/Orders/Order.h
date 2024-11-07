@@ -150,6 +150,33 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
+
+//========================================
+//Bomb Order
+//========================================
+class Bomb : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
+public:
+  std::string getLabel() const override;
+  bool validate(Player* player, Territory* target);
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
+  void execute(Player* player, Territory* target);
+  ~Bomb() override;
+  Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+
+private:
+  const static std::string label;
+  Order *clone() const override;
+  std::ostream &orderCout(std::ostream &) const override;
+};
+
+
 //========================================
 //Blockade Order
 //========================================
@@ -167,31 +194,6 @@ public:
   void execute() override;
   ~Blockade() override;
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
-
-private:
-  const static std::string label;
-  Order *clone() const override;
-  std::ostream &orderCout(std::ostream &) const override;
-};
-
-
-//========================================
-//Bomb Order
-//========================================
-class Bomb : public Order{
-private:
-  Player* user;
-  Player* targeted;
-  int troops;
-  Territory* target;
-  Territory* source;
-public:
-  std::string getLabel() const override;
-  bool validate(Player* player, Territory* target);
-  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
-  void execute() override;
-  ~Bomb() override;
-  Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;

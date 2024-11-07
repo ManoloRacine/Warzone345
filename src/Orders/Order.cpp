@@ -1,8 +1,8 @@
 
 #include <stdexcept>
-
+#include <algorithm>
 #include "Order.h"
-
+using namespace std;
 
 //Constructor, Destructor and << override
 Order::Order(){}
@@ -205,7 +205,9 @@ Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, 
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() && armies <= source->getArmies()){
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
+  && armies <= source->getArmies()){
     cout << "Order is Valid" << endl;
     execute(player, armies, source, target);
   }
@@ -326,6 +328,51 @@ Order *Airlift::clone() const { return new Airlift(*this); }
 
 
 //========================================
+//Bomb Order
+//========================================
+const std::string Bomb::label = "Bomb";
+// constructor for bomb
+Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+//destructor for bomb
+Bomb::~Bomb() = default;
+
+std::string Bomb::getLabel() const { return label; }
+
+std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
+//validation for bomb
+bool Bomb::validate(Player* player, Territory* target){
+  bool adjacent = false;
+  for(int i = 0; i < target->getConnectedTerritories().size(); i++){
+    if(target->getConnectedTerritories()[i]->getOwner() == player){
+      adjacent = true;
+    }
+  }
+
+  if(adjacent 
+  && find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  && hasCard("bomb", player) ){
+    cout << "Bomb order Valid" << endl;
+    execute(player, target);
+    return true;
+  }
+return false;
+}
+//execution of the the Bomb order
+void Bomb::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
+  target->setArmies(target->getArmies()/2);
+  cout << target->getName() << " has been bombed by " << user->getName() << ". It now has " << target->getArmies() << " troops remaining" << endl;
+}
+
+//helper function for bomb order
+void Bomb::execute(Player* player, Territory* target){
+  execute(player, nullptr, 0, nullptr, target);
+}
+
+Order *Bomb::clone() const { return new Bomb(*this); }
+
+
+//========================================
 //Blockade Order
 //========================================
 const std::string Blockade::label = "Blockade";
@@ -349,32 +396,6 @@ void Blockade::execute(Player* user, Player* targeted, int armies, Territory* so
 }
 
 Order *Blockade::clone() const { return new Blockade(*this); }
-
-
-//========================================
-//Bomb Order
-//========================================
-const std::string Bomb::label = "Bomb";
-
-Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
-
-Bomb::~Bomb() = default;
-
-std::string Bomb::getLabel() const { return label; }
-
-std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
-
-bool Bomb::validate(Player* player, Territory* target){
-  std::cout << "Validation of Bomb order" << std::endl;
-  return true;
-}
-
-void Bomb::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
-  std::cout << "Bomb execution" << std::endl;
-}
-
-Order *Bomb::clone() const { return new Bomb(*this); }
 
 
 //========================================
