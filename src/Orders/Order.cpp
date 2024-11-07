@@ -4,10 +4,56 @@
 #include "Order.h"
 
 
-//order
-
+//Constructor, Destructor and << override
+Order::Order(){}
 Order::~Order() = default;
 std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderCout(stream); }
+
+//Getters and setters for user
+Player* Order::getUser() const{
+  return user;
+}
+
+void Order::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Order::getTargeted() const{
+  return targeted;
+}
+
+void Order::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Order::getTroops() const{
+  return troops;
+}
+
+void Order::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Order::getTarget() const{
+  return target;
+}
+
+void Order::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Order::getSource() const{
+  return source;
+}
+
+void Order::setSource(Territory* newSource){
+  source = newSource;
+}
+
 
 //order list
 
@@ -62,19 +108,6 @@ void OrdersList::move(int pos1, int pos2){
   }
 }
 
-void OrdersList::execute(){
-  unsigned listLength = orders.size();
-  if (listLength == 0){
-    throw std::runtime_error("empty list");
-  }
-  else{
-    for(auto order : orders){
-      order->execute();
-      delete order;
-    }
-    orders.clear();
-  }
-}
 
 //to copy list object
 OrdersList &OrdersList::operator=(const OrdersList &copyList){
@@ -117,17 +150,20 @@ std::vector<Order *> *OrdersList::getList() {
 //========================================
 //Deploy Order
 //========================================
-const std::string Deploy::label = "Deploy";
+const string Deploy::label = "Deploy";
 Deploy::~Deploy() = default;
-std::string Deploy::getLabel() const { return label; }
-
-std::ostream &Deploy::orderCout(std::ostream &output) const {
+string Deploy::getLabel() const { return label; }
+ostream &Deploy::orderCout(ostream &output) const {
   return output << "Deploy order";
 }
+//constructor
+Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 //Validate method for deploy
 bool Deploy::validate(Player* player, int armies, Territory* target){
-  if(player->getReinforcements() >= armies && find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
+  if(player->getReinforcements() >= armies 
+  && find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
       cout << "Deployment Valid" << endl;
       execute(player, armies, target);
       return true;
@@ -163,6 +199,9 @@ std::ostream &Advance::orderCout(std::ostream &output) const { return output << 
 std::string Advance::getLabel() const { return label; }
 Advance::~Advance() = default;
 const std::string Advance::label = "Advance";
+
+Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
@@ -246,13 +285,17 @@ const string Airlift::label = "Airlift";
 Airlift::~Airlift() = default;
 
 string Airlift::getLabel() const { return label; }
+//constructor
+Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 ostream &Airlift::orderCout(ostream &output) const { return output << "Airlift order"; }
 //validation for airlift
 bool Airlift::validate(Player* player, int armies, Territory* source, Territory* target) {
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
     && find(player->getTerritories().begin(), player->getTerritories().end(), source) != player->getTerritories().end()
-    && armies <= source->getArmies()){
+    && armies <= source->getArmies()
+    && hasCard("airlift", player)){
       cout << "AirLift Order Validated" << endl;
       execute(player, armies, source, target);
       return true;
@@ -287,6 +330,9 @@ Order *Airlift::clone() const { return new Airlift(*this); }
 //========================================
 const std::string Blockade::label = "Blockade";
 
+Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+
 Blockade::~Blockade() = default;
 
 std::string Blockade::getLabel() const { return label; }
@@ -309,6 +355,9 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 //Bomb Order
 //========================================
 const std::string Bomb::label = "Bomb";
+
+Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 Bomb::~Bomb() = default;
 
@@ -333,6 +382,9 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 //========================================
 const std::string Negotiate::label = "Negotiate";
 
+Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+
 Negotiate::~Negotiate() = default;
 
 std::string Negotiate::getLabel() const { return label; }
@@ -353,7 +405,7 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
   return ostream << "-> Negotiate order.";
 }
 
-
+/*
 // user input
 Order* UserInputOrder::create(const std::string& orderType){
   if (orderType == "Deploy") { return new Deploy; }
@@ -364,3 +416,4 @@ Order* UserInputOrder::create(const std::string& orderType){
   else if (orderType == "Negotiate") { return new Negotiate(); }
   else { throw std::runtime_error("invalid OrderType: " + orderType ); }
 }
+*/

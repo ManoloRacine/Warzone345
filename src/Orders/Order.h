@@ -11,17 +11,45 @@ enum CardType : int;
 
 // orders
 class Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   virtual std::string getLabel() const = 0;
   virtual void execute() = 0;
-  virtual void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) = 0;
+  virtual void execute(Player* user, Player* targeted, int troops, Territory* source, Territory* target) = 0;
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
+  Order();
+  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   virtual std::ostream &orderCout(std::ostream &) const = 0;
-
   friend std::ostream &operator<<(std::ostream &, const Order &);
+
+//Getters and setters for user
+Player* getUser() const;
+void setUser(Player* newUser);
+
+//Getters and setters for targeted
+Player* getTargeted() const;
+void setTargeted(Player* newTargeted);
+
+//Getters and setters for Troops
+int getTroops() const;
+void setTroops(int newTroops);
+
+//Getters and setters for target
+Territory* getTarget() const;
+void setTarget(Territory* newTarget);
+
+//Getters and setters for source
+Territory* getSource() const;
+void setSource(Territory* newSource);
+  
 };
 
 //order list
@@ -39,7 +67,6 @@ public:
   void add(Order *o);
   void remove(int);
   void move(int, int);
-  void execute();
 
   std::vector<Order *>* getList();
 
@@ -52,6 +79,12 @@ private:
 //Deploy Order
 //========================================
 class Deploy : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* target);
@@ -59,6 +92,7 @@ public:
   void execute(Player* player, int armies, Territory* target);
   void execute() override;
   ~Deploy() override;
+  Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;
@@ -70,6 +104,12 @@ private:
 //Advance Order
 //========================================
 class Advance : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* source, Territory* target);
@@ -77,6 +117,7 @@ public:
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
   ~Advance() override;
+  Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;
@@ -88,6 +129,12 @@ private:
 //Airlift Order
 //========================================
 class Airlift : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* source, Territory* target);
@@ -95,6 +142,7 @@ public:
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
   ~Airlift() override;
+  Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;
@@ -106,12 +154,19 @@ private:
 //Blockade Order
 //========================================
 class Blockade : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
   bool validate(Player* player, Territory* source);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   ~Blockade() override;
+  Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;
@@ -124,12 +179,19 @@ private:
 //Bomb Order
 //========================================
 class Bomb : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
   bool validate(Player* player, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   ~Bomb() override;
+  Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;
@@ -142,12 +204,19 @@ private:
 //Negociate Order
 //========================================
 class Negotiate : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
   bool validate(Player* user, Player* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   ~Negotiate() override;
+  Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;

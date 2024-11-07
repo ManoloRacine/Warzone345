@@ -80,4 +80,7 @@ public:
     bool removeTerritories(Territory*);
 };
 
+//checks if a player has a card in hand
+bool hasCard(string card, Player* player);
+
 #endif // PLAYER_H

@@ -158,3 +158,16 @@ bool Player::removeTerritories(Territory* territory){
    }
     
 }
+
+//checks if a player has a card in hand
+ bool hasCard(string card, Player* player){
+        for(int i = 0; i < player->getHand()->getCards().size(); i++){
+            string currentCard = player->getHand()->getCards()[i]->print();
+            if (card == currentCard)
+            {
+                player->getHand()->play(player->getHand()->getCards()[i]);
+                return true;
+            }
+        }
+        return false;
+    }
