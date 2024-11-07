@@ -167,6 +167,7 @@ const std::string Advance::label = "Advance";
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() && armies <= source->getArmies()){
+    cout << "Order is Valid" << endl;
     execute(player, armies, source, target);
   }
   else
@@ -226,7 +227,7 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
 
     }
 }
-//Helper Fnction for execute
+//Helper Function for execute
 void Advance::execute(Player* player, int armies, Territory* source, Territory* target){
   execute(player, target->getOwner(), armies, source, target);
 }
@@ -241,26 +242,39 @@ Order *Advance::clone() const { return new Advance(*this); }
 //========================================
 //Airlift Order
 //========================================
-const std::string Airlift::label = "Airlift";
+const string Airlift::label = "Airlift";
 Airlift::~Airlift() = default;
 
-std::string Airlift::getLabel() const { return label; }
+string Airlift::getLabel() const { return label; }
 
-std::ostream &Airlift::orderCout(std::ostream &output) const { return output << "Airlift order"; }
-
+ostream &Airlift::orderCout(ostream &output) const { return output << "Airlift order"; }
+//validation for airlift
 bool Airlift::validate(Player* player, int armies, Territory* source, Territory* target) {
-  std::cout << "Validatin of Airlift order" << std::endl;
-  return true;
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+    && find(player->getTerritories().begin(), player->getTerritories().end(), source) != player->getTerritories().end()
+    && armies <= source->getArmies()){
+      cout << "AirLift Order Validated" << endl;
+      execute(player, armies, source, target);
+      return true;
+  }
+  else{
+    cout << "Airlift order Invalid" << endl;
+  }
+  
 }
-
+//execution of the airlift order
 void Airlift::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
-  std::cout << "Airlift execution" << std::endl;
+  user->toDefend(target);
+  source->setArmies(source->getArmies()-armies);
+  target->setArmies(target->getArmies()+armies);
+
+  cout << "Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
 }
-
-void Airlift::execute(){
-
+//Helper function for execute
+void Airlift::execute(Player* player, int armies, Territory* source, Territory* target){
+  execute(player, player, armies, source, target);
 }
-
+//Overrriden Execute
 void Airlift::execute(){
   cout << "Please Pass parameters in the form (Player* player, int armies, Territory* source, Territory* target)" << endl;
 }

@@ -93,6 +93,7 @@ public:
   bool validate(Player* player, int armies, Territory* source, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  void execute(Player* player, int armies, Territory* source, Territory* target);
   ~Airlift() override;
 
 private:
