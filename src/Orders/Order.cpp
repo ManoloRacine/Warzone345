@@ -133,12 +133,14 @@ bool Deploy::validate(Player* player, int armies, Territory* target){
       return true;
   }
   else
+    cout << "Order Invalid" << endl;
     return false;
 }
-//Overriden execute function
+//Overriden execute function that performs the execution
 void Deploy::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
     user->setReinforcements(user->getReinforcements()-armies);
     target->setArmies(target->getArmies()+armies);
+    user->toDefend(target);
     cout << "Troops deployed" << endl;
 }
 //Helper method for execute method
@@ -147,7 +149,7 @@ void Deploy::execute(Player* player, int armies, Territory* target){
 }
 //Overriden execute function
 void Deploy::execute(){
-
+  cout << "Please Pass parameters in the form (Player* player, int armies, Territory* target)" << endl;
 }
 
 Order *Deploy::clone() const {
@@ -160,16 +162,34 @@ Order *Deploy::clone() const {
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
 std::string Advance::getLabel() const { return label; }
 Advance::~Advance() = default;
-
 const std::string Advance::label = "Advance";
 
+//Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
-  std::cout << "Validate Advance order" << std::endl;
-  return true;
-}
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end()){
+      if(source->getOwner() == target->getOwner()){
+        
+      }
+      else if(source->getOwner() != target->getOwner()){
 
+      }
+  }
+  else
+    cout << "Order Invalid" << endl;
+    return false;
+}
+//Overriden execute function that performs the execution
 void Advance::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
-  std::cout << "Advance execution" << std::endl;
+
+  std::cout << "Troops Advanced" << std::endl;
+}
+//Helper Fnction for execute
+void Advance::execute(Player* player, int armies, Territory* source, Territory* target){
+  execute(player, player, armies, source, target);
+}
+//Overrriden Execute
+void Advance::execute(){
+  cout << "Please Pass parameters in the form (Player* player, int armies, Territory* source, Territory* target)" << endl;
 }
 
 Order *Advance::clone() const { return new Advance(*this); }
@@ -192,6 +212,14 @@ bool Airlift::validate(Player* player, int armies, Territory* source, Territory*
 
 void Airlift::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
   std::cout << "Airlift execution" << std::endl;
+}
+
+void Airlift::execute(){
+
+}
+
+void Airlift::execute(){
+  cout << "Please Pass parameters in the form (Player* player, int armies, Territory* source, Territory* target)" << endl;
 }
 
 Order *Airlift::clone() const { return new Airlift(*this); }

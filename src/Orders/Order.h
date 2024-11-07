@@ -1,6 +1,3 @@
-//
-// Created by Ryad on 2024-10-03.
-//
 
 #pragma once
 
@@ -78,6 +75,7 @@ public:
   bool validate(Player* player, int armies, Territory* source, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  void execute(Player* player, int armies, Territory* source, Territory* target);
   ~Advance() override;
 
 private:
