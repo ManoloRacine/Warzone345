@@ -228,10 +228,23 @@ void GameEngine::changeState(string stateInput) {
 
 void GameEngine::setState(GameState &newState) {
     gameEngineState = &newState;
+    Subject::notify(this);
 }
 
 GameEngine::GameEngine(const GameEngine &gameEngine) {
     gameEngineState = gameEngine.gameEngineState;
+}
+
+LogObserver* GameEngine::getLogObserver() const {
+    return this->logObserver;
+}
+
+std::string GameEngine::stringToLog() {
+    std::stringstream stream;
+    stream << "Game Engine: ";
+    stream << "State Change to ";
+    stream << getCurrentState()->getName();
+    return stream.str();
 }
 
 GameEngine & GameEngine::operator=(const GameEngine &other) {

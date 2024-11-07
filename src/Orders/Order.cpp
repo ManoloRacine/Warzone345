@@ -83,6 +83,7 @@ void OrdersList::add(Order *o){
   } else {
     throw std::runtime_error("NULL value inserted in the list");
   }
+  Subject::notify(this);
 }
 
 
@@ -158,8 +159,52 @@ vector<Order*> *OrdersList::getList() {
 }
 */
 
+
 std::vector<Order*> OrdersList::getList() const {
     return orders;
+
+
+// this function is needed to convert order type to string
+std::string OrdersList::castOrderType(Order * o){
+  if(auto advance = dynamic_cast<Advance*>(o)){
+    return advance->getLabel();
+  }
+  else if(auto airlift = dynamic_cast<Airlift*>(o)){
+    return airlift->getLabel();
+  }
+  else if(auto blockade = dynamic_cast<Blockade*>(o)){
+    return blockade->getLabel();
+  }
+  else if(auto bomb = dynamic_cast<Bomb*>(o)){
+    return bomb->getLabel();
+  }
+  else if(auto deploy = dynamic_cast<Deploy*>(o)){
+    return deploy->getLabel();
+  }
+  else if(auto negotiate = dynamic_cast<Negotiate*>(o)){
+    return negotiate->getLabel();
+  }
+  throw std::runtime_error("OrdersList::castOrderType(Order * o) - o is NULL"); // order type is invalid - NULL
+}
+
+
+
+
+
+
+std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
+
+std::string Advance::getLabel() const { return label; }
+
+Advance::~Advance() = default;
+
+const std::string Advance::label = "Advance";
+
+bool Advance::validate() const
+{
+  std::cout << "Validate Advance order" << std::endl;
+  return true;
+
 }
 
 //========================================
@@ -203,11 +248,13 @@ Order *Deploy::clone() const {
   return new Deploy(*this);
 }
 
+
 //========================================
 //Advance Order
 //========================================
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
 Advance::~Advance() = default;
+
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){}
@@ -289,6 +336,7 @@ void Advance::execute(Player* player, int armies, Territory* source, Territory* 
 void Advance::execute(){
   cout << "Please Pass parameters in the form (Player* player, int armies, Territory* source, Territory* target)" << endl;
 }
+
 
 Order *Advance::clone() const { return new Advance(*this); }
 
@@ -478,6 +526,14 @@ void Negotiate::execute(){
   cout << "Please Pass parameters in the form (Player* user, Player* targeted)" << endl;
 }
 
+void Negotiate::execute() const
+{
+  if (validate()) {
+    std::cout << "Negotiate execution." << std::endl;
+  }
+
+}
+
 
 Order *Negotiate::clone() const { return new Negotiate(*this); }
 
@@ -485,9 +541,9 @@ std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
   return ostream << "-> Negotiate order.";
 }
 
-/*
+
 // user input
-Order* UserInputOrder::create(const std::string& orderType){
+/*Order* UserInputOrder::create(const std::string& orderType){
   if (orderType == "Deploy") { return new Deploy; }
   else if (orderType == "Advance") { return new Advance; }
   else if (orderType == "Bomb") { return new Bomb(); }
@@ -495,5 +551,4 @@ Order* UserInputOrder::create(const std::string& orderType){
   else if (orderType == "Airlift") { return new Airlift(); }
   else if (orderType == "Negotiate") { return new Negotiate(); }
   else { throw std::runtime_error("invalid OrderType: " + orderType ); }
-}
-*/
+}*/

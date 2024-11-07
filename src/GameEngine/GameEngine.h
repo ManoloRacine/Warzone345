@@ -10,6 +10,9 @@
 #include "../CommandProcessing/CommandProcessor.h"
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
+#include <iomanip>
+#include "Logger/LogObserver.h"
+
 
 using namespace std;
 
@@ -111,7 +114,7 @@ private:
     WinState();
 };
 
-class GameEngine {
+class GameEngine: public Subject, ILoggable {
     public:
     GameEngine();
     GameState* getCurrentState() const;
@@ -120,6 +123,8 @@ class GameEngine {
     GameEngine(const GameEngine& gameEngine);
     GameEngine& operator=(const GameEngine& gameEngine);
     friend std::ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
+    std::string stringToLog() override; // from logger
+    LogObserver* getLogObserver() const;
 
     //------------- A2-P2 CHANGES --------------- ( by Nektarios )
     void startupPhase(); //A2-Part2
@@ -135,6 +140,8 @@ class GameEngine {
     //------------------------------------------------
 
     private:
+    // Logger
+    LogObserver* logObserver = nullptr;
     GameState* gameEngineState;
 };
 
