@@ -16,7 +16,8 @@ enum CardType : int;
 class Order{
 public:
   virtual std::string getLabel() const = 0;
-  virtual void execute() const = 0;
+  virtual void execute() = 0;
+  virtual void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) = 0;
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
 
@@ -50,12 +51,16 @@ private:
   friend std::ostream &operator<<(std::ostream &, const OrdersList &);
 };
 
-//deploy
+//========================================
+//Deploy Order
+//========================================
 class Deploy : public Order{
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* target);
-  void execute() const override;
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute(Player* player, int armies, Territory* target);
+  void execute() override;
   ~Deploy() override;
 
 private:
@@ -64,12 +69,15 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-//advance
+//========================================
+//Advance Order
+//========================================
 class Advance : public Order{
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* source, Territory* target);
-  void execute() const override;
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
   ~Advance() override;
 
 private:
@@ -78,12 +86,15 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-//airlift
+//========================================
+//Airlift Order
+//========================================
 class Airlift : public Order{
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* source, Territory* target);
-  void execute() const override;
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
   ~Airlift() override;
 
 private:
@@ -92,12 +103,15 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-//blockade
+//========================================
+//Blockade Order
+//========================================
 class Blockade : public Order{
 public:
   std::string getLabel() const override;
   bool validate(Player* player, Territory* source);
-  void execute() const override;
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
   ~Blockade() override;
 
 private:
@@ -107,12 +121,15 @@ private:
 };
 
 
-// bomb
+//========================================
+//Bomb Order
+//========================================
 class Bomb : public Order{
 public:
   std::string getLabel() const override;
   bool validate(Player* player, Territory* target);
-  void execute() const override;
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
   ~Bomb() override;
 
 private:
@@ -122,12 +139,15 @@ private:
 };
 
 
-//Negotiate
+//========================================
+//Negociate Order
+//========================================
 class Negotiate : public Order{
 public:
   std::string getLabel() const override;
   bool validate(Player* user, Player* target);
-  void execute() const override;
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
   ~Negotiate() override;
 
 private:

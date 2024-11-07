@@ -3,6 +3,7 @@
 
 #include "Order.h"
 
+
 //order
 
 Order::~Order() = default;
@@ -113,7 +114,9 @@ std::vector<Order *> *OrdersList::getList() {
 }
 
 
-//deploy
+//========================================
+//Deploy Order
+//========================================
 const std::string Deploy::label = "Deploy";
 Deploy::~Deploy() = default;
 std::string Deploy::getLabel() const { return label; }
@@ -122,42 +125,59 @@ std::ostream &Deploy::orderCout(std::ostream &output) const {
   return output << "Deploy order";
 }
 
-bool Deploy::validate() const{
-  std::cout << "Validation of Deply order" << std::endl;
-  return true;
-}
-
-void Deploy::execute() const{
-  if (validate()) {
-    std::cout << "Deploy execution." << std::endl;
+//Validate method for deploy
+bool Deploy::validate(Player* player, int armies, Territory* target){
+  if(player->getReinforcements() >= armies && find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
+      cout << "Deployment Valid" << endl;
+      execute(player, armies, target);
+      return true;
   }
+  else
+    return false;
+}
+//Overriden execute function
+void Deploy::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
+    user->setReinforcements(user->getReinforcements()-armies);
+    target->setArmies(target->getArmies()+armies);
+    cout << "Troops deployed" << endl;
+}
+//Helper method for execute method
+void Deploy::execute(Player* player, int armies, Territory* target){
+  execute(player, player, armies, target, target);
+}
+//Overriden execute function
+void Deploy::execute(){
+
 }
 
 Order *Deploy::clone() const {
   return new Deploy(*this);
 }
 
-
-//advance
+//========================================
+//Advance Order
+//========================================
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
 std::string Advance::getLabel() const { return label; }
 Advance::~Advance() = default;
 
 const std::string Advance::label = "Advance";
 
-bool Advance::validate() const{
+bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
   std::cout << "Validate Advance order" << std::endl;
   return true;
 }
 
-void Advance::execute() const{
-  if (validate()) { std::cout << "Advance execution" << std::endl; }
+void Advance::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
+  std::cout << "Advance execution" << std::endl;
 }
 
 Order *Advance::clone() const { return new Advance(*this); }
 
 
-//airlift
+//========================================
+//Airlift Order
+//========================================
 const std::string Airlift::label = "Airlift";
 Airlift::~Airlift() = default;
 
@@ -165,19 +185,21 @@ std::string Airlift::getLabel() const { return label; }
 
 std::ostream &Airlift::orderCout(std::ostream &output) const { return output << "Airlift order"; }
 
-bool Airlift::validate() const{
+bool Airlift::validate(Player* player, int armies, Territory* source, Territory* target) {
   std::cout << "Validatin of Airlift order" << std::endl;
   return true;
 }
 
-void Airlift::execute() const{
-  if (validate()) { std::cout << "Airlift execution" << std::endl; }
+void Airlift::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
+  std::cout << "Airlift execution" << std::endl;
 }
 
 Order *Airlift::clone() const { return new Airlift(*this); }
 
 
-//blockade
+//========================================
+//Blockade Order
+//========================================
 const std::string Blockade::label = "Blockade";
 
 Blockade::~Blockade() = default;
@@ -186,19 +208,21 @@ std::string Blockade::getLabel() const { return label; }
 
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "Blockade order"; }
 
-bool Blockade::validate() const{
+bool Blockade::validate(Player* player, Territory* source){
   std::cout << "validation of Blockade order" << std::endl;
   return true;
 }
 
-void Blockade::execute() const{
-  if (validate()) { std::cout << "Blockade execution" << std::endl; }
+void Blockade::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) {
+  std::cout << "Blockade execution" << std::endl;
 }
 
 Order *Blockade::clone() const { return new Blockade(*this); }
 
 
-//bomb
+//========================================
+//Bomb Order
+//========================================
 const std::string Bomb::label = "Bomb";
 
 Bomb::~Bomb() = default;
@@ -207,32 +231,34 @@ std::string Bomb::getLabel() const { return label; }
 
 std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
 
-bool Bomb::validate() const{
+bool Bomb::validate(Player* player, Territory* target){
   std::cout << "Validation of Bomb order" << std::endl;
   return true;
 }
 
-void Bomb::execute() const{
-  if (validate()) { std::cout << "Bomb execution" << std::endl; }
+void Bomb::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
+  std::cout << "Bomb execution" << std::endl;
 }
 
 Order *Bomb::clone() const { return new Bomb(*this); }
 
 
-// negotiate
+//========================================
+//Negociate Order
+//========================================
 const std::string Negotiate::label = "Negotiate";
 
 Negotiate::~Negotiate() = default;
 
 std::string Negotiate::getLabel() const { return label; }
 
-bool Negotiate::validate() const{
+bool Negotiate::validate(Player* user, Player* target){
   std::cout << "Validatiom of negotiate order" << std::endl;
   return true;
 }
 
-void Negotiate::execute() const{
-  if (validate()) { std::cout << "Negotiate execution." << std::endl; }
+void Negotiate::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
+  std::cout << "Negotiate execution." << std::endl;
 }
 
 
