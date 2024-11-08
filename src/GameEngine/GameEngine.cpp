@@ -722,8 +722,8 @@ for (int i = 0; i < players.size(); i++) {
             playerDoneExecuting[i] = true;
             break;
         }
-
-        if (players[i]->getOrdersList().getList()[j]->getLabel() == "Deploy") {
+            string order = players[i]->getOrdersList().getList()[j]->getLabel();
+        if (order == "Deploy") {
             // Calling the Validate function ------------------Current player---------------Number of Troops Deployed-------------------------Targeted Territory
             players[i]->getOrdersList().getList()[j]->validate(players[i], players[i]->getOrdersList().getList()[j]->getTroops(), players[i]->getOrdersList().getList()[j]->getTarget());
             //validate internally calls the excute method if conditions satisfied
