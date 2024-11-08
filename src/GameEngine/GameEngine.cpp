@@ -543,21 +543,24 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
         //rotate through each player
         for(int i = 0; i < numPlayers; i++) {
             //if player not done issuing orders let them issue order
-            if (!playerDoneTurn[i])
-            {
+            if (!playerDoneTurn[i]) { 
+                validOrder = false;
                 //loop until current player gives a valid order
-                while (!validOrder)
-                {
+                while (!validOrder) {
                     // ask user for their order
                     cout << players[i]->getName() << " enter an order: " << endl;
                     // let user put in order
                     cin >> choice;
                     choice = toLower(choice);
 
+                    if (!players[i]->getReinforcements() == 0) {
+                        playerDoneDeploying[i] = true;
+                    }
 
+                    //for user to choose deploy
                     if (!playerDoneDeploying[i]) {
                         if(choice != "deploy") {
-                            cout<< "Must Deploy All troops First" << endl;
+                            cout<< "Must deploy all troops First" << endl;
                             break;
                         }
                     }
@@ -570,15 +573,25 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     if (choice == "deploy"){
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
+                        int playerTroops = (players[i]->getReinforcements());
+
+                        if(playerTroops-numArmies < 0) {
+                            cout << "Number entered goes beyond the reinforcement pool" << endl;
+                            cout << playerTroops << " troops remaining" << endl;
+                            break;
+                        } 
+                            
+                        players[i]->setReinforcements(playerTroops-numArmies);
                         cout << "Enter name of target territory:" << endl;
                         cin >> targetTerritory;
-
 
                         // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
                         // the rest of the inputs are inputted by the user, number of troops to transfer, source territory is unnecessary...null, target territory owned
                         Deploy *deployOrder = new Deploy(players[i], players[i], numArmies, nullptr, getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(deployOrder);
+                        validOrder = true;
+                        
                     }
                     //========================================
                     //Advance Order
@@ -598,6 +611,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         Advance *advanceOrder = new Advance(players[i], getTerritoryByName(map, targetTerritory)->getOwner(), numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(advanceOrder);
+                        validOrder = true;
                     }
                     //========================================
                     //Airlift Order
@@ -616,6 +630,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         Airlift *airliftOrder = new Airlift(players[i], players[i], numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(airliftOrder);
+                        validOrder = true;
 
 
                     }
@@ -634,6 +649,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         Bomb *bombOrder = new Bomb(players[i], players[i], numArmies, nullptr, getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(bombOrder);
+                        validOrder = true;
 
 
                     }
@@ -651,6 +667,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         Blockade *blockadeOrder = new Blockade(players[i], players[i], 0, getTerritoryByName(map, targetTerritory), getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(blockadeOrder);
+                        validOrder = true;
 
 
                     }
@@ -666,34 +683,75 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         Negotiate *negotiateOrder = new Negotiate(players[i], getPlayerByName(players, opposingPlayerName), 0, nullptr, nullptr);
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(negotiateOrder);
+                        validOrder = true;
 
                     }
                     else if (choice == "done") {
                         // player is now done issuing orders
                         playerDoneTurn[i] = true;
-                    }
-
-
-                    playersIssuingOrders = false;
-                    // check if all players are done
-                    for (int j = 0; j < numPlayers; j++)
-                    {
-                        //if not done issuing orders
-                        if (playerDoneTurn[j] == false)
-                        {
-                            //players are still issuing orders keep looping
-                            playersIssuingOrders = true;
-                            break;
-                        }
+                        validOrder = true;
                     }
                 }
+            }
+        }
+        playersIssuingOrders = false;
+        // check if all players are done
+        for (int j = 0; j < numPlayers; j++) {
+            // if not done issuing orders
+            if (playerDoneTurn[j] == false) {
+                // players are still issuing orders keep looping
+                playersIssuingOrders = true;
+                break;
             }
         }
     }
 }
 
 
-void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
+void GameEngine::orderExecutionPhase(vector<Player*>& players) {
+vector<bool> playerDoneExecuting(players.size(), false);
+bool execute = true;
+
+//First loop through all players orderlist search for deploy orders
+for (int i = 0; i < players.size(); i++) {
+    int orderListSize = players[i]->getOrdersList()->getList()->size();
+    for (int j = 0; j < orderListSize; j++) {
+        
+        //if the order list size is 0 no orders left skip
+        if (orderListSize == 0) {
+            playerDoneExecuting[i] = true;
+            break;
+        }
+
+        if (players[i]->getOrdersList()->getList()[j]->getLabel() == "Deploy") {
+            // Calling the Validate function ------------------Current player---------------Number of Troops Deployed-------------------------Targeted Territory
+            players[i]->getOrdersList()->getList()[j]->validate(players[i], players[i]->getOrdersList()->getList()[j]->getTroops(), players[i]->getOrdersList()->getList()[j]->getTarget());
+            //validate internally calls the excute method if conditions satisfied
+            //regardeless of validation remove the deploy order
+            players[i]->getOrdersList()->remove(j);
+            //move back one index because remove shifted the vector
+            j--;
+            //track the decreased size to prevent out of bounds
+            orderListSize--;
+        }
+    }
+}
+//Deploying all troops round robin players orders
+
+while(execute) {
+    for (int i = 0; i < players.size(); i++) {
+        if(!playerDoneExecuting[i]) {
+            
+        }
+        
+        execute = false;
+    if (playerDoneExecuting[i] == false) {
+        // players are still issuing orders keep looping
+        execute = true; 
+    }
+    }
+}
+
 
 }
 
@@ -705,11 +763,6 @@ string GameEngine::toLower(const string& str) {
     });
     return lowerStr;
 }
-
-//!!!!!!!!!!!!!! pseudo code
-//for all who have conquered
-//give them a card
-
 
 Territory* GameEngine::getTerritoryByName(Map& map, string targetName) {
     //Iterate through the map data
