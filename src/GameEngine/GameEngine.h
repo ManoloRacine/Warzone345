@@ -137,10 +137,10 @@ class GameEngine {
     //------------- A2-P3 CHANGES -------------- ( by Griffin)
     void reinforcementPhase(std::vector<Player*>& players, std::vector<Continent*>& continents);
     void issueOrdersPhase(Map& map, std::vector<Player*>& players);
-    void resetPlayerStatuses(std::vector<Player*>& players);
+    void orderExecutionPhase(std::vector<Player*>& players);
     Territory* getTerritoriesByName(Map& map, string territory);
     Player* getPlayerByName(std::vector<Player*>& players, string targetPlayer);
-   
+    
 
 
     private:

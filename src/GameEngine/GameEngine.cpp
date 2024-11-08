@@ -693,6 +693,10 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
 }
 
 
+void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
+
+}
+
 // Function to convert a string to lowercase
 string toLower(const string& str) {
     string lowerStr = str;
@@ -702,27 +706,10 @@ string toLower(const string& str) {
     return lowerStr;
 }
 
-
-void resetPlayerStatuses(std::vector<Player*>& players) {
-    for (int i; i < players.size(); i++) {
-        //reset concquered territory status
-        players[i]->setConqueredATerritory(false);
-        //initialize some empty vectors
-        vector<Territory*>  emptyToAttack = {};
-        vector<Territory*>  emptyToDefend = {};
-        //set territoies to attack and to defend to empty vectors
-        players[i]->setTerritoriesToAttack(emptyToAttack);
-        players[i]->setTerritoriesToDefend(emptyToDefend);
-        //resets player negotiations
-        players[i]->clearNegotiations();
-   
-    }
-
-
-}
-
+//!!!!!!!!!!!!!! pseudo code
 //for all who have conquered
 //give them a card
+
 
 Territory* getTerritoryByName(Map& map, string targetName) {
     //Iterate through the map data
