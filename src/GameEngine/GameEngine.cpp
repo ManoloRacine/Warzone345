@@ -463,6 +463,246 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
     }
 }
 
+//----------------A2-PART3-Griffin-Sin-Chan---------------//
+
+
+void GameEngine::reinforcementPhase(std::vector<Player*>& players, std::vector<Continent*>& continents) {
+
+
+    //Distribute normal number of troops to all players
+    cout << "Adding reinforcements..." << endl;
+    for(const auto& player : players) {
+        //# of territories owned divided by 3, rounded down
+        int numTroops = ((player->getTerritories().size())/3);
+        player->setReinforcements(numTroops);
+
+
+        //set minimal troops for player if less than 3
+        if (numTroops < 3) {
+        player->setReinforcements(3);
+        }
+        cout << player->getName() <<" recieves " << player->getReinforcements() << " troops." << endl;
+    }
+
+
+    //Check for continent bonus
+    //loop throuh all continents
+    for(int i = 0; i < continents.size(); i++) {
+        //player ptr to track the current owner of the territory
+        //bool to say if the territories are owned by the same player
+        Player* tempOwnerPtr = nullptr;
+        bool sameOwner = false;
+        //loop through all the territories of the current continent
+        for (int j = 0; j < continents[i]->getTerritories().size(); j++) {
+            //On the first iteration nullptr is changed to the current territories owner
+            if (tempOwnerPtr == nullptr) {
+                tempOwnerPtr = continents[i]->getTerritories()[j]->getOwner();
+            }
+            //Check to see if the previous territories owner is the same as the current territories owner
+            if (tempOwnerPtr != continents[i]->getTerritories()[j]->getOwner()) {
+                //if not true they are not the same owner and break out of the loop
+                sameOwner = false;
+                break;
+            }
+            else {
+                //the previous owner was the same as the current
+                //the loop goes through all of the continents territories
+                sameOwner = true;
+            }
+        }
+        //if all territories share the same owner give the continent bonus
+        if (sameOwner) {
+            //total troops = current troops + continent bonus
+            int totalTroops = (tempOwnerPtr->getReinforcements() + continents[i]->getBonus());
+            tempOwnerPtr->setReinforcements(totalTroops);
+            cout << tempOwnerPtr->getName() <<" recieves a bonus of " << continents[i]->getBonus()<< "troops." <<endl;
+        }
+    }
+}
+
+
+void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
+   
+    //Vector storing number players with turn status
+    int numPlayers = players.size();
+    //create vector with size equal to num players and set true
+    vector<bool> playerDoneTurn(numPlayers, false);
+    vector<bool> playerDoneDeploying(numPlayers, false);
+    bool playersIssuingOrders = true;
+    bool validOrder = false;
+    string choice;
+    int numArmies;
+    string sourceTerritory;
+    string targetTerritory;
+
+
+    //While orders are still being issued
+    while(playersIssuingOrders) {
+        //looping until player puts in a valid order
+        //rotate through each player
+        for(int i = 0; i < numPlayers; i++) {
+            //if player not done issuing orders let them issue order
+            if (!playerDoneTurn[i])
+            {
+                while (!validOrder)
+                {
+                    // ask user for their order
+                    cout << players[i]->getName() << " enter an order: " << endl;
+                    // let user put in order
+                    cin >> choice;
+                    choice = toLower(choice);
+
+
+                    if (!playerDoneDeploying[i]) {
+                        if(choice != "deploy") {
+                            cout<< "Must Deploy All troops First" << endl;
+                            break;
+                        }
+                    }
+
+
+                    // using user input create a new order
+                    if (choice == "deploy"){
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> numArmies;
+                        cout << "Enter name of source territory:" << endl;
+                        cin >> sourceTerritory;
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> targetTerritory;
+
+
+                        // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
+                        Deploy *deployOrder = new Deploy(players[i], players[i], numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(deployOrder);
+                    }
+                    else if (choice == "advance") {
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> numArmies;
+                        cout << "Enter name of source territory:" << endl;
+                        cin >> sourceTerritory;
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> targetTerritory;
+
+
+                        // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
+                        Deploy *deployOrder = new Deploy(players[i], players[i], numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(deployOrder);
+                    }
+                    else if (choice == "airlift") {
+
+
+
+
+                    }
+                    else if (choice == "bomb") {
+
+
+
+
+                    }
+                    else if (choice == "blockade") {
+
+
+
+
+                    }
+                    else if (choice == "negotitate") {
+
+
+
+
+                    }
+                    else if (choice == "done") {
+                        // player is now done issuing orders
+                        playerDoneTurn[i] = true;
+                    }
+
+
+                    playersIssuingOrders = false;
+                    // check if all players are done
+                    for (int j = 0; j < numPlayers; j++)
+                    {
+                        //if not done issuing orders
+                        if (playerDoneTurn[j] == false)
+                        {
+                            //players are still issuing orders keep looping
+                            playersIssuingOrders = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// Function to convert a string to lowercase
+string toLower(const string& str) {
+    string lowerStr = str;
+    transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), [](unsigned char c) {
+        return tolower(c);
+    });
+    return lowerStr;
+}
+
+
+void resetPlayerStatuses(std::vector<Player*>& players) {
+    for (int i; i < players.size(); i++) {
+        //reset concquered territory status
+        players[i]->setConqueredATerritory(false);
+        //initialize some empty vectors
+        vector<Territory*>  emptyToAttack = {};
+        vector<Territory*>  emptyToDefend = {};
+        //set territoies to attack and to defend to empty vectors
+        players[i]->setTerritoriesToAttack(emptyToAttack);
+        players[i]->setTerritoriesToDefend(emptyToDefend);
+   
+    }
+
+
+}
+
+
+Territory* getTerritoryByName(Map& map, string targetName) {
+    //Iterate through the map data
+    for (auto& pair : map.getMapData()) {
+        //refence second data in pair iterator which is a territory ptr
+        Territory* territory = pair.second;
+
+
+        //if target name matches current iterations name, return the territory ptr
+        if(toLower(targetName) == toLower(territory->getName())) {
+            return territory;
+        }
+    }
+    //never found return null
+    return(nullptr);
+}
+
+
+Player* getPlayerByName(std::vector<Player*>& players, string targetPlayer) {
+        //iterate through all players
+        for (auto& player: players) {
+       
+        //if target player name found in the player list return the player ptr
+        if(toLower(targetPlayer) == toLower(player->getName())) {
+            return player;
+        }
+    }
+    //never found return null
+    return(nullptr);
+}
+
+
+
+
+
+
 
 
 
