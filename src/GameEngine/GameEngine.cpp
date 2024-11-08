@@ -705,7 +705,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     }
 }
 
-
+/*
 void GameEngine::orderExecutionPhase(vector<Player*>& players) {
 vector<bool> playerDoneExecuting(players.size(), false);
 bool execute = true;
@@ -720,6 +720,7 @@ for (int i = 0; i < players.size(); i++) {
             playerDoneExecuting[i] = true;
             break;
         }
+        /*
             string order = players[i]->getOrdersList()->getList()[j]->getLabel();
         if (order == "Deploy") {
             // Calling the Validate function ---------------Current player---------------Number of Troops Deployed-------------------------Target Territory
@@ -729,15 +730,16 @@ for (int i = 0; i < players.size(); i++) {
             //regardeless of validation remove the deploy order
             players[i]->getOrdersList()->remove(j);
             //move back one index because remove shifted the vector
-            delete deployOrder;
+           // delete deployOrder;
             j--;
             //track the decreased size to prevent out of bounds
             orderListSize--;
         }
     }
+    
 }
 //issue round robin players orders
-
+/*
 while(execute) {
     for (int i = 0; i < players.size(); i++) {
         if(!playerDoneExecuting[i]) {
@@ -754,7 +756,7 @@ while(execute) {
                     Advance *advanceOrder = new Advance(players[i], players[i], players[i]->getOrdersList()->getList()[0]->getTroops(), players[i]->getOrdersList()->getList()[0]->getSource(), players[i]->getOrdersList()->getList()[0]->getTarget());
                     //Calling Validate with required inputs, validate executes the command after internally checking
                     advanceOrder->validate(advanceOrder->getUser(), advanceOrder->getTroops(),advanceOrder->getSource(), advanceOrder->getTarget());
-                    delete advanceOrder;
+                   // delete advanceOrder;
 
                     //remove the order from the list, pop first element
                     players[i]->getOrdersList()->remove(0);
@@ -763,21 +765,21 @@ while(execute) {
                     //Airlift Order----------------Current Player, same player, ---------------Troops Sent------------------------------------Source territory ----------------------------------------------- Target Territory
                     Airlift *airliftOrder = new Airlift (players[i], players[i], players[i]->getOrdersList()->getList()[0]->getTroops(), players[i]->getOrdersList()->getList()[0]->getSource(), players[i]->getOrdersList()->getList()[0]->getTarget());
                     airliftOrder->validate(airliftOrder->getUser(), airliftOrder->getTroops(),airliftOrder->getSource(), airliftOrder->getTarget());
-                    delete airliftOrder;
+                  //  delete airliftOrder;
                     players[i]->getOrdersList()->remove(0);
                 }
                 else if (orderType == "bomb") {
                     //Bomb order-------------Current Player--same player--no troops or source territory needed-------target territory
                     Bomb *bombOrder = new Bomb(players[i], players[i], 0, nullptr, players[i]->getOrdersList()->getList()[0]->getTarget());
                     bombOrder->validate(bombOrder->getUser(), bombOrder->getTarget());
-                    delete bombOrder;
+                  //  delete bombOrder;
                     players[i]->getOrdersList()->remove(0);
                 }
                 else if (orderType == "blockade") {
                     //Blockade order-------------Player performing the blockade, no troops moved, no source territory, --------Target Territory
                     Blockade *blockadeOrder = new Blockade(players[i], players[i], 0 , nullptr, players[i]->getOrdersList()->getList()[0]->getTarget());
                     blockadeOrder->validate(blockadeOrder->getUser(), blockadeOrder->getTarget());
-                    delete blockadeOrder;
+                   // delete blockadeOrder;
 
                     players[i]->getOrdersList()->remove(0);
                 }
@@ -785,7 +787,7 @@ while(execute) {
                     //Negotiate Order------------------Current Player-------------------Opposing Player------------- no armies or territories required for validate
                     Negotiate *negotiateOrder = new Negotiate(players[i], players[i]->getOrdersList()->getList()[0]->getTargeted(), 0, nullptr, nullptr);
                     negotiateOrder->validate(negotiateOrder->getUser(), negotiateOrder->getTargeted());
-                    delete negotiateOrder;
+                    //delete negotiateOrder;
                     players[i]->getOrdersList()->remove(0);
                 }
                 }
@@ -797,11 +799,13 @@ while(execute) {
         execute = true; 
     }
     }
+    
+    }
+    
+
 }
 
-
-}
-
+*/
 // Function to convert a string to lowercase
 string GameEngine::toLower(const string& str) {
     string lowerStr = str;

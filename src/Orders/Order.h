@@ -12,6 +12,8 @@ class Territory;
 class Card;
 enum CardType : int;
 
+using std::vector;
+
 // orders
 class Order{
 private:
@@ -58,7 +60,7 @@ private:
 //order list
 class OrdersList{
 private:
-  std::vector<Order *> orders{};
+  vector<Order*> orders{};
 
 public:
   OrdersList() = default;
@@ -70,7 +72,9 @@ public:
   void add(Order *o);
   void remove(int);
   void move(int, int);
-  vector<Order*> getList() const;
+  //vector<Order*> getList() const;
+  std::vector<Order *>* getList();
+  const std::vector<Territory*>& getConnectedTerritories() const;
 
 private:
 
