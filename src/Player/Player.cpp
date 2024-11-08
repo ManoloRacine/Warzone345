@@ -12,7 +12,7 @@ Player::Player(const string& playerName)
 
 // Copy Constructor
 Player::Player(const Player& other)
-    : name(other.name), territories(other.territories), hand(new Hand(*other.hand)), ordersList(new OrdersList(*other.ordersList)) {
+    : name(other.name), territories(other.territories), hand(new Hand(*other.hand)), ordersList(new OrdersList(*other.ordersList)), territoriesToDefend(other.territoriesToDefend), territoriesToAttack(other.territoriesToAttack){
     // Copy territories, hand, and ordersList from the other player
 }
 
@@ -65,6 +65,33 @@ void Player::setHand(Hand* newHand) {
     hand = newHand;
 }
 
+// Getters and Setters for TerritoriesToDefend
+vector<Territory*> Player::getTerritoriesToDefend() const {
+    return territoriesToDefend;
+}
+
+void Player::setTerritoriesToDefend(const vector<Territory*>& newTerritoriesToDefend) {
+    territoriesToDefend = newTerritoriesToDefend;
+}
+
+// Getters and Setters for TerritoriesToAttack
+vector<Territory*> Player::getTerritoriesToAttack() const {
+    return territoriesToAttack;
+}
+
+void Player::setTerritoriesToAttack(const vector<Territory*>& newTerritoriesToAttack) {
+    territoriesToAttack = newTerritoriesToAttack;
+}
+
+// Getters and Setters for conqueredATerritory
+bool Player::getConqueredATerritory() const {
+    return conqueredATerritory;
+}
+
+void Player::setConqueredATerritory(const bool& captured) {
+    name = captured;
+}
+
 // Stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Player& player) {
     os << "Player territories: " << player.getTerritories().size() << " | Orders: " << player.ordersList->getList() << " | Cards in hand: " << player.hand->getCards().size() << "\n";
@@ -91,19 +118,21 @@ void Player::printPlayer() const {
 }
 
 // Method to return a list of territories to defend
-vector<Territory*> Player::toDefend(vector<Territory*> defendingTerritories) {
-    for (int i = 0; i < defendingTerritories.size(); i++) {
-        cout << defendingTerritories[i]->getName() << " defending with " << defendingTerritories[i]->getArmies() << "\n";
+vector<Territory*> Player::toDefend(Territory* defendingTerritories) {
+    territoriesToDefend.push_back(defendingTerritories);
+    for (int i = 0; i < territoriesToDefend.size(); i++) {
+        cout << territoriesToDefend[i]->getName() << " defending with " << territoriesToDefend[i]->getArmies() << "\n";
     }
-    return defendingTerritories;
+    return territoriesToDefend;
 }
 
 // Method to return a list of territories to attack
-vector<Territory*> Player::toAttack(vector<Territory*> attackingTerritories) {
-    for (int i = 0; i < attackingTerritories.size(); i++) {
-        cout << attackingTerritories[i]->getName() << " attacking with " << attackingTerritories[i]->getArmies() << "\n";
+vector<Territory*> Player::toAttack(Territory* attackingTerritories) {
+    territoriesToAttack.push_back(attackingTerritories);
+    for (int i = 0; i < territoriesToAttack.size(); i++) {
+         cout << territoriesToAttack[i]->getName() << " attacking with " << territoriesToAttack[i]->getArmies() << "\n";
     }
-    return attackingTerritories;
+    return territoriesToAttack;
 }
 
 // Method to issue an order
@@ -115,3 +144,30 @@ void Player::issueOrder(Order* order) {
 void Player::addTerritories(Territory* territory) {
     territories.push_back(territory);
 }
+
+//removing a Territory
+bool Player::removeTerritories(Territory* territory){
+ auto it = std::find(territories.begin(), territories.end(), territory);
+        
+     if (it != territories.end()) {
+        territories.erase(it);  // Remove the territory if found
+        return true;
+     } else {
+        std::cout << "Territory not found." << std::endl;
+        return false;
+   }
+    
+}
+
+//checks if a player has a card in hand
+ bool hasCard(string card, Player* player){
+        for(int i = 0; i < player->getHand()->getCards().size(); i++){
+            string currentCard = player->getHand()->getCards()[i]->print();
+            if (card == currentCard)
+            {
+                player->getHand()->play(player->getHand()->getCards()[i]);
+                return true;
+            }
+        }
+        return false;
+    }

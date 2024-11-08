@@ -1,35 +1,59 @@
-//
-// Created by Ryad on 2024-10-03.
-//
 
 #pragma once
 
 #include <iostream>
 #include <vector>
 #include "../Cards/Cards.h"
+#include "../Player/Player.h"
 
 class Card;
 enum CardType : int;
 
 // orders
-class Order
-{
+class Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   virtual std::string getLabel() const = 0;
-  virtual bool validate() const = 0;
-  virtual void execute() const = 0;
+  virtual void execute() = 0;
+  virtual void execute(Player* user, Player* targeted, int troops, Territory* source, Territory* target) = 0;
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
+  Order();
+  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   virtual std::ostream &orderCout(std::ostream &) const = 0;
-
   friend std::ostream &operator<<(std::ostream &, const Order &);
+
+//Getters and setters for user
+Player* getUser() const;
+void setUser(Player* newUser);
+
+//Getters and setters for targeted
+Player* getTargeted() const;
+void setTargeted(Player* newTargeted);
+
+//Getters and setters for Troops
+int getTroops() const;
+void setTroops(int newTroops);
+
+//Getters and setters for target
+Territory* getTarget() const;
+void setTarget(Territory* newTarget);
+
+//Getters and setters for source
+Territory* getSource() const;
+void setSource(Territory* newSource);
+  
 };
 
 //order list
-class OrdersList
-{
+class OrdersList{
 private:
   std::vector<Order *> orders{};
 
@@ -43,7 +67,6 @@ public:
   void add(Order *o);
   void remove(int);
   void move(int, int);
-  void execute();
 
   std::vector<Order *>* getList();
 
@@ -52,77 +75,24 @@ private:
   friend std::ostream &operator<<(std::ostream &, const OrdersList &);
 };
 
-
-
-//advance
-class Advance : public Order
-{
-public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Advance() override;
-
+//========================================
+//Deploy Order
+//========================================
+class Deploy : public Order{
 private:
-  const static std::string label;
-  Order *clone() const override;
-  std::ostream &orderCout(std::ostream &) const override;
-};
-
-//airlift
-class Airlift : public Order
-{
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Airlift() override;
-
-private:
-  const static std::string label;
-  Order *clone() const override;
-  std::ostream &orderCout(std::ostream &) const override;
-};
-
-//blockade
-class Blockade : public Order
-{
-public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Blockade() override;
-
-private:
-  const static std::string label;
-  Order *clone() const override;
-  std::ostream &orderCout(std::ostream &) const override;
-};
-
-
-// bomb
-class Bomb : public Order
-{
-public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Bomb() override;
-
-private:
-  const static std::string label;
-  Order *clone() const override;
-  std::ostream &orderCout(std::ostream &) const override;
-};
-
-//deploy
-class Deploy : public Order
-{
-public:
-  std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
+  bool validate(Player* player, int armies, Territory* target);
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute(Player* player, int armies, Territory* target);
+  void execute() override;
   ~Deploy() override;
+  Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;
@@ -130,13 +100,24 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-class Negotiate : public Order
-{
+//========================================
+//Advance Order
+//========================================
+class Advance : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
 public:
   std::string getLabel() const override;
-  bool validate() const override;
-  void execute() const override;
-  ~Negotiate() override;
+  bool validate(Player* player, int armies, Territory* source, Territory* target);
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
+  void execute(Player* player, int armies, Territory* source, Territory* target);
+  ~Advance() override;
+  Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   const static std::string label;
@@ -144,14 +125,111 @@ private:
   std::ostream &orderCout(std::ostream &) const override;
 };
 
-class UserInputOrder
-{
+//========================================
+//Airlift Order
+//========================================
+class Airlift : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
+public:
+  std::string getLabel() const override;
+  bool validate(Player* player, int armies, Territory* source, Territory* target);
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
+  void execute(Player* player, int armies, Territory* source, Territory* target);
+  ~Airlift() override;
+  Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+
+private:
+  const static std::string label;
+  Order *clone() const override;
+  std::ostream &orderCout(std::ostream &) const override;
+};
+
+//========================================
+//Blockade Order
+//========================================
+class Blockade : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
+public:
+  std::string getLabel() const override;
+  bool validate(Player* player, Territory* source);
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
+  ~Blockade() override;
+  Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+
+private:
+  const static std::string label;
+  Order *clone() const override;
+  std::ostream &orderCout(std::ostream &) const override;
+};
+
+
+//========================================
+//Bomb Order
+//========================================
+class Bomb : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
+public:
+  std::string getLabel() const override;
+  bool validate(Player* player, Territory* target);
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
+  ~Bomb() override;
+  Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+
+private:
+  const static std::string label;
+  Order *clone() const override;
+  std::ostream &orderCout(std::ostream &) const override;
+};
+
+
+//========================================
+//Negociate Order
+//========================================
+class Negotiate : public Order{
+private:
+  Player* user;
+  Player* targeted;
+  int troops;
+  Territory* target;
+  Territory* source;
+public:
+  std::string getLabel() const override;
+  bool validate(Player* user, Player* target);
+  void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
+  void execute() override;
+  ~Negotiate() override;
+  Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+
+private:
+  const static std::string label;
+  Order *clone() const override;
+  std::ostream &orderCout(std::ostream &) const override;
+};
+
+class UserInputOrder{
 public:
   static Order *create(const std::string&) ;
 };
 
 class OrdersFactory {
-
 public:
   static Order* CreateOrder(CardType cardType);
 
