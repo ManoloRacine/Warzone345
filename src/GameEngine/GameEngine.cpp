@@ -705,7 +705,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     }
 }
 
-/*
+
 void GameEngine::orderExecutionPhase(vector<Player*>& players) {
 vector<bool> playerDoneExecuting(players.size(), false);
 bool execute = true;
@@ -720,7 +720,7 @@ for (int i = 0; i < players.size(); i++) {
             playerDoneExecuting[i] = true;
             break;
         }
-        /*
+        
             string order = players[i]->getOrdersList()->getList()[j]->getLabel();
         if (order == "Deploy") {
             // Calling the Validate function ---------------Current player---------------Number of Troops Deployed-------------------------Target Territory
@@ -739,7 +739,7 @@ for (int i = 0; i < players.size(); i++) {
     
 }
 //issue round robin players orders
-/*
+
 while(execute) {
     for (int i = 0; i < players.size(); i++) {
         if(!playerDoneExecuting[i]) {
@@ -805,7 +805,7 @@ while(execute) {
 
 }
 
-*/
+
 // Function to convert a string to lowercase
 string GameEngine::toLower(const string& str) {
     string lowerStr = str;

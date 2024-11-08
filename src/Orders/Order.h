@@ -73,7 +73,8 @@ public:
   void remove(int);
   void move(int, int);
   //vector<Order*> getList() const;
-  std::vector<Order *>* getList();
+ // std::vector<Order *>* getList();
+ std::vector<Order*> getList() const;
   const std::vector<Territory*>& getConnectedTerritories() const;
 
 private:
