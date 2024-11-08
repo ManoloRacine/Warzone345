@@ -252,7 +252,6 @@ std::ostream & operator<<(std::ostream &os, const GameEngine &gameEngine) {
 void GameEngine::startupPhase() {
     CommandProcessor commandProcessor; // Create CommandProcessor instance
     std::cout << "Starting game setup. Enter commands:" << std::endl;
-
     bool isMapLoaded = false;
     bool isMapValid = false;
     bool enoughPlayers = false;
@@ -351,6 +350,7 @@ void GameEngine::startupPhase() {
                 cout << "Game Set Up Succesfull..." << endl;
                 cout << "Starting Game..." << endl;
                 cout << "Current State: " << *this << endl;
+                issueOrdersPhase(loadedMap,playerList);
 
             } else if(!isMapLoaded) {
                 cout << "Can't proceed: Map not loaded" << endl;
@@ -543,26 +543,29 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
         //rotate through each player
         for(int i = 0; i < numPlayers; i++) {
             //if player not done issuing orders let them issue order
-            if (!playerDoneTurn[i]) { 
+                if (playerDoneTurn[i]){
+                    continue;
+                }
+
+                if (players[i]->getReinforcements() == 0) {
+                        playerDoneDeploying[i] = true;
+                    }
+
                 validOrder = false;
                 //loop until current player gives a valid order
                 while (!validOrder) {
+                    numArmies = 0;
                     // ask user for their order
                     cout << players[i]->getName() << " enter an order: " << endl;
                     // let user put in order
                     cin >> choice;
                     choice = toLower(choice);
 
-                    if (!players[i]->getReinforcements() == 0) {
-                        playerDoneDeploying[i] = true;
-                    }
-
                     //for user to choose deploy
-                    if (!playerDoneDeploying[i]) {
-                        if(choice != "deploy") {
+                    if (!playerDoneDeploying[i] && choice != "deploy") {
                             cout<< "Must deploy all troops First" << endl;
-                            break;
-                        }
+                            i--;
+                            continue;
                     }
 
                     // using user input create a new order
@@ -578,6 +581,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         if(playerTroops-numArmies < 0) {
                             cout << "Number entered goes beyond the reinforcement pool" << endl;
                             cout << playerTroops << " troops remaining" << endl;
+                            i--;
                             break;
                         } 
                             
@@ -689,18 +693,19 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         playerDoneTurn[i] = true;
                         validOrder = true;
                     }
+
+                    playersIssuingOrders = false;
+                    // check if all players are done
+                    for (int j = 0; j < numPlayers; j++) {
+                     // if not done issuing orders
+                    if (playerDoneTurn[j] == false) {
+                            // players are still issuing orders keep looping
+                            playersIssuingOrders = true;
+                            break;
+                        }
+                    }
                 }
-            }
-        }
-        playersIssuingOrders = false;
-        // check if all players are done
-        for (int j = 0; j < numPlayers; j++) {
-            // if not done issuing orders
-            if (playerDoneTurn[j] == false) {
-                // players are still issuing orders keep looping
-                playersIssuingOrders = true;
-                break;
-            }
+            
         }
     }
 }
