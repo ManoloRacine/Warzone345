@@ -350,6 +350,7 @@ void GameEngine::startupPhase() {
                 cout << "Game Set Up Succesfull..." << endl;
                 cout << "Starting Game..." << endl;
                 cout << "Current State: " << *this << endl;
+                reinforcementPhase(playerList, loadedMap);
                 issueOrdersPhase(loadedMap,playerList);
 
             } else if(!isMapLoaded) {
@@ -466,20 +467,21 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
 //----------------A2-PART3-Griffin-Sin-Chan---------------//
 
 
-void GameEngine::reinforcementPhase(std::vector<Player*>& players, std::vector<Continent*>& continents) {
+void GameEngine::reinforcementPhase(std::vector<Player*>& players, Map& map) {
 
-
+    vector<Continent*> continents = map.getContinents();
+    
     //Distribute normal number of troops to all players
     cout << "Adding reinforcements..." << endl;
     for(const auto& player : players) {
         //# of territories owned divided by 3, rounded down
         int numTroops = ((player->getTerritories().size())/3);
-        player->setReinforcements(numTroops);
+        player->setReinforcements(numTroops + player->getReinforcements());
 
 
         //set minimal troops for player if less than 3
         if (numTroops < 3) {
-        player->setReinforcements(3);
+        player->setReinforcements(3 + player->getReinforcements());
         }
         cout << player->getName() <<" recieves " << player->getReinforcements() << " troops." << endl;
     }
@@ -515,7 +517,7 @@ void GameEngine::reinforcementPhase(std::vector<Player*>& players, std::vector<C
             //total troops = current troops + continent bonus
             int totalTroops = (tempOwnerPtr->getReinforcements() + continents[i]->getBonus());
             tempOwnerPtr->setReinforcements(totalTroops);
-            cout << tempOwnerPtr->getName() <<" recieves a bonus of " << continents[i]->getBonus()<< "troops." <<endl;
+            cout << tempOwnerPtr->getName() <<" recieves a bonus of " << continents[i]->getBonus()<< " troops." <<endl;
         }
     }
 }
@@ -526,7 +528,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     //Vector storing number players with turn status
     int numPlayers = players.size();
     //create vector with size equal to num players and set true
-    vector<bool> playerDoneTurn(numPlayers, false);
+    vector<bool> playerNotDoneTurn(numPlayers, true);
     vector<bool> playerDoneDeploying(numPlayers, false);
     bool playersIssuingOrders = true;
     bool validOrder = false;
@@ -543,14 +545,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
         //rotate through each player
         for(int i = 0; i < numPlayers; i++) {
             //if player not done issuing orders let them issue order
-                if (playerDoneTurn[i]){
-                    continue;
-                }
-
-                if (players[i]->getReinforcements() == 0) {
-                        playerDoneDeploying[i] = true;
-                    }
-
+            if (playerNotDoneTurn[i]) { 
                 validOrder = false;
                 //loop until current player gives a valid order
                 while (!validOrder) {
@@ -561,11 +556,18 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     cin >> choice;
                     choice = toLower(choice);
 
+                    if (players[i]->getReinforcements() == 0) {
+                        playerDoneDeploying[i] = true;
+                    }
+
                     //for user to choose deploy
-                    if (!playerDoneDeploying[i] && choice != "deploy") {
+                    if (!playerDoneDeploying[i]) {
+                        if(choice != "deploy") {
+                            
                             cout<< "Must deploy all troops First" << endl;
                             i--;
-                            continue;
+                            break;
+                        }
                     }
 
                     // using user input create a new order
@@ -690,22 +692,23 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     }
                     else if (choice == "done") {
                         // player is now done issuing orders
-                        playerDoneTurn[i] = true;
+                        playerNotDoneTurn[i] = false;
                         validOrder = true;
                     }
 
-                    playersIssuingOrders = false;
+                    int sum = 0;
                     // check if all players are done
                     for (int j = 0; j < numPlayers; j++) {
-                     // if not done issuing orders
-                    if (playerDoneTurn[j] == false) {
-                            // players are still issuing orders keep looping
-                            playersIssuingOrders = true;
-                            break;
+                        sum += playerNotDoneTurn[j];
+                        // if not done issuing orders
                         }
+                    if (sum == 0) {
+                        // players are still issuing orders keep looping
+                        playersIssuingOrders = false;
+                        break;
                     }
                 }
-            
+            }
         }
     }
 }
