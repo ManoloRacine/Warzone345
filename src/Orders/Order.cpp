@@ -142,8 +142,15 @@ std::ostream &operator<<(std::ostream &stream, const OrdersList &ol){
   return stream;
 }
 
+/*
 vector<Order*> *OrdersList::getList() {
   return &this->orders;
+}
+*/
+
+// Getter for OrdersList - returns a copy of the orders vector
+vector<Order*> OrdersList::getList() const {
+    return orders;
 }
 
 

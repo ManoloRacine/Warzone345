@@ -714,7 +714,7 @@ bool execute = true;
 
 //First loop through all players orderlist search for deploy orders
 for (int i = 0; i < players.size(); i++) {
-    int orderListSize = players[i]->getOrdersList()->getList()->size();
+    int orderListSize = players[i]->getOrdersList()->getList().size();
     for (int j = 0; j < orderListSize; j++) {
         
         //if the order list size is 0 no orders left skip
@@ -722,10 +722,11 @@ for (int i = 0; i < players.size(); i++) {
             playerDoneExecuting[i] = true;
             break;
         }
-            string order = players[i]->getOrdersList().getList()[j]->getLabel();
+            string order = players[i]->getOrdersList()->getList()[j]->getLabel();
         if (order == "Deploy") {
             // Calling the Validate function ------------------Current player---------------Number of Troops Deployed-------------------------Targeted Territory
-            players[i]->getOrdersList().getList()[j]->validate(players[i], players[i]->getOrdersList().getList()[j]->getTroops(), players[i]->getOrdersList().getList()[j]->getTarget());
+            Deploy *deployOrder = new Deploy(players[i], players[i], players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
+            deployOrder->validate(deployOrder->getUser(), deployOrder->getTroops(), deployOrder->getTargeted());
             //validate internally calls the excute method if conditions satisfied
             //regardeless of validation remove the deploy order
             players[i]->getOrdersList()->remove(j);
@@ -741,7 +742,7 @@ for (int i = 0; i < players.size(); i++) {
 while(execute) {
     for (int i = 0; i < players.size(); i++) {
         if(!playerDoneExecuting[i]) {
-           if (players[i]->getOrdersList()->getList()->size() == 0) {
+           if (players[i]->getOrdersList()->getList().size() == 0) {
                 playerDoneExecuting[i] = true;
                 break;
            }

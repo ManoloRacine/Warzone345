@@ -28,30 +28,30 @@ public:
   virtual Order *clone() const = 0;
   Order();
   Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
 
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
 private:
   virtual std::ostream &orderCout(std::ostream &) const = 0;
   friend std::ostream &operator<<(std::ostream &, const Order &);
 
-//Getters and setters for user
-Player* getUser() const;
-void setUser(Player* newUser);
 
-//Getters and setters for targeted
-Player* getTargeted() const;
-void setTargeted(Player* newTargeted);
-
-//Getters and setters for Troops
-int getTroops() const;
-void setTroops(int newTroops);
-
-//Getters and setters for target
-Territory* getTarget() const;
-void setTarget(Territory* newTarget);
-
-//Getters and setters for source
-Territory* getSource() const;
-void setSource(Territory* newSource);
   
 };
 
@@ -70,8 +70,7 @@ public:
   void add(Order *o);
   void remove(int);
   void move(int, int);
-
-  std::vector<Order *>* getList();
+  vector<Order*> getList() const;
 
 private:
 

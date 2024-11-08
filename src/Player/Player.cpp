@@ -121,7 +121,7 @@ void Player::printPlayer() const {
     }
 
     cout << "Orders in Order List: " << endl;
-    for (Order* order : *ordersList->getList()) {
+    for (Order* order : ordersList->getList()) {
         cout << *order << endl;  // Assuming Order class has operator<< overloaded
     }
 }
