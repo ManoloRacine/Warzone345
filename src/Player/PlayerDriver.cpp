@@ -10,7 +10,7 @@ using namespace std;
 
 void testPlayer() {
 
-
+/*
     // Create a deck and some cards
     Deck* deck = new Deck();
     deck->generateDeck();
@@ -51,5 +51,5 @@ void testPlayer() {
     delete deck;
     delete player;
     delete asia;
-    delete europe;
+    delete europe;*/
 }

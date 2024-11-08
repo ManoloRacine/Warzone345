@@ -10,6 +10,7 @@
 #include "../CommandProcessing/CommandProcessor.h"
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
+#include "../Player/Player.h"
 
 using namespace std;
 

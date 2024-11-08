@@ -1,3 +1,4 @@
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -9,6 +10,8 @@
 #include "../Cards/Cards.h"
 
 class Territory;
+class Order;
+class OrdersList;
 
 using namespace std;
 

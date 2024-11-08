@@ -306,6 +306,7 @@ bool Airlift::validate(Player* player, int armies, Territory* source, Territory*
   }
   else{
     cout << "Airlift order Invalid" << endl;
+    return false;
   }
   
 }
@@ -374,6 +375,11 @@ void Bomb::execute(Player* user, Territory* target){
   execute(user, nullptr, 0, nullptr, target);
 }
 
+//overridden execute
+void Bomb::execute(){
+  cout << "Please Pass parameters in the form (Player* user, Territory* target)" << endl;
+}
+
 Order *Bomb::clone() const { return new Bomb(*this); }
 
 
@@ -421,6 +427,11 @@ void Blockade::execute(Player* user, Territory* source){
   execute(user, nullptr, 0, source, nullptr);
 }
 
+//overridden execute
+void Blockade::execute(){
+  cout << "Please Pass parameters in the form (Player* user, Territory* source)" << endl;
+}
+
 Order *Blockade::clone() const { return new Blockade(*this); }
 
 
@@ -456,6 +467,11 @@ void Negotiate::execute(Player* user, Player* targeted, int armies, Territory* s
 //helper function for execute
 void Negotiate::execute(Player* user, Player* targeted){
   execute(user, targeted, 0, nullptr, nullptr);
+}
+
+//overridden execute
+void Negotiate::execute(){
+  cout << "Please Pass parameters in the form (Player* user, Player* targeted)" << endl;
 }
 
 
