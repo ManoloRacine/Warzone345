@@ -698,7 +698,7 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
 }
 
 // Function to convert a string to lowercase
-string toLower(const string& str) {
+string GameEngine::toLower(const string& str) {
     string lowerStr = str;
     transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), [](unsigned char c) {
         return tolower(c);
@@ -711,7 +711,7 @@ string toLower(const string& str) {
 //give them a card
 
 
-Territory* getTerritoryByName(Map& map, string targetName) {
+Territory* GameEngine::getTerritoryByName(Map& map, string targetName) {
     //Iterate through the map data
     for (auto& pair : map.getMapData()) {
         //refence second data in pair iterator which is a territory ptr
@@ -728,7 +728,7 @@ Territory* getTerritoryByName(Map& map, string targetName) {
 }
 
 
-Player* getPlayerByName(vector<Player*>& players, string targetPlayer) {
+Player* GameEngine::getPlayerByName(vector<Player*>& players, string targetPlayer) {
         //iterate through all players
         for (auto& player: players) {
        

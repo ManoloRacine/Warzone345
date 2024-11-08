@@ -139,7 +139,9 @@ class GameEngine {
     void reinforcementPhase(std::vector<Player*>& players, std::vector<Continent*>& continents);
     void issueOrdersPhase(Map& map, std::vector<Player*>& players);
     void orderExecutionPhase(std::vector<Player*>& players);
-    Territory* getTerritoriesByName(Map& map, string territory);
+    string toLower(const string &str);
+    Territory *getTerritoryByName(Map &map, string targetName);
+    Territory *getTerritoriesByName(Map &map, string territory);
     Player* getPlayerByName(std::vector<Player*>& players, string targetPlayer);
     
 
