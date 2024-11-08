@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef ORDER_H
+#define ORDER_H
 
 #include <iostream>
 #include <vector>
@@ -237,3 +238,5 @@ public:
   static Order* CreateOrder(CardType cardType);
 
 };
+
+#endif
