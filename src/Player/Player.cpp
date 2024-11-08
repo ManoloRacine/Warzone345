@@ -6,7 +6,7 @@ using namespace std;
 
 // Default constructor
 Player::Player(const string& playerName)
-    : name(playerName), hand(new Hand()), ordersList(new OrdersList()) {
+    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers) {
     // Initialize player with empty territories, hand, and order list
 }
 
@@ -92,6 +92,15 @@ void Player::setConqueredATerritory(const bool& captured) {
     name = captured;
 }
 
+// Getters and Setters for NegociatedPlayers
+set<Player*> Player::getNegotiatedPlayers() const {
+    return negotiatedPlayers;
+}
+
+void Player::setNegotiatedPlayers(set<Player*>& newNegotiatedPlayers) {
+    negotiatedPlayers = newNegotiatedPlayers;
+}
+
 // Stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Player& player) {
     os << "Player territories: " << player.getTerritories().size() << " | Orders: " << player.ordersList->getList() << " | Cards in hand: " << player.hand->getCards().size() << "\n";
@@ -171,3 +180,16 @@ bool Player::removeTerritories(Territory* territory){
         }
         return false;
     }
+
+//for negociating with a player
+void Player::addNegotiateEffect(Player* other) {
+    negotiatedPlayers.insert(other);
+}
+
+bool Player::isNegotiatedWith(Player* other) {
+    return negotiatedPlayers.find(other) != negotiatedPlayers.end();
+}
+
+void Player::clearNegotiations() {
+    negotiatedPlayers.clear();
+}

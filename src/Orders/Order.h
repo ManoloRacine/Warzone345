@@ -1,5 +1,6 @@
 
-#pragma once
+#ifndef ORDER_H
+#define ORDER_H
 
 #include <iostream>
 #include <vector>
@@ -192,6 +193,7 @@ public:
   bool validate(Player* player, Territory* source);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  void execute(Player* user, Territory* source);  
   ~Blockade() override;
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
@@ -217,6 +219,7 @@ public:
   bool validate(Player* user, Player* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  void execute(Player* user, Player* targeted);
   ~Negotiate() override;
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
@@ -236,3 +239,5 @@ public:
   static Order* CreateOrder(CardType cardType);
 
 };
+
+#endif

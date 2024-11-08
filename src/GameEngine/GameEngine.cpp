@@ -534,6 +534,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     int numArmies;
     string sourceTerritory;
     string targetTerritory;
+    string opposingPlayerName;
 
 
     //While orders are still being issued
@@ -544,6 +545,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
             //if player not done issuing orders let them issue order
             if (!playerDoneTurn[i])
             {
+                //loop until current player gives a valid order
                 while (!validOrder)
                 {
                     // ask user for their order
@@ -560,60 +562,110 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         }
                     }
 
-
                     // using user input create a new order
+                    
+                    //========================================
+                    //Deploy Order
+                    //========================================
                     if (choice == "deploy"){
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
-                        cout << "Enter name of source territory:" << endl;
-                        cin >> sourceTerritory;
-                        cout << "Enter number of troops to move:" << endl;
+                        cout << "Enter name of target territory:" << endl;
                         cin >> targetTerritory;
 
 
-                        // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
-                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
-                        Deploy *deployOrder = new Deploy(players[i], players[i], numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, source territory is unnecessary...null, target territory owned
+                        Deploy *deployOrder = new Deploy(players[i], players[i], numArmies, nullptr, getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(deployOrder);
                     }
+                    //========================================
+                    //Advance Order
+                    //========================================
                     else if (choice == "advance") {
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
                         cout << "Enter name of source territory:" << endl;
                         cin >> sourceTerritory;
+                        cout << "Enter name of target territory:" << endl;
+                        cin >> targetTerritory;
+
+
+                        // Pass in the current player and the player being attacked
+                        // getTerritoryByName(map, targetTerritory)->getOwner()... it gets the owner of the territory being attacked or defended
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
+                        Advance *advanceOrder = new Advance(players[i], getTerritoryByName(map, targetTerritory)->getOwner(), numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(advanceOrder);
+                    }
+                    //========================================
+                    //Airlift Order
+                    //========================================
+                    else if (choice == "airlift") {
                         cout << "Enter number of troops to move:" << endl;
+                        cin >> numArmies;
+                        cout << "Enter name of source territory:" << endl;
+                        cin >> sourceTerritory;
+                        cout << "Enter name of target territory:" << endl;
+                        cin >> targetTerritory;
+
+
+                        // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
+                        Airlift *airliftOrder = new Airlift(players[i], players[i], numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(airliftOrder);
+
+
+                    }
+                    //========================================
+                    //Bomb Order
+                    //========================================
+                    else if (choice == "bomb") {
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> numArmies;
+                        cout << "Enter name of target territory:" << endl;
                         cin >> targetTerritory;
 
 
                         // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
                         // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
-                        Deploy *deployOrder = new Deploy(players[i], players[i], numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        Bomb *bombOrder = new Bomb(players[i], players[i], numArmies, nullptr, getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
-                        players[i]->issueOrder(deployOrder);
-                    }
-                    else if (choice == "airlift") {
-
-
+                        players[i]->issueOrder(bombOrder);
 
 
                     }
-                    else if (choice == "bomb") {
-
-
-
-
-                    }
+                    //========================================
+                    //Blockade Order
+                    //========================================
                     else if (choice == "blockade") {
+                        
+                        cout << "Enter name of target territory:" << endl;
+                        cin >> targetTerritory;
 
 
+                        // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, source territory and targte territory are the same
+                        Blockade *blockadeOrder = new Blockade(players[i], players[i], 0, getTerritoryByName(map, targetTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(blockadeOrder);
 
 
                     }
+                    //========================================
+                    //Negotiate Order
+                    //========================================
                     else if (choice == "negotitate") {
+                        cout << "Enter name of player to negotiate with:" << endl;
+                        cin >> opposingPlayerName;
 
 
-
+                        //negotiate only needs current player and opposing player of choosing
+                        Negotiate *negotiateOrder = new Negotiate(players[i], getPlayerByName(players, opposingPlayerName), 0, nullptr, nullptr);
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(negotiateOrder);
 
                     }
                     else if (choice == "done") {
@@ -661,12 +713,16 @@ void resetPlayerStatuses(std::vector<Player*>& players) {
         //set territoies to attack and to defend to empty vectors
         players[i]->setTerritoriesToAttack(emptyToAttack);
         players[i]->setTerritoriesToDefend(emptyToDefend);
+        //resets player negotiations
+        players[i]->clearNegotiations();
    
     }
 
 
 }
 
+//for all who have conquered
+//give them a card
 
 Territory* getTerritoryByName(Map& map, string targetName) {
     //Iterate through the map data
@@ -685,7 +741,7 @@ Territory* getTerritoryByName(Map& map, string targetName) {
 }
 
 
-Player* getPlayerByName(std::vector<Player*>& players, string targetPlayer) {
+Player* getPlayerByName(vector<Player*>& players, string targetPlayer) {
         //iterate through all players
         for (auto& player: players) {
        
