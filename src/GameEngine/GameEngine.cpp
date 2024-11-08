@@ -638,15 +638,13 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     //Bomb Order
                     //========================================
                     else if (choice == "bomb") {
-                        cout << "Enter number of troops to move:" << endl;
-                        cin >> numArmies;
                         cout << "Enter name of target territory:" << endl;
                         cin >> targetTerritory;
 
 
                         // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
                         // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
-                        Bomb *bombOrder = new Bomb(players[i], players[i], numArmies, nullptr, getTerritoryByName(map, targetTerritory));
+                        Bomb *bombOrder = new Bomb(players[i], players[i], 0, nullptr, getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(bombOrder);
                         validOrder = true;
@@ -724,20 +722,21 @@ for (int i = 0; i < players.size(); i++) {
         }
             string order = players[i]->getOrdersList()->getList()[j]->getLabel();
         if (order == "Deploy") {
-            // Calling the Validate function ------------------Current player---------------Number of Troops Deployed-------------------------Targeted Territory
+            // Calling the Validate function ---------------Current player---------------Number of Troops Deployed-------------------------Target Territory
             Deploy *deployOrder = new Deploy(players[i], players[i], players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
-            deployOrder->validate(deployOrder->getUser(), deployOrder->getTroops(), deployOrder->getTargeted());
+            deployOrder->validate(deployOrder->getUser(), deployOrder->getTroops(), deployOrder->getTarget());
             //validate internally calls the excute method if conditions satisfied
             //regardeless of validation remove the deploy order
             players[i]->getOrdersList()->remove(j);
             //move back one index because remove shifted the vector
+            delete deployOrder;
             j--;
             //track the decreased size to prevent out of bounds
             orderListSize--;
         }
     }
 }
-//Deploying all troops round robin players orders
+//issue round robin players orders
 
 while(execute) {
     for (int i = 0; i < players.size(); i++) {
@@ -745,28 +744,51 @@ while(execute) {
            if (players[i]->getOrdersList()->getList().size() == 0) {
                 playerDoneExecuting[i] = true;
                 break;
-           }
-           string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
-           else if (orderType == "advance") {
+           } 
+            else {
+                //get label to compare with order name later
+                string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
+                if (orderType == "advance") {
+                    //Advance Order----------------Current Player, same player, ---------------Troops Sent------------------------------------Source territory ----------------------------------------------- Target Territory
+                    //creating an object of subclass (Advance) with data from parent class (Order)
+                    Advance *advanceOrder = new Advance(players[i], players[i], players[i]->getOrdersList()->getList()[0]->getTroops(), players[i]->getOrdersList()->getList()[0]->getSource(), players[i]->getOrdersList()->getList()[0]->getTarget());
+                    //Calling Validate with required inputs, validate executes the command after internally checking
+                    advanceOrder->validate(advanceOrder->getUser(), advanceOrder->getTroops(),advanceOrder->getSource(), advanceOrder->getTarget());
+                    delete advanceOrder;
 
-            players[i]->getOrdersList()->remove(0)
-           }
-           else if (orderType == "airlift") {
+                    //remove the order from the list, pop first element
+                    players[i]->getOrdersList()->remove(0);
+                }
+                else if (orderType == "airlift") {
+                    //Airlift Order----------------Current Player, same player, ---------------Troops Sent------------------------------------Source territory ----------------------------------------------- Target Territory
+                    Airlift *airliftOrder = new Airlift (players[i], players[i], players[i]->getOrdersList()->getList()[0]->getTroops(), players[i]->getOrdersList()->getList()[0]->getSource(), players[i]->getOrdersList()->getList()[0]->getTarget());
+                    airliftOrder->validate(airliftOrder->getUser(), airliftOrder->getTroops(),airliftOrder->getSource(), airliftOrder->getTarget());
+                    delete airliftOrder;
+                    players[i]->getOrdersList()->remove(0);
+                }
+                else if (orderType == "bomb") {
+                    //Bomb order-------------Current Player--same player--no troops or source territory needed-------target territory
+                    Bomb *bombOrder = new Bomb(players[i], players[i], 0, nullptr, players[i]->getOrdersList()->getList()[0]->getTarget());
+                    bombOrder->validate(bombOrder->getUser(), bombOrder->getTarget());
+                    delete bombOrder;
+                    players[i]->getOrdersList()->remove(0);
+                }
+                else if (orderType == "blockade") {
+                    //Blockade order-------------Player performing the blockade, no troops moved, no source territory, --------Target Territory
+                    Blockade *blockadeOrder = new Blockade(players[i], players[i], 0 , nullptr, players[i]->getOrdersList()->getList()[0]->getTarget());
+                    blockadeOrder->validate(blockadeOrder->getUser(), blockadeOrder->getTarget());
+                    delete blockadeOrder;
 
-            players[i]->getOrdersList()->remove(0)
-           }
-           else if (orderType == "bomb") {
-
-            players[i]->getOrdersList()->remove(0)
-           }
-           else if (orderType == "blockade") {
-
-            players[i]->getOrdersList()->remove(0)
-           }
-           else if (orderType == "negotiate") {
-
-            players[i]->getOrdersList()->remove(0)
-           }
+                    players[i]->getOrdersList()->remove(0);
+                }
+                else if (orderType == "negotiate") {
+                    //Negotiate Order------------------Current Player-------------------Opposing Player------------- no armies or territories required for validate
+                    Negotiate *negotiateOrder = new Negotiate(players[i], players[i]->getOrdersList()->getList()[0]->getTargeted(), 0, nullptr, nullptr);
+                    negotiateOrder->validate(negotiateOrder->getUser(), negotiateOrder->getTargeted());
+                    delete negotiateOrder;
+                    players[i]->getOrdersList()->remove(0);
+                }
+                }
         }
         
         execute = false;
