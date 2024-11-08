@@ -219,6 +219,7 @@ public:
   bool validate(Player* user, Player* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  void execute(Player* user, Player* targeted);
   ~Negotiate() override;
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 

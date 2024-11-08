@@ -207,7 +207,8 @@ Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, 
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
-  && armies <= source->getArmies()){
+  && armies <= source->getArmies() 
+  && !player->isNegotiatedWith(target->getOwner())){
     cout << "Advance Order is Valid" << endl;
     execute(player, armies, source, target);
   }
@@ -341,22 +342,25 @@ Bomb::~Bomb() = default;
 std::string Bomb::getLabel() const { return label; }
 
 std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
+
 //validation for bomb
-bool Bomb::validate(Player* player, Territory* target){
+bool Bomb::validate(Player* user, Territory* target){
   bool adjacent = false;
   for(int i = 0; i < target->getConnectedTerritories().size(); i++){
-    if(target->getConnectedTerritories()[i]->getOwner() == player){
+    if(target->getConnectedTerritories()[i]->getOwner() == user){
       adjacent = true;
     }
   }
 
   if(adjacent 
-  && find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
-  && hasCard("bomb", player) ){
+  && find(user->getTerritories().begin(), user->getTerritories().end(), target) == user->getTerritories().end() 
+  && !user->isNegotiatedWith(target->getOwner())
+  && hasCard("bomb", user) ){
     cout << "Bomb order Valid" << endl;
-    execute(player, target);
+    execute(user, target);
     return true;
   }
+  cout << "Bomb invalid" << endl;
 return false;
 }
 //execution of the the Bomb order
@@ -366,8 +370,8 @@ void Bomb::execute(Player* user, Player* targeted, int armies, Territory* source
 }
 
 //helper function for bomb order
-void Bomb::execute(Player* player, Territory* target){
-  execute(player, nullptr, 0, nullptr, target);
+void Bomb::execute(Player* user, Territory* target){
+  execute(user, nullptr, 0, nullptr, target);
 }
 
 Order *Bomb::clone() const { return new Bomb(*this); }
@@ -395,23 +399,21 @@ bool Blockade::validate(Player* player, Territory* source){
     execute(player, source);
     return true;
   }
+  cout << "Blockade invalid" << endl;
   return false;
 }
 
 //creation of the neutral player
-//static Player* neutral("neutral");
+static Player* neutral = new Player("neutral");
 
 
 //execute the blockade function
 void Blockade::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) {
- // Player* neutralPlayer = &neutral;
   source->setArmies(source->getArmies()*2);
-  //source->setOwner(neutral);
+  source->setOwner(neutral);
+  neutral->addTerritories(source);
   user->removeTerritories(source);
-
-
-
-  
+  cout << "Blockade has been made on " << source->getName() << " with " << source->getArmies() << " troops." << endl;
 }
 
 //helper function for execute
@@ -426,21 +428,34 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 //Negociate Order
 //========================================
 const std::string Negotiate::label = "Negotiate";
-
+//constructor
 Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target){}
-
+//destructor
 Negotiate::~Negotiate() = default;
 
 std::string Negotiate::getLabel() const { return label; }
 
-bool Negotiate::validate(Player* user, Player* target){
-  std::cout << "Validatiom of negotiate order" << std::endl;
-  return true;
+//Validation for Negociate
+bool Negotiate::validate(Player* user, Player* targeted){
+  if (user != targeted 
+  && hasCard("negociate", user)){
+    cout << "Negociation valid" << endl;
+    execute(user, targeted);
+    return true;
+  }
+  cout << "Negociation invalid" << endl;
+  return false;
 }
-
+//execution functionality for Negociate
 void Negotiate::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
-  std::cout << "Negotiate execution." << std::endl;
+  user->addNegotiateEffect(targeted);
+  targeted->addNegotiateEffect(user);
+  cout << "Negotiate Order executed: " << user->getName()  << " and " << targeted->getName() << " cannot attack each other this turn." << endl;
+}
+//helper function for execute
+void Negotiate::execute(Player* user, Player* targeted){
+  execute(user, targeted, 0, nullptr, nullptr);
 }
 
 

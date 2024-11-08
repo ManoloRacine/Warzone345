@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <vector>
+#include <set>
 #include <string>
 #include "../Map/Map.h"
 #include "../Orders/Order.h"
@@ -21,6 +22,7 @@ private:
     vector<Territory*> territoriesToDefend; //For toDefend gets wiped every execute orders
     vector<Territory*> territoriesToAttack; //For toAttack gets wiped every execute orders
     bool conqueredATerritory; //To give card at end of turn
+    set<Player*> negotiatedPlayers; //players that are negociating with you
 
 public:
     // Constructors
@@ -66,6 +68,10 @@ public:
     bool getConqueredATerritory() const;
     void setConqueredATerritory(const bool& captured);
 
+     // Getters and Setters for for NegociatePlayers
+     set<Player*> getNegotiatedPlayers() const;
+     void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
+
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Player& player);  
 
@@ -78,9 +84,16 @@ public:
     void issueOrder(Order* order);
     void addTerritories(Territory*);
     bool removeTerritories(Territory*);
+
+
+
+//for negociating with a player
+void addNegotiateEffect(Player* other);
+bool isNegotiatedWith(Player* other);
+
+void clearNegotiations();
 };
 
 //checks if a player has a card in hand
 bool hasCard(string card, Player* player);
-
 #endif // PLAYER_H
