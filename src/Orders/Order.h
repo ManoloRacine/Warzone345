@@ -207,7 +207,7 @@ private:
 
 
 //========================================
-//Negociate Order
+//Negotiate Order
 //========================================
 class Negotiate : public Order{
 private:

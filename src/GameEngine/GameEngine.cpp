@@ -723,9 +723,9 @@ for (int i = 0; i < players.size(); i++) {
             break;
         }
 
-        if (players[i]->getOrdersList()->getList()[j]->getLabel() == "Deploy") {
+        if (players[i]->getOrdersList().getList()[j]->getLabel() == "Deploy") {
             // Calling the Validate function ------------------Current player---------------Number of Troops Deployed-------------------------Targeted Territory
-            players[i]->getOrdersList()->getList()[j]->validate(players[i], players[i]->getOrdersList()->getList()[j]->getTroops(), players[i]->getOrdersList()->getList()[j]->getTarget());
+            players[i]->getOrdersList().getList()[j]->validate(players[i], players[i]->getOrdersList().getList()[j]->getTroops(), players[i]->getOrdersList().getList()[j]->getTarget());
             //validate internally calls the excute method if conditions satisfied
             //regardeless of validation remove the deploy order
             players[i]->getOrdersList()->remove(j);
@@ -741,7 +741,31 @@ for (int i = 0; i < players.size(); i++) {
 while(execute) {
     for (int i = 0; i < players.size(); i++) {
         if(!playerDoneExecuting[i]) {
-            
+           if (players[i]->getOrdersList()->getList()->size() == 0) {
+                playerDoneExecuting[i] = true;
+                break;
+           }
+           string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
+           else if (orderType == "advance") {
+
+            players[i]->getOrdersList()->remove(0)
+           }
+           else if (orderType == "airlift") {
+
+            players[i]->getOrdersList()->remove(0)
+           }
+           else if (orderType == "bomb") {
+
+            players[i]->getOrdersList()->remove(0)
+           }
+           else if (orderType == "blockade") {
+
+            players[i]->getOrdersList()->remove(0)
+           }
+           else if (orderType == "negotiate") {
+
+            players[i]->getOrdersList()->remove(0)
+           }
         }
         
         execute = false;
