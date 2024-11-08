@@ -422,7 +422,6 @@ void GameEngine::draw2cards(std::vector<Player*>& players) {
         cout << player->getName() << " Draws two cards..." << endl;
         player->getHand()->draw(gameDeck);
         player->getHand()->draw(gameDeck);
-
     }
 
 }

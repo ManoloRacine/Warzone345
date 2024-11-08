@@ -35,9 +35,9 @@ public:
     string getName() const;
     void setName(const string& newName);
 
-    // Getters and Setters for Reinforcemnts -ADDED IN P2-A2 - Nektarios
+    // Getters and Setters for Reinforcements -ADDED IN P2-A2 - Nektarios
     inline int getReinforcements() const { return this->reinforcementPool;};
-    inline void setReinforcements(const int& newReinforcments) { this->reinforcementPool = newReinforcments; };
+    inline void setReinforcements(const int& newReinforcements) { this->reinforcementPool = newReinforcements; };
 
     // Getters and Setters for Territories
     vector<Territory*> getTerritories() const;

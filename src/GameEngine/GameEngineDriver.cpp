@@ -25,7 +25,6 @@ void testGameStates(){
 // Function to simulate the startup phase of the game
 void testStartupPhase() {
     GameEngine game; // Initialize the GameEngine
-
         // Check current state after commands
     game.startupPhase();
 

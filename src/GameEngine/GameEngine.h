@@ -132,7 +132,7 @@ class GameEngine {
     Deck * gameDeck;
     void draw2cards(std::vector<Player*>& players);
     void printAllMaps(const std::string& mapDirectory);
-    //---------------------------------------
+    //------------------------------------------------
 
     private:
     GameState* gameEngineState;
