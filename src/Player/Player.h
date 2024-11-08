@@ -10,6 +10,8 @@
 #include "../Cards/Cards.h"
 
 class Territory;
+class Order;
+class OrdersList;
 
 using namespace std;
 

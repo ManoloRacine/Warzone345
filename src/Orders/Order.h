@@ -7,6 +7,8 @@
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 
+class Player;
+class Territory;
 class Card;
 enum CardType : int;
 
