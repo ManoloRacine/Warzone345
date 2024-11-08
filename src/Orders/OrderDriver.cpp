@@ -43,6 +43,20 @@ void testOrdersLists()
         playerIndex = (playerIndex + 1) % totalPlayers;
     }
     
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    
+
 
     
 

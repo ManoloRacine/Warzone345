@@ -162,8 +162,7 @@ Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Te
 
 //Validate method for deploy
 bool Deploy::validate(Player* player, int armies, Territory* target){
-  if(player->getReinforcements() >= armies 
-  && find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
       cout << "Deployment Valid" << endl;
       execute(player, armies, target);
       return true;
@@ -174,7 +173,6 @@ bool Deploy::validate(Player* player, int armies, Territory* target){
 }
 //Overriden execute function that performs the execution
 void Deploy::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
-    user->setReinforcements(user->getReinforcements()-armies);
     target->setArmies(target->getArmies()+armies);
     user->toDefend(target);
     cout << "Troops deployed" << endl;
