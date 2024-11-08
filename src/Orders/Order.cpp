@@ -208,11 +208,11 @@ bool Advance::validate(Player* player, int armies, Territory* source, Territory*
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
   && armies <= source->getArmies()){
-    cout << "Order is Valid" << endl;
+    cout << "Advance Order is Valid" << endl;
     execute(player, armies, source, target);
   }
   else
-    cout << "Order Invalid" << endl;
+    cout << "Advance Order Invalid" << endl;
     return false;
 }
 //Overriden execute function that performs the execution
@@ -257,6 +257,7 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
         target->setOwner(user);
         targeted->removeTerritories(target);
         user->addTerritories(target);
+        user->setConqueredATerritory(true);
 
         target->setArmies(attackingUnits-attackingLosses);
         source->setArmies(source->getArmies()-(attackingUnits-attackingLosses));
@@ -350,7 +351,7 @@ bool Bomb::validate(Player* player, Territory* target){
   }
 
   if(adjacent 
-  && find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  && find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
   && hasCard("bomb", player) ){
     cout << "Bomb order Valid" << endl;
     execute(player, target);
@@ -376,23 +377,46 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 //Blockade Order
 //========================================
 const std::string Blockade::label = "Blockade";
-
+//Constructor
 Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target){}
-
+//destructor
 Blockade::~Blockade() = default;
 
 std::string Blockade::getLabel() const { return label; }
 
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "Blockade order"; }
 
+//validate Blockade order
 bool Blockade::validate(Player* player, Territory* source){
-  std::cout << "validation of Blockade order" << std::endl;
-  return true;
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  && hasCard("blockade", player)){
+    cout << "Blockade Validated" << endl;
+    execute(player, source);
+    return true;
+  }
+  return false;
 }
 
+//creation of the neutral player
+//static Player* neutral("neutral");
+
+
+//execute the blockade function
 void Blockade::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) {
-  std::cout << "Blockade execution" << std::endl;
+ // Player* neutralPlayer = &neutral;
+  source->setArmies(source->getArmies()*2);
+  //source->setOwner(neutral);
+  user->removeTerritories(source);
+
+
+
+  
+}
+
+//helper function for execute
+void Blockade::execute(Player* user, Territory* source){
+  execute(user, nullptr, 0, source, nullptr);
 }
 
 Order *Blockade::clone() const { return new Blockade(*this); }

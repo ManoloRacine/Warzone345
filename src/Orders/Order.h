@@ -192,6 +192,7 @@ public:
   bool validate(Player* player, Territory* source);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  void execute(Player* user, Territory* source);  
   ~Blockade() override;
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
