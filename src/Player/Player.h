@@ -1,3 +1,4 @@
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -92,6 +93,9 @@ void addNegotiateEffect(Player* other);
 bool isNegotiatedWith(Player* other);
 
 void clearNegotiations();
+
+//reset statuses that may have been altered during play
+void resetPlayerStatuses(std::vector<Player*>& players, Deck* deck);
 };
 
 //checks if a player has a card in hand

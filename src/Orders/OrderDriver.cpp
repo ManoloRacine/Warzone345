@@ -1,37 +1,49 @@
-//
-// Created by Ryad on 2024-10-03.
-//
+
 
 #include "../Orders/Order.h"
 #include "../Orders/OrderDriver.h"
-#include "../Orders/OrderDriver.h"
+#include "../GameEngine/GameEngine.h"
+
 
 void testOrdersLists()
 {
-    auto orderList = new OrdersList();
-    std::cout << "> Order Driver - testing Orders" << std::endl;
-    std::cout << std::endl;
-    std::cout << "adding orders - test" << std::endl;
 
-    orderList->add(UserInputOrder::create("Deploy"));
-    orderList->add(UserInputOrder::create("Advance"));
-    orderList->add(UserInputOrder::create("Bomb"));
-    orderList->add(UserInputOrder::create("Blockade"));
-    orderList->add(UserInputOrder::create("Airlift"));
-    orderList->add(UserInputOrder::create("Negotiate"));
-    std::cout << std::endl;
-    std::cout << "move with 2 & remove 1" << std::endl;
-    orderList->move(2, 1);
+    // Create a deck and some cards
+    Deck* deck = new Deck();
+    deck->generateDeck();
+
+    // generating two players
+    Player* player1 = new Player("player1");
+    Player* player2 = new Player("player2");
+    vector<Player*> players;
+    players.push_back(player1);
+    players.push_back(player2);
+
+    //loading a map to show functionality
+    MapLoader mapLoader;
+    Map loadedMap;
+    mapLoader.loadMap(loadedMap,"../res/maps/usa.txt");
+
+   int playerIndex = 0;
+    int totalPlayers = players.size();
+
+    // Traverse mapData and assign each territory to a player in round-robin fashion
+    for (auto& pair : loadedMap.getMapData()) {
+        Territory* territory = pair.second;
+
+        // Assign the territory to the current player
+        territory->setOwner(players[playerIndex]);
+        players[playerIndex]->addTerritories(territory);
+
+        // Print assignment (for debugging or confirmation)
+        std::cout << "Assigned territory " << pair.first
+                  << " to player " << players[playerIndex]->getName() << std::endl;
+
+        // Move to the next player (round-robin)
+        playerIndex = (playerIndex + 1) % totalPlayers;
+    }
     
 
-    orderList->remove(1);
-    std::cout << std::endl;
-    auto list = *orderList->getList();
-    std::cout << "Order validation" << std::endl;
-    bool validation = orderList->getList()->at(0)->validate();
-    std::cout << "ex. is first order valid? - " << (validation ? "True" : "False");
+    
 
-    std::cout << "\nList order execution" << std::endl;
-    orderList->execute();
-    std::cout << "\n --------END of Order List Test--------\n" << std::endl;
 }
