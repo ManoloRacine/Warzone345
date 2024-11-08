@@ -328,7 +328,7 @@ void GameEngine::startupPhase() {
                     Player* player = new Player(playername); // Use extracted player name
                     playerList.push_back(player); //Add player pointer to vector
                     playerCount++;
-                    if (playerCount > 1) {
+                    if (playerCount > 1dasdasd) {
                         enoughPlayers = true;
                     }
                     std::cout << "Player " << playername << " added successfully." << std::endl;
