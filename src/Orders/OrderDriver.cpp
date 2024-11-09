@@ -1,37 +1,66 @@
-//
-// Created by Ryad on 2024-10-03.
-//
+
 
 #include "../Orders/Order.h"
 #include "../Orders/OrderDriver.h"
-#include "../Orders/OrderDriver.h"
+#include "../GameEngine/GameEngine.h"
+
 
 void testOrdersLists()
 {
-    auto orderList = new OrdersList();
-    std::cout << "> Order Driver - testing Orders" << std::endl;
-    std::cout << std::endl;
-    std::cout << "adding orders - test" << std::endl;
 
-    orderList->add(UserInputOrder::create("Deploy"));
-    orderList->add(UserInputOrder::create("Advance"));
-    orderList->add(UserInputOrder::create("Bomb"));
-    orderList->add(UserInputOrder::create("Blockade"));
-    orderList->add(UserInputOrder::create("Airlift"));
-    orderList->add(UserInputOrder::create("Negotiate"));
-    std::cout << std::endl;
-    std::cout << "move with 2 & remove 1" << std::endl;
-    orderList->move(2, 1);
+    // Create a deck and some cards
+    Deck* deck = new Deck();
+    deck->generateDeck();
+
+    // generating two players
+    Player* player1 = new Player("player1");
+    Player* player2 = new Player("player2");
+    vector<Player*> players;
+    players.push_back(player1);
+    players.push_back(player2);
+
+    //loading a map to show functionality
+    MapLoader mapLoader;
+    Map loadedMap;
+    mapLoader.loadMap(loadedMap,"../res/maps/usa.txt");
+
+    int playerIndex = 0;
+    int totalPlayers = players.size();
+
+    
+    Continent* asia = new Continent("Asia", 5);
+    Continent* europe = new Continent("Europe", 4);
+
+    Territory* china = new Territory("China", { 0, 0 }, asia, player1, 5);
+    Territory* india = new Territory("India", { 1, 0 }, asia, player2, 3);
+    Territory* spain = new Territory("Spain", { 1, 1 }, europe, player1, 4);
+    Territory* portugal = new Territory("portugal", { 1, 2 }, europe, player2, 2);
+    Territory* england = new Territory("England", { 2, 2}, europe, player2, 4);
+    
+    india->addConnectedTerritory(china);
+    china->addConnectedTerritory(india);
+    spain->addConnectedTerritory(china);
+    china->addConnectedTerritory(india);
+
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+
+    Advance* advance = new Advance(nullptr, nullptr, 1, nullptr, nullptr);
+    Negotiate* negotiate = new Negotiate(nullptr, nullptr, 1, nullptr, nullptr);
+    negotiate->validate(player1, player2);
+    advance->validate(player1,1,china,india);
+
+
     
 
-    orderList->remove(1);
-    std::cout << std::endl;
-    auto list = *orderList->getList();
-    std::cout << "Order validation" << std::endl;
-    bool validation = orderList->getList()->at(0)->validate();
-    std::cout << "ex. is first order valid? - " << (validation ? "True" : "False");
-
-    std::cout << "\nList order execution" << std::endl;
-    orderList->execute();
-    std::cout << "\n --------END of Order List Test--------\n" << std::endl;
 }
