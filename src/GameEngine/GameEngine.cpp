@@ -590,7 +590,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                             
                         players[i]->setReinforcements(playerTroops-numArmies);
                         cout << "Enter name of target territory:" << endl;
-                        cin >> targetTerritory;
+                        getline(cin >> ws, targetTerritory);
 
                         // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
                         // the rest of the inputs are inputted by the user, number of troops to transfer, source territory is unnecessary...null, target territory owned
@@ -607,9 +607,9 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
                         cout << "Enter name of source territory:" << endl;
-                        cin >> sourceTerritory;
+                        getline(cin >> ws, sourceTerritory);
                         cout << "Enter name of target territory:" << endl;
-                        cin >> targetTerritory;
+                        getline(cin >> ws, targetTerritory);
 
 
                         // Pass in the current player and the player being attacked
@@ -628,9 +628,9 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
                         cout << "Enter name of source territory:" << endl;
-                        cin >> sourceTerritory;
+                        getline(cin >> ws, sourceTerritory);
                         cout << "Enter name of target territory:" << endl;
-                        cin >> targetTerritory;
+                        getline(cin >> ws, targetTerritory);
 
 
                         // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
@@ -647,7 +647,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     //========================================
                     else if (choice == "bomb") {
                         cout << "Enter name of target territory:" << endl;
-                        cin >> targetTerritory;
+                        getline(cin >> ws, targetTerritory);
 
 
                         // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
@@ -665,7 +665,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     else if (choice == "blockade") {
                         
                         cout << "Enter name of target territory:" << endl;
-                        cin >> targetTerritory;
+                        getline(cin >> ws, targetTerritory);
 
 
                         // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
@@ -716,31 +716,29 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
 }
 
 
-void GameEngine::orderExecutionPhase(vector<Player*>& players) {
+void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
 vector<bool> playerDoneExecuting(players.size(), false);
 bool execute = true;
-        int integer = players[0]->getOrdersList()->getList()[0]->getTroops();
-        cout<< &integer<< endl;
-        cout<< players[0]->getOrdersList()->getList()[0]->getTarget()->getName()<< endl;
+        
 //First loop through all players orderlist search for deploy orders
 for (int i = 0; i < players.size(); i++) {
     int orderListSize = players[i]->getOrdersList()->getList().size();
+    cout<<"number of orders is: " << orderListSize<<endl;
     for (int j = 0; j < orderListSize; j++) {
-        
-        cout<< players[i]->getOrdersList()->getList()[j]->getTroops()<< endl;
-        cout<< players[i]->getOrdersList()->getList()[j]->getTarget()->getName()<< endl;
         
         //if the order list size is 0 no orders left skip
         if (orderListSize == 0) {
             playerDoneExecuting[i] = true;
             break;
         }
-        
-            string order = players[i]->getOrdersList()->getList()[j]->getLabel();
-        if (order == "Deploy") {
+
+            string order = toLower(players[i]->getOrdersList()->getList()[j]->getLabel());
+            cout<<"Order type is: " << order<< endl;
+        if (order == "deploy") {
             cout<<"deploying"<<endl;
             // Calling the Validate function ---------------Current player---------------Number of Troops Deployed-------------------------Target Territory
-            Deploy *deployOrder = new Deploy(players[i], nullptr, players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
+            cout<<"Num of Army units is "<< players[i]->getOrdersList()->getList()[j]->getTroops()<< endl;
+            Deploy* deployOrder = new Deploy(players[i], nullptr, players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
             deployOrder->validate(deployOrder->getUser(), deployOrder->getTroops(), deployOrder->getTarget());
             cout<<"deploying middle"<<endl;
             //validate internally calls the excute method if conditions satisfied
@@ -754,8 +752,7 @@ for (int i = 0; i < players.size(); i++) {
             cout<<"deploying end"<<endl;
 
         }
-    }
-    cout<<"done deploying"<<endl;    
+    }   
 }
 
 //issue round robin players orders
@@ -765,8 +762,7 @@ while(execute) {
         cout<<"inside the round robin"<<endl;
         if(!playerDoneExecuting[i]) {
            if (players[i]->getOrdersList()->getList().size() == 0) {
-                playerDoneExecuting[i] = true;
-                break;
+                playerDoneExecuting[i] = true;  
            } 
             else {
                 //get label to compare with order name later
@@ -775,7 +771,7 @@ while(execute) {
                     cout<<"inside advance"<<endl;
                     //Advance Order----------------Current Player, same player, ---------------Troops Sent------------------------------------Source territory ----------------------------------------------- Target Territory
                     //creating an object of subclass (Advance) with data from parent class (Order)
-                    Advance *advanceOrder = new Advance(players[i], players[i], players[i]->getOrdersList()->getList()[0]->getTroops(), players[i]->getOrdersList()->getList()[0]->getSource(), players[i]->getOrdersList()->getList()[0]->getTarget());
+                    Advance* advanceOrder = new Advance(players[i], players[i], players[i]->getOrdersList()->getList()[0]->getTroops(), players[i]->getOrdersList()->getList()[0]->getSource(), players[i]->getOrdersList()->getList()[0]->getTarget());
                     //Calling Validate with required inputs, validate executes the command after internally checking
                     advanceOrder->validate(advanceOrder->getUser(), advanceOrder->getTroops(),advanceOrder->getSource(), advanceOrder->getTarget());
                    // delete advanceOrder;
@@ -818,16 +814,21 @@ while(execute) {
                 cout<<"inside the round robin part of the if statement at the end"<<endl;
         }
         
-        execute = false;
-    if (playerDoneExecuting[i] == false) {
-        // players are still issuing orders keep looping
-        execute = true; 
-    }
+                bool allPlayersDone = true;
+                    // Check if all players are done
+                    for (int j = 0; j < players.size(); j++) {
+                        if (playerDoneExecuting[j] == false) {
+                            allPlayersDone = false;
+                            break;
+                        }
+                    }
+                    if (allPlayersDone) {
+                        execute = false;
+                    }
     cout<<"inside the round robin at the very end"<<endl;
     }
     
     }
-    
 
 }
 

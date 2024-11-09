@@ -54,9 +54,15 @@ void Order::setSource(Territory* newSource){
   source = newSource;
 }
 
+//Getters and setters for label
 void Order::setLabel(string newlabel) {
   label = newlabel;
 }
+
+string Order::getLabel(){
+  return label;
+}
+
 
 
 //order list
@@ -160,7 +166,6 @@ std::vector<Order*> OrdersList::getList() const {
 //Deploy Order
 //========================================
 Deploy::~Deploy() = default;
-string Deploy::getLabel() const { return label; }
 ostream &Deploy::orderCout(ostream &output) const {
   return output << "Deploy order";
 }
@@ -170,7 +175,7 @@ Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Te
 
 //Validate method for deploy
 bool Deploy::validate(Player* player, int armies, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end()){
       cout << "Deployment Valid" << endl;
       execute(player, armies, target);
       return true;
@@ -202,7 +207,6 @@ Order *Deploy::clone() const {
 //Advance Order
 //========================================
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
-std::string Advance::getLabel() const { return label; }
 Advance::~Advance() = default;
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
@@ -210,7 +214,7 @@ Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, 
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
   && armies <= source->getArmies() 
   && !player->isNegotiatedWith(target->getOwner())){
@@ -224,9 +228,11 @@ bool Advance::validate(Player* player, int armies, Territory* source, Territory*
 //Overriden execute function that performs the execution
 void Advance::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
     if(user == targeted){
-      user->toDefend(target);
       source->setArmies(source->getArmies()-armies);
       target->setArmies(target->getArmies()+armies);
+      user->toDefend(target);
+      cout << target->getName() << " Now has " << target->getArmies() << " occupying it" << endl;
+      
     }
     else if(user != targeted){
       user->toAttack(target);
@@ -292,7 +298,6 @@ Order *Advance::clone() const { return new Advance(*this); }
 //========================================
 Airlift::~Airlift() = default;
 
-string Airlift::getLabel() const { return label; }
 //constructor
 Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift"){}
@@ -300,8 +305,8 @@ Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, 
 ostream &Airlift::orderCout(ostream &output) const { return output << "Airlift order"; }
 //validation for airlift
 bool Airlift::validate(Player* player, int armies, Territory* source, Territory* target) {
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
-    && find(player->getTerritories().begin(), player->getTerritories().end(), source) != player->getTerritories().end()
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
+    && find(player->getTerritories().begin(), player->getTerritories().end(), source) == player->getTerritories().end()
     && armies <= source->getArmies()
     && hasCard("airlift", player)){
       cout << "AirLift Order Validated" << endl;
@@ -320,7 +325,7 @@ void Airlift::execute(Player* user, Player* targeted, int armies, Territory* sou
   source->setArmies(source->getArmies()-armies);
   target->setArmies(target->getArmies()+armies);
 
-  cout << "Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
+  cout << target->getArmies() <<"Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
 }
 //Helper function for execute
 void Airlift::execute(Player* player, int armies, Territory* source, Territory* target){
@@ -343,8 +348,6 @@ Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territ
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Bomb"){}
 //destructor for bomb
 Bomb::~Bomb() = default;
-
-std::string Bomb::getLabel() const { return label; }
 
 std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
 
@@ -397,13 +400,12 @@ Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source
 //destructor
 Blockade::~Blockade() = default;
 
-std::string Blockade::getLabel() const { return label; }
 
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "Blockade order"; }
 
 //validate Blockade order
 bool Blockade::validate(Player* player, Territory* source){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
   && hasCard("blockade", player)){
     cout << "Blockade Validated" << endl;
     execute(player, source);
@@ -422,7 +424,7 @@ void Blockade::execute(Player* user, Player* targeted, int armies, Territory* so
   source->setArmies(source->getArmies()*2);
   source->setOwner(neutral);
   neutral->addTerritories(source);
-  user->removeTerritories(source);
+  
   cout << "Blockade has been made on " << source->getName() << " with " << source->getArmies() << " troops." << endl;
 }
 
@@ -449,12 +451,10 @@ Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* sour
 //destructor
 Negotiate::~Negotiate() = default;
 
-std::string Negotiate::getLabel() const { return label; }
-
 //Validation for Negociate
 bool Negotiate::validate(Player* user, Player* targeted){
   if (user != targeted 
-  && hasCard("negotiate", user)){
+  && hasCard("diplomacy", user)){
     cout << "Negotiation valid" << endl;
     execute(user, targeted);
     return true;
