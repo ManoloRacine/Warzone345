@@ -594,7 +594,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
 
                         // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
                         // the rest of the inputs are inputted by the user, number of troops to transfer, source territory is unnecessary...null, target territory owned
-                        Deploy *deployOrder = new Deploy(players[i], players[i], numArmies, nullptr, getTerritoryByName(map, targetTerritory));
+                        Deploy *deployOrder = new Deploy(players[i], nullptr, numArmies, nullptr, getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(deployOrder);
                         validOrder = true;

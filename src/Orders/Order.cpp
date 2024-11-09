@@ -377,7 +377,7 @@ bool Bomb::validate(Player* user, Territory* target){
   cout << "Bomb invalid" << endl;
 return false;
 }
-//execution of the the Bomb order
+//execution of the Bomb order
 void Bomb::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
   target->setArmies(target->getArmies()/2);
   cout << target->getName() << " has been bombed by " << user->getName() << ". It now has " << target->getArmies() << " troops remaining" << endl;

@@ -17,7 +17,8 @@ int main() {
     // cout << command->getCommand() << endl;
     // cout << command->getType() << endl;
 
-    testStartupPhase();
+    //testStartupPhase();
+    testReinforcementPhase();
     //testLoadMaps();
     return 0;
 }
