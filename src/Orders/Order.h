@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
 
@@ -13,6 +14,7 @@ class Card;
 enum CardType : int;
 
 using std::vector;
+using std::string;
 
 // orders
 class Order{
