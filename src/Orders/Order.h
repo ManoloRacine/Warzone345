@@ -12,6 +12,8 @@ class Territory;
 class Card;
 enum CardType : int;
 
+using std::vector;
+
 // orders
 class Order{
 private:
@@ -20,6 +22,7 @@ private:
   int troops;
   Territory* target;
   Territory* source;
+  string label;
 public:
   virtual std::string getLabel() const = 0;
   virtual void execute() = 0;
@@ -28,37 +31,40 @@ public:
   virtual Order *clone() const = 0;
   Order();
   Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
 
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
+
+  //setter for label
+  void setLabel(string newlabel);
 private:
   virtual std::ostream &orderCout(std::ostream &) const = 0;
   friend std::ostream &operator<<(std::ostream &, const Order &);
 
-//Getters and setters for user
-Player* getUser() const;
-void setUser(Player* newUser);
 
-//Getters and setters for targeted
-Player* getTargeted() const;
-void setTargeted(Player* newTargeted);
-
-//Getters and setters for Troops
-int getTroops() const;
-void setTroops(int newTroops);
-
-//Getters and setters for target
-Territory* getTarget() const;
-void setTarget(Territory* newTarget);
-
-//Getters and setters for source
-Territory* getSource() const;
-void setSource(Territory* newSource);
   
 };
 
 //order list
 class OrdersList{
 private:
-  std::vector<Order *> orders{};
+  vector<Order*> orders{};
 
 public:
   OrdersList() = default;
@@ -70,8 +76,10 @@ public:
   void add(Order *o);
   void remove(int);
   void move(int, int);
-
-  std::vector<Order *>* getList();
+  //vector<Order*> getList() const;
+ // std::vector<Order *>* getList();
+ std::vector<Order*> getList() const;
+  const std::vector<Territory*>& getConnectedTerritories() const;
 
 private:
 
@@ -88,6 +96,7 @@ private:
   int troops;
   Territory* target;
   Territory* source;
+  string label;
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* target);
@@ -98,7 +107,6 @@ public:
   Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -123,7 +131,7 @@ public:
   Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -148,7 +156,7 @@ public:
   Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -174,7 +182,7 @@ public:
   Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -200,14 +208,14 @@ public:
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
 
 
 //========================================
-//Negociate Order
+//Negotiate Order
 //========================================
 class Negotiate : public Order{
 private:
@@ -226,7 +234,7 @@ public:
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };

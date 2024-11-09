@@ -54,6 +54,10 @@ void Order::setSource(Territory* newSource){
   source = newSource;
 }
 
+void Order::setLabel(string newlabel) {
+  label = newlabel;
+}
+
 
 //order list
 
@@ -142,15 +146,19 @@ std::ostream &operator<<(std::ostream &stream, const OrdersList &ol){
   return stream;
 }
 
-std::vector<Order *> *OrdersList::getList() {
+/*
+vector<Order*> *OrdersList::getList() {
   return &this->orders;
 }
+*/
 
+std::vector<Order*> OrdersList::getList() const {
+    return orders;
+}
 
 //========================================
 //Deploy Order
 //========================================
-const string Deploy::label = "Deploy";
 Deploy::~Deploy() = default;
 string Deploy::getLabel() const { return label; }
 ostream &Deploy::orderCout(ostream &output) const {
@@ -158,7 +166,7 @@ ostream &Deploy::orderCout(ostream &output) const {
 }
 //constructor
 Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Deploy"){}
 
 //Validate method for deploy
 bool Deploy::validate(Player* player, int armies, Territory* target){
@@ -196,10 +204,9 @@ Order *Deploy::clone() const {
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
 std::string Advance::getLabel() const { return label; }
 Advance::~Advance() = default;
-const std::string Advance::label = "Advance";
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){}
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
@@ -283,13 +290,12 @@ Order *Advance::clone() const { return new Advance(*this); }
 //========================================
 //Airlift Order
 //========================================
-const string Airlift::label = "Airlift";
 Airlift::~Airlift() = default;
 
 string Airlift::getLabel() const { return label; }
 //constructor
 Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift"){}
 
 ostream &Airlift::orderCout(ostream &output) const { return output << "Airlift order"; }
 //validation for airlift
@@ -331,10 +337,10 @@ Order *Airlift::clone() const { return new Airlift(*this); }
 //========================================
 //Bomb Order
 //========================================
-const std::string Bomb::label = "Bomb";
+
 // constructor for bomb
 Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Bomb"){}
 //destructor for bomb
 Bomb::~Bomb() = default;
 
@@ -384,10 +390,10 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 //========================================
 //Blockade Order
 //========================================
-const std::string Blockade::label = "Blockade";
+
 //Constructor
 Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){}
 //destructor
 Blockade::~Blockade() = default;
 
@@ -434,12 +440,12 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 
 
 //========================================
-//Negociate Order
+//Negotiate Order
 //========================================
-const std::string Negotiate::label = "Negotiate";
+
 //constructor
 Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate"){}
 //destructor
 Negotiate::~Negotiate() = default;
 
@@ -448,15 +454,15 @@ std::string Negotiate::getLabel() const { return label; }
 //Validation for Negociate
 bool Negotiate::validate(Player* user, Player* targeted){
   if (user != targeted 
-  && hasCard("negociate", user)){
-    cout << "Negociation valid" << endl;
+  && hasCard("negotiate", user)){
+    cout << "Negotiation valid" << endl;
     execute(user, targeted);
     return true;
   }
-  cout << "Negociation invalid" << endl;
+  cout << "Negotiation invalid" << endl;
   return false;
 }
-//execution functionality for Negociate
+//execution functionality for Negotiate
 void Negotiate::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
   user->addNegotiateEffect(targeted);
   targeted->addNegotiateEffect(user);
