@@ -352,6 +352,7 @@ void GameEngine::startupPhase() {
                 cout << "Current State: " << *this << endl;
                 reinforcementPhase(playerList, loadedMap);
                 issueOrdersPhase(loadedMap,playerList);
+                orderExecutionPhase(playerList);
 
             } else if(!isMapLoaded) {
                 cout << "Can't proceed: Map not loaded" << endl;
@@ -718,11 +719,16 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
 void GameEngine::orderExecutionPhase(vector<Player*>& players) {
 vector<bool> playerDoneExecuting(players.size(), false);
 bool execute = true;
-
+        int integer = players[0]->getOrdersList()->getList()[0]->getTroops();
+        cout<< &integer<< endl;
+        cout<< players[0]->getOrdersList()->getList()[0]->getTarget()->getName()<< endl;
 //First loop through all players orderlist search for deploy orders
 for (int i = 0; i < players.size(); i++) {
     int orderListSize = players[i]->getOrdersList()->getList().size();
     for (int j = 0; j < orderListSize; j++) {
+        
+        cout<< players[i]->getOrdersList()->getList()[j]->getTroops()<< endl;
+        cout<< players[i]->getOrdersList()->getList()[j]->getTarget()->getName()<< endl;
         
         //if the order list size is 0 no orders left skip
         if (orderListSize == 0) {
@@ -732,9 +738,11 @@ for (int i = 0; i < players.size(); i++) {
         
             string order = players[i]->getOrdersList()->getList()[j]->getLabel();
         if (order == "Deploy") {
+            cout<<"deploying"<<endl;
             // Calling the Validate function ---------------Current player---------------Number of Troops Deployed-------------------------Target Territory
-            Deploy *deployOrder = new Deploy(players[i], players[i], players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
+            Deploy *deployOrder = new Deploy(players[i], nullptr, players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
             deployOrder->validate(deployOrder->getUser(), deployOrder->getTroops(), deployOrder->getTarget());
+            cout<<"deploying middle"<<endl;
             //validate internally calls the excute method if conditions satisfied
             //regardeless of validation remove the deploy order
             players[i]->getOrdersList()->remove(j);
@@ -743,14 +751,18 @@ for (int i = 0; i < players.size(); i++) {
             j--;
             //track the decreased size to prevent out of bounds
             orderListSize--;
+            cout<<"deploying end"<<endl;
+
         }
     }
-    
+    cout<<"done deploying"<<endl;    
 }
+
 //issue round robin players orders
 
 while(execute) {
     for (int i = 0; i < players.size(); i++) {
+        cout<<"inside the round robin"<<endl;
         if(!playerDoneExecuting[i]) {
            if (players[i]->getOrdersList()->getList().size() == 0) {
                 playerDoneExecuting[i] = true;
@@ -760,6 +772,7 @@ while(execute) {
                 //get label to compare with order name later
                 string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
                 if (orderType == "advance") {
+                    cout<<"inside advance"<<endl;
                     //Advance Order----------------Current Player, same player, ---------------Troops Sent------------------------------------Source territory ----------------------------------------------- Target Territory
                     //creating an object of subclass (Advance) with data from parent class (Order)
                     Advance *advanceOrder = new Advance(players[i], players[i], players[i]->getOrdersList()->getList()[0]->getTroops(), players[i]->getOrdersList()->getList()[0]->getSource(), players[i]->getOrdersList()->getList()[0]->getTarget());
@@ -769,6 +782,8 @@ while(execute) {
 
                     //remove the order from the list, pop first element
                     players[i]->getOrdersList()->remove(0);
+
+                    cout<<"inside advance at the end" << endl;
                 }
                 else if (orderType == "airlift") {
                     //Airlift Order----------------Current Player, same player, ---------------Troops Sent------------------------------------Source territory ----------------------------------------------- Target Territory
@@ -800,6 +815,7 @@ while(execute) {
                     players[i]->getOrdersList()->remove(0);
                 }
                 }
+                cout<<"inside the round robin part of the if statement at the end"<<endl;
         }
         
         execute = false;
@@ -807,6 +823,7 @@ while(execute) {
         // players are still issuing orders keep looping
         execute = true; 
     }
+    cout<<"inside the round robin at the very end"<<endl;
     }
     
     }

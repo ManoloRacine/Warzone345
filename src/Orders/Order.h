@@ -22,6 +22,7 @@ private:
   int troops;
   Territory* target;
   Territory* source;
+  string label;
 public:
   virtual std::string getLabel() const = 0;
   virtual void execute() = 0;
@@ -49,6 +50,9 @@ public:
   //Getters and setters for source
   Territory* getSource() const;
   void setSource(Territory* newSource);
+
+  //setter for label
+  void setLabel(string newlabel);
 private:
   virtual std::ostream &orderCout(std::ostream &) const = 0;
   friend std::ostream &operator<<(std::ostream &, const Order &);
@@ -92,6 +96,7 @@ private:
   int troops;
   Territory* target;
   Territory* source;
+  string label;
 public:
   std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* target);
@@ -102,7 +107,6 @@ public:
   Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -127,7 +131,7 @@ public:
   Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -152,7 +156,7 @@ public:
   Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -178,7 +182,7 @@ public:
   Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -204,7 +208,7 @@ public:
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -230,7 +234,7 @@ public:
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
-  const static std::string label;
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
