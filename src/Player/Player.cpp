@@ -130,7 +130,7 @@ void Player::printPlayer() const {
 vector<Territory*> Player::toDefend(Territory* defendingTerritories) {
     territoriesToDefend.push_back(defendingTerritories);
     for (int i = 0; i < territoriesToDefend.size(); i++) {
-        cout << territoriesToDefend[i]->getName() << " defending with " << territoriesToDefend[i]->getArmies() << "\n";
+        cout << territoriesToDefend[i]->getName() << " is defending" << endl;
     }
     return territoriesToDefend;
 }
@@ -139,7 +139,7 @@ vector<Territory*> Player::toDefend(Territory* defendingTerritories) {
 vector<Territory*> Player::toAttack(Territory* attackingTerritories) {
     territoriesToAttack.push_back(attackingTerritories);
     for (int i = 0; i < territoriesToAttack.size(); i++) {
-         cout << territoriesToAttack[i]->getName() << " attacking with " << territoriesToAttack[i]->getArmies() << "\n";
+         cout << territoriesToAttack[i]->getName() << " is attacking" << endl;
     }
     return territoriesToAttack;
 }

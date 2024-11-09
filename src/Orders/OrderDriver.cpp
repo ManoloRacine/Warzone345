@@ -24,38 +24,41 @@ void testOrdersLists()
     Map loadedMap;
     mapLoader.loadMap(loadedMap,"../res/maps/usa.txt");
 
-   int playerIndex = 0;
+    int playerIndex = 0;
     int totalPlayers = players.size();
 
-    // Traverse mapData and assign each territory to a player in round-robin fashion
-    for (auto& pair : loadedMap.getMapData()) {
-        Territory* territory = pair.second;
-
-        // Assign the territory to the current player
-        territory->setOwner(players[playerIndex]);
-        players[playerIndex]->addTerritories(territory);
-
-        // Print assignment (for debugging or confirmation)
-        std::cout << "Assigned territory " << pair.first
-                  << " to player " << players[playerIndex]->getName() << std::endl;
-
-        // Move to the next player (round-robin)
-        playerIndex = (playerIndex + 1) % totalPlayers;
-    }
     
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
-    player1->getHand()->draw(deck);
+    Continent* asia = new Continent("Asia", 5);
+    Continent* europe = new Continent("Europe", 4);
+
+    Territory* china = new Territory("China", { 0, 0 }, asia, player1, 5);
+    Territory* india = new Territory("India", { 1, 0 }, asia, player2, 3);
+    Territory* spain = new Territory("Spain", { 1, 1 }, europe, player1, 4);
+    Territory* portugal = new Territory("portugal", { 1, 2 }, europe, player2, 2);
+    Territory* england = new Territory("England", { 2, 2}, europe, player2, 4);
     
+    india->addConnectedTerritory(china);
+    china->addConnectedTerritory(india);
+    spain->addConnectedTerritory(china);
+    china->addConnectedTerritory(india);
+
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+
+    Advance* advance = new Advance(nullptr, nullptr, 1, nullptr, nullptr);
+    Negotiate* negotiate = new Negotiate(nullptr, nullptr, 1, nullptr, nullptr);
+    negotiate->validate(player1, player2);
+    advance->validate(player1,1,china,india);
 
 
     
