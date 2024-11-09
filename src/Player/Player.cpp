@@ -103,7 +103,7 @@ void Player::setNegotiatedPlayers(set<Player*>& newNegotiatedPlayers) {
 
 // Stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Player& player) {
-    os << "Player territories: " << player.getTerritories().size() << " | Orders: " << player.ordersList->getList() << " | Cards in hand: " << player.hand->getCards().size() << "\n";
+    os << "Player territories: " << player.getTerritories().size() << " | Cards in hand: " << player.hand->getCards().size() << "\n";
     return os;
 }
 
@@ -121,7 +121,7 @@ void Player::printPlayer() const {
     }
 
     cout << "Orders in Order List: " << endl;
-    for (Order* order : *ordersList->getList()) {
+    for (Order* order : ordersList->getList()) {
         cout << *order << endl;  // Assuming Order class has operator<< overloaded
     }
 }

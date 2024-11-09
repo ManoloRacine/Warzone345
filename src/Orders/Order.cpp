@@ -54,9 +54,15 @@ void Order::setSource(Territory* newSource){
   source = newSource;
 }
 
+//Getters and setters for label
 void Order::setLabel(string newlabel) {
   label = newlabel;
 }
+
+string Order::getLabel(){
+  return label;
+}
+
 
 
 //order list
@@ -160,7 +166,6 @@ std::vector<Order*> OrdersList::getList() const {
 //Deploy Order
 //========================================
 Deploy::~Deploy() = default;
-string Deploy::getLabel() const { return label; }
 ostream &Deploy::orderCout(ostream &output) const {
   return output << "Deploy order";
 }
@@ -202,7 +207,6 @@ Order *Deploy::clone() const {
 //Advance Order
 //========================================
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
-std::string Advance::getLabel() const { return label; }
 Advance::~Advance() = default;
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
@@ -292,7 +296,6 @@ Order *Advance::clone() const { return new Advance(*this); }
 //========================================
 Airlift::~Airlift() = default;
 
-string Airlift::getLabel() const { return label; }
 //constructor
 Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift"){}
@@ -343,8 +346,6 @@ Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territ
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Bomb"){}
 //destructor for bomb
 Bomb::~Bomb() = default;
-
-std::string Bomb::getLabel() const { return label; }
 
 std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
 
@@ -397,7 +398,6 @@ Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source
 //destructor
 Blockade::~Blockade() = default;
 
-std::string Blockade::getLabel() const { return label; }
 
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "Blockade order"; }
 
@@ -448,8 +448,6 @@ Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* sour
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate"){}
 //destructor
 Negotiate::~Negotiate() = default;
-
-std::string Negotiate::getLabel() const { return label; }
 
 //Validation for Negociate
 bool Negotiate::validate(Player* user, Player* targeted){

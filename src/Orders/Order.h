@@ -26,7 +26,7 @@ private:
   Territory* source;
   string label;
 public:
-  virtual std::string getLabel() const = 0;
+  string getLabel();
   virtual void execute() = 0;
   virtual void execute(Player* user, Player* targeted, int troops, Territory* source, Territory* target) = 0;
   virtual ~Order() = 0;
@@ -100,7 +100,6 @@ private:
   Territory* source;
   string label;
 public:
-  std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute(Player* player, int armies, Territory* target);
@@ -124,7 +123,6 @@ private:
   Territory* target;
   Territory* source;
 public:
-  std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* source, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
@@ -149,7 +147,6 @@ private:
   Territory* target;
   Territory* source;
 public:
-  std::string getLabel() const override;
   bool validate(Player* player, int armies, Territory* source, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
@@ -175,7 +172,6 @@ private:
   Territory* target;
   Territory* source;
 public:
-  std::string getLabel() const override;
   bool validate(Player* player, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
@@ -201,7 +197,6 @@ private:
   Territory* target;
   Territory* source;
 public:
-  std::string getLabel() const override;
   bool validate(Player* player, Territory* source);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
@@ -227,7 +222,6 @@ private:
   Territory* target;
   Territory* source;
 public:
-  std::string getLabel() const override;
   bool validate(Player* user, Player* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
