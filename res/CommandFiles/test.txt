@@ -1,1 +1,8 @@
-loadmap arr
+loadmap europe.txt
+validatemap
+addplayer Manolo
+addplayer Nek
+addplayer Ryad
+addplayer Griffin
+addplayer Jaxon
+gamestart

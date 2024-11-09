@@ -41,6 +41,7 @@ add_executable(Warzone345
         src/Command/Command.cpp
         src/CommandProcessing/CommandProcessor.h
         src/CommandProcessing/CommandProcessor.cpp
+        src/CommandProcessing/CommandProcessingDriver.cpp
 )
 
 # Link Boost libraries to your executable

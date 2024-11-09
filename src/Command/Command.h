@@ -28,6 +28,7 @@ class Command {
         string getCommand();
         CommandType getType();
         void setSuccess(bool success);
+        bool getSuccess();
         void saveEffect(string effect);
 
 };

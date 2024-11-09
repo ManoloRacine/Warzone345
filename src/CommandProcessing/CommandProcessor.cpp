@@ -157,7 +157,7 @@ Command *FileCommandProcessorAdapter::readCommand() {
 string FileLineReader::readLineFromFile() {
     ifstream file(filePath);
     string line;
-    int lineBeingRead = 1;
+    int lineBeingRead = 0;
 
     while (getline(file, line)) {
         if (lineBeingRead == currentLine) {
@@ -169,14 +169,13 @@ string FileLineReader::readLineFromFile() {
     }
 
     file.close();
-    // TODO throw error or something
+    throw runtime_error("reached end of file");
 
-    return 0;
 }
 
 FileLineReader::FileLineReader(string filePath) {
     this->filePath = filePath;
-    currentLine = 1;
+    currentLine = 0;
 }
 
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filePath) {

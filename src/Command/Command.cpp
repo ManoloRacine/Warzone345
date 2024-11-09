@@ -25,6 +25,10 @@ void Command::setSuccess(bool success) {
     this->success = success;
 }
 
+bool Command::getSuccess() {
+    return success;
+}
+
 string Command::getCommand() {
     return command;
 }
