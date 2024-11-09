@@ -33,4 +33,28 @@ string Command::getCommand() {
     return command;
 }
 
+Command::Command(const Command &command) {
+    this->command = command.command;
+    this->type = command.type;
+    this->success = command.success;
+    this->effect = command.effect;
+}
+
+Command &Command::operator=(const Command &other) {
+    if (this != &other) {
+        this->command = other.command;
+        this->type = other.type;
+        this->success = other.success;
+        this->effect = other.effect;
+    }
+
+    return *this;
+}
+
+std::ostream &operator<<(std::ostream &os, const Command &command) {
+    os << command.command;
+    return os;
+}
+
+
 

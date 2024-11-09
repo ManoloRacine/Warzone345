@@ -25,6 +25,9 @@ class Command {
         CommandType type;
     public:
         Command(string command, CommandType type);
+        Command(const Command& command);
+        Command& operator=(const Command& command);
+        friend ostream& operator<<(ostream& os, const Command& command);
         string getCommand();
         CommandType getType();
         void setSuccess(bool success);

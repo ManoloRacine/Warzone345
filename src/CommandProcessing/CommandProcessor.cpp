@@ -31,6 +31,7 @@ string toLower(const string& str) {
     return lowerStr;
 }
 
+//reads a string a creates a command based on it
 Command *CommandProcessor::getCommandFromString(string commandString) {
     vector<string> splitCommand;
     commandString = toLower(commandString);
@@ -63,6 +64,7 @@ Command *CommandProcessor::getCommandFromString(string commandString) {
 
 }
 
+//reads a string from the command line
 Command *CommandProcessor::readCommand() {
     string commandString;
     getline(cin, commandString);
@@ -70,6 +72,7 @@ Command *CommandProcessor::readCommand() {
     return getCommandFromString(commandString);
 }
 
+//validates if the Command is valid in the current game state and saves the effect if so
 void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
     vector<string> splitCommand;
     split(splitCommand, command->getCommand(), ' ');
@@ -142,6 +145,7 @@ void CommandProcessor::saveCommand(Command* command) {
     commands.push_back(command);
 }
 
+//reads the command from the commandline, validates it, then saves it in the commands vector
 Command *CommandProcessor::getCommand(GameEngine *gameEngine) {
     Command* command = readCommand();
     validate(gameEngine,command);
@@ -149,11 +153,13 @@ Command *CommandProcessor::getCommand(GameEngine *gameEngine) {
     return command;
 }
 
+//gets a string from the file
 Command *FileCommandProcessorAdapter::readCommand() {
     string commandString = fileLineReader->readLineFromFile();
     return getCommandFromString(commandString);
 }
 
+//reads the current line on the file
 string FileLineReader::readLineFromFile() {
     ifstream file(filePath);
     string line;
@@ -181,4 +187,32 @@ FileLineReader::FileLineReader(string filePath) {
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filePath) {
     fileLineReader = new FileLineReader(filePath);
 }
+
+CommandProcessor::CommandProcessor() = default;
+
+CommandProcessor::CommandProcessor(const CommandProcessor &copy) {
+    commands = copy.commands;
+}
+
+CommandProcessor &CommandProcessor::operator=(const CommandProcessor &copy) {
+    if (this != &copy) {
+        commands = copy.commands;
+    }
+
+    return *this;
+}
+
+vector<Command *> CommandProcessor::getCommands() const {
+    return commands;
+}
+
+
+std::ostream &operator<<(std::ostream &os, const CommandProcessor &commandProcessor) {
+    for (Command* command : commandProcessor.getCommands()) {
+        os << command->getCommand() << "\n";
+    }
+
+    return os;
+}
+
 

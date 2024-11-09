@@ -23,6 +23,11 @@ class CommandProcessor {
         friend class GameEngine;
     public:
         Command* getCommand(GameEngine* gameEngine);
+        CommandProcessor();
+        CommandProcessor(const CommandProcessor& copy);
+        CommandProcessor& operator=(const CommandProcessor& copy);
+        friend ostream& operator<<(ostream& os, CommandProcessor& commandProcessor);
+        vector<Command*> getCommands() const ;
 };
 
 class FileLineReader {
