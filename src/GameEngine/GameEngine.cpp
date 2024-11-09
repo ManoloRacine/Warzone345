@@ -598,7 +598,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         players[i]->issueOrder(deployOrder);
                         validOrder = true;
                         
-                    }
+                    } 
                     //========================================
                     //Advance Order
                     //========================================
@@ -614,11 +614,12 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         // Pass in the current player and the player being attacked
                         // getTerritoryByName(map, targetTerritory)->getOwner()... it gets the owner of the territory being attacked or defended
                         // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
-                        Advance *advanceOrder = new Advance(players[i], getTerritoryByName(map, targetTerritory)->getOwner(), numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        Advance *advanceOrder = new Advance(players[i], nullptr, numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
                         // pass the order onto the current players order list place order inside of the function
                         players[i]->issueOrder(advanceOrder);
                         validOrder = true;
                     }
+                    
                     //========================================
                     //Airlift Order
                     //========================================
@@ -678,7 +679,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     //========================================
                     //Negotiate Order
                     //========================================
-                    else if (choice == "negotitate") {
+                    else if (choice == "negotiate") {
                         cout << "Enter name of player to negotiate with:" << endl;
                         cin >> opposingPlayerName;
 
@@ -696,16 +697,16 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                         validOrder = true;
                     }
 
-                    int sum = 0;
-                    // check if all players are done
+                    bool allPlayersDone = true;
+                    // Check if all players are done
                     for (int j = 0; j < numPlayers; j++) {
-                        sum += playerNotDoneTurn[j];
-                        // if not done issuing orders
+                        if (playerNotDoneTurn[j]) {
+                            allPlayersDone = false;
+                            break;
                         }
-                    if (sum == 0) {
-                        // players are still issuing orders keep looping
+                    }
+                    if (allPlayersDone) {
                         playersIssuingOrders = false;
-                        break;
                     }
                 }
             }
