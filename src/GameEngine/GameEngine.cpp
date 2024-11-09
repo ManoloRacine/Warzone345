@@ -761,7 +761,7 @@ while(execute) {
     for (int i = 0; i < players.size(); i++) {
         cout<<"inside the round robin"<<endl;
         if(!playerDoneExecuting[i]) {
-           if (players[i]->getOrdersList()->getList().size() == 0) {
+           if (players[i]->getOrdersList()->getList().size() == 0 || players[i]->getOrdersList()->getList()[0] == nullptr) {
                 playerDoneExecuting[i] = true;  
            } 
             else {

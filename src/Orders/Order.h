@@ -32,7 +32,7 @@ public:
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
   Order();
-  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target, const string& label);
   //Getters and setters for user
   Player* getUser() const;
   void setUser(Player* newUser);

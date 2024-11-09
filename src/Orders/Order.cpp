@@ -9,6 +9,12 @@ Order::Order(){}
 Order::~Order() = default;
 std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderCout(stream); }
 
+
+
+//Parameterized constructor for common attributes
+    Order::Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target, const string& label)
+        : user(user), targeted(targeted), troops(troops), source(source), target(target), label(label) {}
+
 //Getters and setters for user
 Player* Order::getUser() const{
   return user;
