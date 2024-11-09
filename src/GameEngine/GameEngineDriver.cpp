@@ -55,10 +55,19 @@ void testReinforcementPhase() {
     cout << *player1 << endl;
     cout << *player2 << endl;
 
-    Deploy *deployOrder = new Deploy(player1, player2, 4, nullptr, game.getTerritoryByName(loadedMap, "Detroit"));
+    Deploy *deployOrder = new Deploy(player1, player2, 4, nullptr, game.getTerritoryByName(loadedMap, "Delaware"));
 
     player1->issueOrder(deployOrder);
 
+    cout<<"Troops amount is: " << (deployOrder->getTroops()) << endl;
+    cout<<"User is: " << (deployOrder->getUser()->getName()) << endl;
+    cout<<"Targeted is: " << (deployOrder->getTargeted()->getName()) << endl;    
+    cout<<"Target is: " << (deployOrder->getTarget()->getName()) << endl;
+    cout<<"Source is: " << (deployOrder->getSource()->getName()) << endl;
+
+
     cout<<"Order type is: " << *(player1->getOrdersList()->getList()[0]) << endl;
+    
+    
 
 }

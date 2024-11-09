@@ -179,6 +179,51 @@ ostream &Deploy::orderCout(ostream &output) const {
 Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Deploy"){}
 
+//Getters and setters for user
+Player* Deploy::getUser() const{
+  return user;
+}
+
+void Deploy::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Deploy::getTargeted() const{
+  return targeted;
+}
+
+void Deploy::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Deploy::getTroops() const{
+  return troops;
+}
+
+void Deploy::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Deploy::getTarget() const{
+  return target;
+}
+
+void Deploy::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Deploy::getSource() const{
+  return source;
+}
+
+void Deploy::setSource(Territory* newSource){
+  source = newSource;
+}
+
 //Validate method for deploy
 bool Deploy::validate(Player* player, int armies, Territory* target){
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end()){
@@ -217,6 +262,51 @@ Advance::~Advance() = default;
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){}
+
+    //Getters and setters for user
+Player* Advance::getUser() const{
+  return user;
+}
+
+void Advance::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Advance::getTargeted() const{
+  return targeted;
+}
+
+void Advance::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Advance::getTroops() const{
+  return troops;
+}
+
+void Advance::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Advance::getTarget() const{
+  return target;
+}
+
+void Advance::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Advance::getSource() const{
+  return source;
+}
+
+void Advance::setSource(Territory* newSource){
+  source = newSource;
+}
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
@@ -308,6 +398,51 @@ Airlift::~Airlift() = default;
 Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift"){}
 
+    //Getters and setters for user
+Player* Airlift::getUser() const{
+  return user;
+}
+
+void Airlift::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Airlift::getTargeted() const{
+  return targeted;
+}
+
+void Airlift::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Airlift::getTroops() const{
+  return troops;
+}
+
+void Airlift::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Airlift::getTarget() const{
+  return target;
+}
+
+void Airlift::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Airlift::getSource() const{
+  return source;
+}
+
+void Airlift::setSource(Territory* newSource){
+  source = newSource;
+}
+
 ostream &Airlift::orderCout(ostream &output) const { return output << "Airlift order"; }
 //validation for airlift
 bool Airlift::validate(Player* player, int armies, Territory* source, Territory* target) {
@@ -356,6 +491,51 @@ Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territ
 Bomb::~Bomb() = default;
 
 std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
+
+//Getters and setters for user
+Player* Bomb::getUser() const{
+  return user;
+}
+
+void Bomb::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Bomb::getTargeted() const{
+  return targeted;
+}
+
+void Bomb::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Bomb::getTroops() const{
+  return troops;
+}
+
+void Bomb::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Bomb::getTarget() const{
+  return target;
+}
+
+void Bomb::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Bomb::getSource() const{
+  return source;
+}
+
+void Bomb::setSource(Territory* newSource){
+  source = newSource;
+}
 
 //validation for bomb
 bool Bomb::validate(Player* user, Territory* target){
@@ -406,6 +586,50 @@ Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source
 //destructor
 Blockade::~Blockade() = default;
 
+//Getters and setters for user
+Player* Blockade::getUser() const{
+  return user;
+}
+
+void Blockade::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Blockade::getTargeted() const{
+  return targeted;
+}
+
+void Blockade::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Blockade::getTroops() const{
+  return troops;
+}
+
+void Blockade::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Blockade::getTarget() const{
+  return target;
+}
+
+void Blockade::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Blockade::getSource() const{
+  return source;
+}
+
+void Blockade::setSource(Territory* newSource){
+  source = newSource;
+}
 
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "Blockade order"; }
 
@@ -456,6 +680,51 @@ Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* sour
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate"){}
 //destructor
 Negotiate::~Negotiate() = default;
+
+//Getters and setters for user
+Player* Negotiate::getUser() const{
+  return user;
+}
+
+void Negotiate::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Negotiate::getTargeted() const{
+  return targeted;
+}
+
+void Negotiate::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Negotiate::getTroops() const{
+  return troops;
+}
+
+void Negotiate::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Negotiate::getTarget() const{
+  return target;
+}
+
+void Negotiate::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Negotiate::getSource() const{
+  return source;
+}
+
+void Negotiate::setSource(Territory* newSource){
+  source = newSource;
+}
 
 //Validation for Negociate
 bool Negotiate::validate(Player* user, Player* targeted){
