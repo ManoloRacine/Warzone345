@@ -7,8 +7,10 @@
 #include <string>
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
+#include "Logger/LogObserver.h"
 
 class Player;
+class GameEngine;
 class Territory;
 class Card;
 enum CardType : int;
@@ -64,23 +66,28 @@ private:
 };
 
 //order list
-class OrdersList{
+class OrdersList: public Subject, ILoggable{
 private:
   vector<Order*> orders{};
-
+  GameEngine* game = nullptr;
 public:
   OrdersList() = default;
+  explicit OrdersList(GameEngine* gameEngine);
   ~OrdersList();
   OrdersList(const OrdersList &);
 
   OrdersList &operator=(const OrdersList &);
 
+  // logging order list
+  static std::string castOrderType(Order * o);
+  std::string stringToLog() override;
+
   void add(Order *o);
   void remove(int);
   void move(int, int);
   //vector<Order*> getList() const;
- // std::vector<Order *>* getList();
- std::vector<Order*> getList() const;
+  // std::vector<Order *>* getList();
+  std::vector<Order*> getList() const;
   const std::vector<Territory*>& getConnectedTerritories() const;
 
 private:
@@ -91,8 +98,9 @@ private:
 //========================================
 //Deploy Order
 //========================================
-class Deploy : public Order{
+class Deploy  : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -104,8 +112,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute(Player* player, int armies, Territory* target);
   void execute() override;
+  std::string stringToLog() override;
   ~Deploy() override;
   Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Deploy(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   Order *clone() const override;
@@ -115,8 +125,9 @@ private:
 //========================================
 //Advance Order
 //========================================
-class Advance : public Order{
+class Advance : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -127,8 +138,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
+  std::string stringToLog() override;
   ~Advance() override;
   Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Advance(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   string label;
@@ -139,8 +152,9 @@ private:
 //========================================
 //Airlift Order
 //========================================
-class Airlift : public Order{
+class Airlift : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -151,8 +165,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
+  std::string stringToLog() override;
   ~Airlift() override;
   Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Airlift(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   string label;
@@ -164,8 +180,9 @@ private:
 //========================================
 //Bomb Order
 //========================================
-class Bomb : public Order{
+class Bomb : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -176,8 +193,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, Territory* target);
+  std::string stringToLog() override;
   ~Bomb() override;
   Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Bomb(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   string label;
@@ -189,8 +208,9 @@ private:
 //========================================
 //Blockade Order
 //========================================
-class Blockade : public Order{
+class Blockade : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -200,9 +220,11 @@ public:
   bool validate(Player* player, Territory* source);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
-  void execute(Player* user, Territory* source);  
+  void execute(Player* user, Territory* source);
+  std::string stringToLog() override;
   ~Blockade() override;
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Blockade(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   string label;
@@ -214,8 +236,9 @@ private:
 //========================================
 //Negotiate Order
 //========================================
-class Negotiate : public Order{
+class Negotiate : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -226,8 +249,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* user, Player* targeted);
+  std::string stringToLog() override;
   ~Negotiate() override;
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Negotiate(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
 
 private:
   string label;
@@ -240,10 +265,5 @@ public:
   static Order *create(const std::string&) ;
 };
 
-class OrdersFactory {
-public:
-  static Order* CreateOrder(CardType cardType);
-
-};
 
 #endif
