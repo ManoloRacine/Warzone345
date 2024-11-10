@@ -11,3 +11,4 @@ build
 
 # Ignore executable files
 *.exe
+*.xml
