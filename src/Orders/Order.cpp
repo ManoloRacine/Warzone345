@@ -267,7 +267,6 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
 
       if(target->getArmies() == 0){
         target->setOwner(user);
-        targeted->removeTerritories(target);
         user->addTerritories(target);
         user->setConqueredATerritory(true);
 
