@@ -6,13 +6,13 @@ using namespace std;
 
 // Default constructor
 Player::Player(const string& playerName)
-    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers) {
+    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false)  {
     // Initialize player with empty territories, hand, and order list
 }
 
 // Copy Constructor
 Player::Player(const Player& other)
-    : name(other.name), territories(other.territories), hand(new Hand(*other.hand)), ordersList(new OrdersList(*other.ordersList)), territoriesToDefend(other.territoriesToDefend), territoriesToAttack(other.territoriesToAttack){
+    : name(other.name), territories(other.territories), hand(new Hand(*other.hand)), ordersList(new OrdersList(*other.ordersList)), territoriesToDefend(other.territoriesToDefend), territoriesToAttack(other.territoriesToAttack), conqueredATerritory(false) {
     // Copy territories, hand, and ordersList from the other player
 }
 
@@ -88,8 +88,8 @@ bool Player::getConqueredATerritory() const {
     return conqueredATerritory;
 }
 
-void Player::setConqueredATerritory(const bool& captured) {
-    name = captured;
+void Player::setConqueredATerritory(const bool captured) {
+    conqueredATerritory = captured;
 }
 
 // Getters and Setters for NegociatedPlayers
