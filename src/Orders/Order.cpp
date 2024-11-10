@@ -222,14 +222,15 @@ void Deploy::setSource(Territory* newSource){
 
 //Validate method for deploy
 bool Deploy::validate(Player* player, int armies, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end()){
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
       cout << "Deployment Valid" << endl;
       execute(player, armies, target);
       return true;
-  }
+ }
   else
     cout << "Order Invalid" << endl;
     return false;
+    
 }
 
   bool Deploy::validate(){
@@ -237,14 +238,14 @@ bool Deploy::validate(Player* player, int armies, Territory* target){
   int armies = getTroops();
   Territory* target = getTarget();
 
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end()){
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
       cout << "Deployment Valid" << endl;
       execute(player, armies, target);
       return true;
-  }
+ }
   else
     cout << "Order Invalid" << endl;
-    return false;
+    return false; 
 }
 //Overriden execute function that performs the execution
 void Deploy::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
@@ -326,7 +327,7 @@ return "advance";
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
   && armies <= source->getArmies() 
   && !player->isNegotiatedWith(target->getOwner())){
@@ -345,7 +346,7 @@ bool Advance::validate(){
   Territory* source = getSource();
   Territory* target = getTarget();
 
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
   && armies <= source->getArmies() 
   && !player->isNegotiatedWith(target->getOwner())){
@@ -485,8 +486,7 @@ string Airlift::getLabel() const{
 ostream &Airlift::orderCout(ostream &output) const { return output << "Airlift order"; }
 //validation for airlift
 bool Airlift::validate(Player* player, int armies, Territory* source, Territory* target) {
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
-    && find(player->getTerritories().begin(), player->getTerritories().end(), source) == player->getTerritories().end()
+  if(source->getOwner()->getName() == target->getOwner()->getName()
     && armies <= source->getArmies()
     && hasCard("airlift", player)){
       cout << "AirLift Order Validated" << endl;
@@ -506,8 +506,7 @@ bool Airlift::validate() {
   Territory* source = getSource();
   Territory* target = getTarget();
 
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
-    && find(player->getTerritories().begin(), player->getTerritories().end(), source) == player->getTerritories().end()
+  if(source->getOwner() == target->getOwner()
     && armies <= source->getArmies()
     && hasCard("airlift", player)){
       cout << "AirLift Order Validated" << endl;
@@ -612,7 +611,7 @@ bool Bomb::validate(Player* user, Territory* target){
   }
 
   if(adjacent 
-  && find(user->getTerritories().begin(), user->getTerritories().end(), target) == user->getTerritories().end() 
+  && find(user->getTerritories().begin(), user->getTerritories().end(), target) != user->getTerritories().end() 
   && !user->isNegotiatedWith(target->getOwner())
   && hasCard("bomb", user) ){
     cout << "Bomb order Valid" << endl;
@@ -636,7 +635,7 @@ bool Bomb::validate(){
   }
 
   if(adjacent 
-  && find(user->getTerritories().begin(), user->getTerritories().end(), target) == user->getTerritories().end() 
+  && find(user->getTerritories().begin(), user->getTerritories().end(), target) != user->getTerritories().end() 
   && !user->isNegotiatedWith(target->getOwner())
   && hasCard("bomb", user) ){
     cout << "Bomb order Valid" << endl;
@@ -729,7 +728,7 @@ std::ostream &Blockade::orderCout(std::ostream &output) const { return output <<
 
 //validate Blockade order
 bool Blockade::validate(Player* player, Territory* source){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && hasCard("blockade", player)){
     cout << "Blockade Validated" << endl;
     execute(player, source);
@@ -744,7 +743,7 @@ bool Blockade::validate(){
   Player* player = getUser();
   Territory* source = getSource();
   
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && hasCard("blockade", player)){
     cout << "Blockade Validated" << endl;
     execute(player, source);
@@ -853,11 +852,11 @@ bool Negotiate::validate(Player* user, Player* targeted){
 
 
 bool Negotiate::validate(){
-  Player* player = getUser();
-  Player* targeted = getUser();
+  Player* user = getUser();
+  Player* targeted = getTargeted();
   
-  if (user != targeted 
-  && hasCard("diplomacy", user)){
+  if (user->getName() != targeted->getName()
+   &&hasCard("diplomacy", user)){
     cout << "Negotiation valid" << endl;
     execute(user, targeted);
     return true;
