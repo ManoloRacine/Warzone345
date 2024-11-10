@@ -33,23 +33,23 @@ public:
   Order();
   Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
   //Getters and setters for user
-  Player* getUser() const;
+  virtual Player* getUser() const = 0;
   void setUser(Player* newUser);
 
   //Getters and setters for targeted
-  Player* getTargeted() const;
+  virtual Player* getTargeted() const = 0;
   void setTargeted(Player* newTargeted);
 
   //Getters and setters for Troops
-  int getTroops() const;
+  virtual int getTroops() const = 0;
   void setTroops(int newTroops);
 
   //Getters and setters for target
-  Territory* getTarget() const;
+  virtual Territory* getTarget() const = 0;
   void setTarget(Territory* newTarget);
 
   //Getters and setters for source
-  Territory* getSource() const;
+  virtual Territory* getSource() const = 0;
   void setSource(Territory* newSource);
 
   //get label
@@ -105,23 +105,23 @@ public:
   ~Deploy() override;
   Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
-  Player* getUser() const;
+  Player* getUser() const override;
   void setUser(Player* newUser);
 
   //Getters and setters for targeted
-  Player* getTargeted() const;
+  Player* getTargeted() const override;
   void setTargeted(Player* newTargeted);
 
   //Getters and setters for Troops
-  int getTroops() const;
+  int getTroops() const override;
   void setTroops(int newTroops);
 
   //Getters and setters for target
-  Territory* getTarget() const;
+  Territory* getTarget() const override;
   void setTarget(Territory* newTarget);
 
   //Getters and setters for source
-  Territory* getSource() const;
+  Territory* getSource() const override;
   void setSource(Territory* newSource);
 
   //get label
@@ -149,23 +149,23 @@ public:
   ~Advance() override;
   Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
-  Player* getUser() const;
+  Player* getUser() const override;
   void setUser(Player* newUser);
 
   //Getters and setters for targeted
-  Player* getTargeted() const;
+  Player* getTargeted() const override;
   void setTargeted(Player* newTargeted);
 
   //Getters and setters for Troops
-  int getTroops() const;
+  int getTroops() const override;
   void setTroops(int newTroops);
 
   //Getters and setters for target
-  Territory* getTarget() const;
+  Territory* getTarget() const override;
   void setTarget(Territory* newTarget);
 
   //Getters and setters for source
-  Territory* getSource() const;
+  Territory* getSource() const override;
   void setSource(Territory* newSource);
 
   //get label
@@ -193,23 +193,23 @@ public:
   ~Airlift() override;
   Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
-  Player* getUser() const;
+  Player* getUser() const override;
   void setUser(Player* newUser);
 
   //Getters and setters for targeted
-  Player* getTargeted() const;
+  Player* getTargeted() const override;
   void setTargeted(Player* newTargeted);
 
   //Getters and setters for Troops
-  int getTroops() const;
+  int getTroops() const override;
   void setTroops(int newTroops);
 
   //Getters and setters for target
-  Territory* getTarget() const;
+  Territory* getTarget() const override;
   void setTarget(Territory* newTarget);
 
   //Getters and setters for source
-  Territory* getSource() const;
+  Territory* getSource() const override;
   void setSource(Territory* newSource);
 
   //get label
@@ -238,23 +238,23 @@ public:
   ~Bomb() override;
   Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
-  Player* getUser() const;
+  Player* getUser() const override;
   void setUser(Player* newUser);
 
   //Getters and setters for targeted
-  Player* getTargeted() const;
+  Player* getTargeted() const override;
   void setTargeted(Player* newTargeted);
 
   //Getters and setters for Troops
-  int getTroops() const;
+  int getTroops() const override;
   void setTroops(int newTroops);
 
   //Getters and setters for target
-  Territory* getTarget() const;
+  Territory* getTarget() const override;
   void setTarget(Territory* newTarget);
 
   //Getters and setters for source
-  Territory* getSource() const;
+  Territory* getSource() const override;
   void setSource(Territory* newSource);
 
   //get label
@@ -283,23 +283,23 @@ public:
   ~Blockade() override;
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
-  Player* getUser() const;
+  Player* getUser() const override;
   void setUser(Player* newUser);
 
   //Getters and setters for targeted
-  Player* getTargeted() const;
+  Player* getTargeted() const override;
   void setTargeted(Player* newTargeted);
 
   //Getters and setters for Troops
-  int getTroops() const;
+  int getTroops() const override;
   void setTroops(int newTroops);
 
   //Getters and setters for target
-  Territory* getTarget() const;
+  Territory* getTarget() const override;
   void setTarget(Territory* newTarget);
 
   //Getters and setters for source
-  Territory* getSource() const;
+  Territory* getSource() const override;
   void setSource(Territory* newSource);
 
   //get label
@@ -329,23 +329,23 @@ public:
   ~Negotiate() override;
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
-  Player* getUser() const;
+  Player* getUser() const override;
   void setUser(Player* newUser);
 
   //Getters and setters for targeted
-  Player* getTargeted() const;
+  Player* getTargeted() const override;
   void setTargeted(Player* newTargeted);
 
   //Getters and setters for Troops
-  int getTroops() const;
+  int getTroops() const override;
   void setTroops(int newTroops);
 
   //Getters and setters for target
-  Territory* getTarget() const;
+  Territory* getTarget() const override;
   void setTarget(Territory* newTarget);
 
   //Getters and setters for source
-  Territory* getSource() const;
+  Territory* getSource() const override;
   void setSource(Territory* newSource);
 
   //get label

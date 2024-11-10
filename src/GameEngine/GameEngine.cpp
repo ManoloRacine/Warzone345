@@ -350,7 +350,7 @@ void GameEngine::startupPhase() {
                 cout << "Game Set Up Succesfull..." << endl;
                 cout << "Starting Game..." << endl;
                 cout << "Current State: " << *this << endl;
-                reinforcementPhase(playerList, loadedMap);
+                reinforcementPhase(loadedMap, playerList);
                 issueOrdersPhase(loadedMap,playerList);
                 orderExecutionPhase(playerList);
 
@@ -468,7 +468,7 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
 //----------------A2-PART3-Griffin-Sin-Chan---------------//
 
 
-void GameEngine::reinforcementPhase(std::vector<Player*>& players, Map& map) {
+void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
 
     vector<Continent*> continents = map.getContinents();
     
@@ -737,7 +737,11 @@ for (int i = 0; i < players.size(); i++) {
         if (order == "deploy") {
             cout<<"deploying"<<endl;
             // Calling the Validate function ---------------Current player---------------Number of Troops Deployed-------------------------Target Territory
-            cout<<"Num of Army units is "<< players[i]->getOrdersList()->getList()[j]->getTroops()<< endl;
+            cout<<"Num of Army units is "<< (players[i]->getOrdersList()->getList()[j]->getTroops())<< endl;
+            cout<<"player name found in order list "<< (players[i]->getOrdersList()->getList()[j]->getUser()->getName())<< endl;
+            cout<<"Current player name from loop "<< (players[i]->getName())<< endl;
+            cout<<"name of target territory "<< (players[i]->getOrdersList()->getList()[j]->getTarget()->getName())<< endl;
+
             Deploy* deployOrder = new Deploy(players[i], nullptr, players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
             deployOrder->validate(deployOrder->getUser(), deployOrder->getTroops(), deployOrder->getTarget());
             cout<<"deploying middle"<<endl;

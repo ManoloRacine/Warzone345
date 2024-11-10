@@ -71,7 +71,9 @@ void testReinforcementPhase() {
 
     */
 
-    game.reinforcementPhase(game.playerList, loadedMap);
+    game.reinforcementPhase(loadedMap, game.playerList);
+    game.issueOrdersPhase(loadedMap, game.playerList);
+    game.orderExecutionPhase(game.playerList);
     
 
 }
