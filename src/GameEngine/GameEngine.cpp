@@ -846,7 +846,7 @@ Player* GameEngine::getPlayerByName(vector<Player*>& players, string targetPlaye
     return(nullptr);
 }
 
-void resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
+void GameEngine::resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
     for (int i; i < players.size(); i++) {
         //reset concquered territory status
         if (players[i]->getConqueredATerritory() == true) {

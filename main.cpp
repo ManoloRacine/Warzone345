@@ -18,7 +18,8 @@ int main() {
     // cout << command->getType() << endl;
 
     //testStartupPhase();
-    testReinforcementPhase();
+    //testReinforcementPhase();
+    testOrdersLists();
     //testLoadMaps();
     return 0;
 }
