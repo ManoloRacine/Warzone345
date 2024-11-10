@@ -69,7 +69,7 @@ public:
 
     // Getters and Setters for conqueredATerritory
     bool getConqueredATerritory() const;
-    void setConqueredATerritory(const bool& captured);
+    void setConqueredATerritory(const bool captured);
 
      // Getters and Setters for for NegociatePlayers
      set<Player*> getNegotiatedPlayers() const;

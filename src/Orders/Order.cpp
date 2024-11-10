@@ -363,7 +363,6 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
 
       if(target->getArmies() == 0){
         target->setOwner(user);
-        targeted->removeTerritories(target);
         user->addTerritories(target);
         user->setConqueredATerritory(true);
 
@@ -466,7 +465,7 @@ void Airlift::execute(Player* user, Player* targeted, int armies, Territory* sou
   source->setArmies(source->getArmies()-armies);
   target->setArmies(target->getArmies()+armies);
 
-  cout << target->getArmies() <<"Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
+  cout << armies <<" Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
 }
 //Helper function for execute
 void Airlift::execute(Player* player, int armies, Territory* source, Territory* target){
