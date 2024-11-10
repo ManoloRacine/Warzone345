@@ -10,11 +10,12 @@
 #include "../CommandProcessing/CommandProcessor.h"
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
+#include "../Logger/LogObserver.h"
 
 using namespace std;
 
 // Forward declaration
-class GameEngine;
+class LogObserver;
 
 
 enum State {
@@ -111,7 +112,7 @@ private:
     WinState();
 };
 
-class GameEngine {
+class GameEngine: public Subject, ILoggable {
     public:
     GameEngine();
     GameState* getCurrentState() const;
@@ -121,6 +122,8 @@ class GameEngine {
     GameEngine& operator=(const GameEngine& gameEngine);
     friend std::ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
 
+    std::string stringToLog() override;// A2 P5 (by RYAD)
+    LogObserver* logObserver = nullptr;
     //------------- A2-P2 CHANGES --------------- ( by Nektarios )
     void startupPhase(); //A2-Part2
     vector<Player*> playerList; // ( we need to store players somewhere)

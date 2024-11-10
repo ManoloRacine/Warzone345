@@ -216,6 +216,8 @@ string WinState::getName() {
 
 GameEngine::GameEngine() {
     gameEngineState = &StartState::getInstance();
+    this->logObserver = new LogObserver(this);
+    Subject::attach((ILogObserver*)logObserver);
 }
 
 GameState* GameEngine::getCurrentState() const {
@@ -224,19 +226,25 @@ GameState* GameEngine::getCurrentState() const {
 
 void GameEngine::changeState(string stateInput) {
     gameEngineState->changeState(this, stateInput);
+    Subject::notify(this);
 }
 
 void GameEngine::setState(GameState &newState) {
     gameEngineState = &newState;
+    Subject::notify(this);
 }
 
 GameEngine::GameEngine(const GameEngine &gameEngine) {
     gameEngineState = gameEngine.gameEngineState;
+    this->logObserver = gameEngine.logObserver;
+    Subject::attach((ILogObserver*)logObserver);
 }
 
 GameEngine & GameEngine::operator=(const GameEngine &other) {
     if (this != &other) {
-        gameEngineState = other.gameEngineState;
+        this->gameEngineState = other.gameEngineState;
+        this->logObserver = other.logObserver;
+        Subject::attach((ILogObserver*)other.logObserver);
     }
 
     return *this;
@@ -248,6 +256,13 @@ std::ostream & operator<<(std::ostream &os, const GameEngine &gameEngine) {
 }
 
 // --------------------------- A2-PART2 -----------------------------------------
+std::string GameEngine::stringToLog() {
+    std::stringstream stream;
+    stream << "GAME ENGINE: ";
+    stream << "State transition to ";
+    stream << GameEngine::getCurrentState();
+    return stream.str();
+}
 
 void GameEngine::startupPhase() {
     CommandProcessor commandProcessor; // Create CommandProcessor instance

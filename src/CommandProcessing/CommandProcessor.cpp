@@ -143,6 +143,7 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
 
 void CommandProcessor::saveCommand(Command* command) {
     commands.push_back(command);
+    Subject::notify(this);
 }
 
 //reads the command from the commandline, validates it, then saves it in the commands vector
@@ -190,15 +191,25 @@ FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filePath) {
 
 CommandProcessor::CommandProcessor() = default;
 
+CommandProcessor::CommandProcessor(GameEngine* game) {
+    this->gameEngine = game;
+}
+
 CommandProcessor::CommandProcessor(const CommandProcessor &copy) {
     commands = copy.commands;
+}
+
+CommandProcessor::CommandProcessor(const CommandProcessor &copy, GameEngine* game) {
+    commands = copy.commands;
+    this->gameEngine = game;
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
 }
 
 CommandProcessor &CommandProcessor::operator=(const CommandProcessor &copy) {
     if (this != &copy) {
         commands = copy.commands;
     }
-
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
     return *this;
 }
 
@@ -213,6 +224,15 @@ std::ostream &operator<<(std::ostream &os, const CommandProcessor &commandProces
     }
 
     return os;
+}
+
+std::string CommandProcessor::stringToLog() {
+    std::stringstream stream;
+    stream << "COMMAND PROCESSOR: ";
+    stream << "Saved command \"";
+    stream << this->commands.back()->getCommand(); // get latest command from vector CommandProcessor::commands
+    stream << "\""; // quoted
+    return stream.str();
 }
 
 
