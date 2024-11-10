@@ -5,6 +5,8 @@
 #ifndef LOGOBSERVER_H
 #define LOGOBSERVER_H
 
+
+
 #include <string>
 #include <vector>
 #include <stdexcept>
@@ -12,32 +14,31 @@
 #include <fstream>
 #include <../GameEngine/GameEngine.h>
 
+class OrdersList;
+class ILogObserver;
+class GameEngine;
 
-class ILogObserver; // added forward declaration
-
-
-
-// loggable interface
+// loggable which will be superclass of objects that need to be logged
 class ILoggable {
 public:
   virtual std::string stringToLog() = 0;
   virtual ~ILoggable()= default;
 };
 
+// ISubject
 
-
-// the subject which notifies - interface
 class ISubject {
 public:
   virtual ~ISubject() = default;
   virtual void attach(ILogObserver* observer) = 0;
   virtual void detach(ILogObserver* observer) = 0;
   virtual void notify(ILoggable*) = 0;
+  virtual void resetObservers() = 0;
 };
 
 
+//subject
 
-// the subject which notifies - extended
 class Subject : ISubject {
 private:
   std::vector<ILogObserver*> observers;
@@ -48,13 +49,12 @@ public:
   void attach(ILogObserver* observer) override;
   void detach(ILogObserver* observer) override;
   void notify(ILoggable*) override;
+  void resetObservers() override;
 
-  void resetObservers();
 };
 
+//interface logObserver
 
-
-// observer which is notified
 class ILogObserver {
 public:
   virtual ~ILogObserver() = default;
@@ -62,18 +62,26 @@ public:
 };
 
 
-
-//observer
+// LogObserver which will be called when subject notifies
 class LogObserver : ILogObserver {
 private:
     // Object Owner
     GameEngine* game;
-public:
-    explicit LogObserver(GameEngine*);
-    explicit LogObserver(LogObserver*);
-    void update(ILoggable*) override;
-    ~LogObserver() override = default;
 
-    LogObserver &operator=(const LogObserver &other);
+public:
+
+    // Constructors
+    explicit LogObserver(GameEngine*);
+    ~LogObserver() override = default;
+    explicit LogObserver(LogObserver*);
+
+    void update(ILoggable*) override;
+
+    // Stream Operator
+    friend std::ostream &operator << (std::ostream &out, const LogObserver &log);
+
+    // Assignment Operator
+    LogObserver& operator=(const LogObserver &other);
+
 };
 #endif //LOGOBSERVER_H

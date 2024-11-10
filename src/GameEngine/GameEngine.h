@@ -6,19 +6,20 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
 #include <string>
+
+#include <iomanip>
+#include "../Logger/LogObserver.h"
 #include "../Command/Command.h"
 #include "../CommandProcessing/CommandProcessor.h"
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
-#include <iomanip>
-#include "Logger/LogObserver.h"
 
 
 using namespace std;
 
-// Forward declaration
-class GameEngine;
-
+/*class Subject;
+class ILoggable;
+class LogObserver;*/
 
 enum State {
     Start,
@@ -114,7 +115,8 @@ private:
     WinState();
 };
 
-class GameEngine: public Subject, ILoggable {
+class GameEngine
+{
     public:
     GameEngine();
     GameState* getCurrentState() const;
@@ -123,8 +125,10 @@ class GameEngine: public Subject, ILoggable {
     GameEngine(const GameEngine& gameEngine);
     GameEngine& operator=(const GameEngine& gameEngine);
     friend std::ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
-    std::string stringToLog() override; // from logger
-    LogObserver* getLogObserver() const;
+
+    //-------------A2 P5 CHANGES --------------- (Ryad)
+    /*std::string stringToLog() override; // from logger
+    LogObserver* logObserver = nullptr;*/
 
     //------------- A2-P2 CHANGES --------------- ( by Nektarios )
     void startupPhase(); //A2-Part2
@@ -140,8 +144,7 @@ class GameEngine: public Subject, ILoggable {
     //------------------------------------------------
 
     private:
-    // Logger
-    LogObserver* logObserver = nullptr;
+    //-------------A2 P5 CHANGES --------------- (Ryad)
     GameState* gameEngineState;
 };
 

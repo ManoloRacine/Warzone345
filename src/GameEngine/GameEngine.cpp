@@ -216,6 +216,7 @@ string WinState::getName() {
 
 GameEngine::GameEngine() {
     gameEngineState = &StartState::getInstance();
+    //this->logObserver = new LogObserver(this);
 }
 
 GameState* GameEngine::getCurrentState() const {
@@ -224,32 +225,25 @@ GameState* GameEngine::getCurrentState() const {
 
 void GameEngine::changeState(string stateInput) {
     gameEngineState->changeState(this, stateInput);
+    //Subject::notify(this);
 }
 
 void GameEngine::setState(GameState &newState) {
     gameEngineState = &newState;
-    Subject::notify(this);
+    //Subject::notify(this);
 }
 
 GameEngine::GameEngine(const GameEngine &gameEngine) {
     gameEngineState = gameEngine.gameEngineState;
+    /*this->logObserver = new LogObserver(this);
+    Subject::attach((ILogObserver*)logObserver);*/
 }
 
-LogObserver* GameEngine::getLogObserver() const {
-    return this->logObserver;
-}
-
-std::string GameEngine::stringToLog() {
-    std::stringstream stream;
-    stream << "Game Engine: ";
-    stream << "State Change to ";
-    stream << getCurrentState()->getName();
-    return stream.str();
-}
 
 GameEngine & GameEngine::operator=(const GameEngine &other) {
     if (this != &other) {
         gameEngineState = other.gameEngineState;
+        //this->logObserver = other.logObserver;
     }
 
     return *this;
@@ -475,9 +469,18 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
     }
 }
 
+// ----------------- A2 P5 ------------ (RYAD)
 
-
-
+// getting current state and returning a string
+/*
+std::string GameEngine::stringToLog() {
+    std::stringstream stream;
+    stream << "Game Engine: ";
+    stream << "State Change to ";
+    stream << this->getCurrentState()->getName();
+    return stream.str();
+}
+*/
 
 
 
