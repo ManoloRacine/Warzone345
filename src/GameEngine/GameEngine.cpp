@@ -742,8 +742,9 @@ for (int i = 0; i < players.size(); i++) {
             cout<<"Current player name from loop "<< (players[i]->getName())<< endl;
             cout<<"name of target territory "<< (players[i]->getOrdersList()->getList()[j]->getTarget()->getName())<< endl;
 
-            Deploy* deployOrder = new Deploy(players[i], nullptr, players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
-            deployOrder->validate(deployOrder->getUser(), deployOrder->getTroops(), deployOrder->getTarget());
+            players[i]->getOrdersList()->getList()[j]->validate();
+           //Deploy* deployOrder = new Deploy(players[i], nullptr, players[i]->getOrdersList()->getList()[j]->getTroops(), nullptr, players[i]->getOrdersList()->getList()[j]->getTarget());
+            //deployOrder->validate();
             cout<<"deploying middle"<<endl;
             //validate internally calls the excute method if conditions satisfied
             //regardeless of validation remove the deploy order

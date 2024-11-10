@@ -28,6 +28,7 @@ private:
 public:
   virtual void execute() = 0;
   virtual void execute(Player* user, Player* targeted, int troops, Territory* source, Territory* target) = 0;
+  virtual bool validate() = 0;
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
   Order();
@@ -99,6 +100,7 @@ private:
   Territory* source;
 public:
   bool validate(Player* player, int armies, Territory* target);
+  bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute(Player* player, int armies, Territory* target);
   void execute() override;
@@ -143,6 +145,7 @@ private:
   Territory* source;
 public:
   bool validate(Player* player, int armies, Territory* source, Territory* target);
+  bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
@@ -187,6 +190,7 @@ private:
   Territory* source;
 public:
   bool validate(Player* player, int armies, Territory* source, Territory* target);
+  bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
@@ -232,6 +236,7 @@ private:
   Territory* source;
 public:
   bool validate(Player* player, Territory* target);
+  bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, Territory* target);
@@ -277,6 +282,7 @@ private:
   Territory* source;
 public:
   bool validate(Player* player, Territory* source);
+  bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* user, Territory* source);  
@@ -323,6 +329,7 @@ private:
   Territory* source;
 public:
   bool validate(Player* user, Player* target);
+  bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* user, Player* targeted);
