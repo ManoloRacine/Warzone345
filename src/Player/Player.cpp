@@ -197,8 +197,10 @@ void Player::clearNegotiations() {
 void resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
     for (int i; i < players.size(); i++) {
         //reset concquered territory status
-        players[i]->getHand()->draw(deck);
-        players[i]->setConqueredATerritory(false);
+        if (players[i]->getConqueredATerritory() == true) {
+            players[i]->getHand()->draw(deck);
+            players[i]->setConqueredATerritory(false);
+        }
         //initialize some empty vectors
         vector<Territory*>  emptyToAttack = {};
         vector<Territory*>  emptyToDefend = {};
@@ -207,8 +209,7 @@ void resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
         players[i]->setTerritoriesToDefend(emptyToDefend);
         //resets player negotiations
         players[i]->clearNegotiations();
+        players[i]->getOrdersList()->getList().clear();
    
     }
-
-
 }
