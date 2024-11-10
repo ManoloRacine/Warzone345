@@ -15,6 +15,7 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
     Order::Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
         : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
+/*
 //Getters and setters for user
 Player* Order::getUser() const{
   return user;
@@ -59,6 +60,7 @@ Territory* Order::getSource() const{
 void Order::setSource(Territory* newSource){
   source = newSource;
 }
+*/
 
 //order list
 

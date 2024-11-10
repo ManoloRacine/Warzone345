@@ -373,7 +373,7 @@ void GameEngine::assignTerritoriesToPlayers(Map& map, vector<Player*>& players) 
 
     int playerIndex = 0;
     int totalPlayers = players.size();
-
+//make a for loop that alternates between the players
     // Traverse mapData and assign each territory to a player in round-robin fashion
     for (auto& pair : map.getMapData()) {
         Territory* territory = pair.second;
