@@ -32,7 +32,7 @@ public:
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
   Order();
-  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target, const string& label);
   //Getters and setters for user
   Player* getUser() const;
   void setUser(Player* newUser);
@@ -106,7 +106,25 @@ public:
   void execute() override;
   ~Deploy() override;
   Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+   //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
 
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
 private:
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
@@ -129,7 +147,25 @@ public:
   void execute(Player* player, int armies, Territory* source, Territory* target);
   ~Advance() override;
   Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+   //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
 
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
 private:
   string label;
   Order *clone() const override;
@@ -153,7 +189,25 @@ public:
   void execute(Player* player, int armies, Territory* source, Territory* target);
   ~Airlift() override;
   Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+   //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
 
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
 private:
   string label;
   Order *clone() const override;
@@ -178,6 +232,25 @@ public:
   void execute(Player* player, Territory* target);
   ~Bomb() override;
   Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+   //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
+
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
 
 private:
   string label;
@@ -203,6 +276,25 @@ public:
   void execute(Player* user, Territory* source);  
   ~Blockade() override;
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+   //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
+
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
 
 private:
   string label;
@@ -228,7 +320,26 @@ public:
   void execute(Player* user, Player* targeted);
   ~Negotiate() override;
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+   //Getters and setters for user
+  Player* getUser() const;
+  void setUser(Player* newUser);
 
+  //Getters and setters for targeted
+  Player* getTargeted() const;
+  void setTargeted(Player* newTargeted);
+
+  //Getters and setters for Troops
+  int getTroops() const;
+  void setTroops(int newTroops);
+
+  //Getters and setters for target
+  Territory* getTarget() const;
+  void setTarget(Territory* newTarget);
+
+  //Getters and setters for source
+  Territory* getSource() const;
+  void setSource(Territory* newSource);
+  
 private:
   string label;
   Order *clone() const override;
