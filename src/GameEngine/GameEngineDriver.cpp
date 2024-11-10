@@ -36,7 +36,7 @@ void testReinforcementPhase() {
     GameEngine game;
     MapLoader mapLoader;
     Map loadedMap;
-    mapLoader.loadMap(loadedMap,"../res/maps/usa.txt");
+    mapLoader.loadMap(loadedMap,"../res/maps/europe.txt");
     cout << "loadingMap: usa.txt..." << endl;
     game.gameMap = new Map(loadedMap);
     bool result = loadedMap.validate();
@@ -50,11 +50,13 @@ void testReinforcementPhase() {
     cout << "Assigning territories" << endl;
     game.assignTerritoriesToPlayers(loadedMap, game.playerList);
     cout << "Setting Reinforcement pools" << endl;
-    game.setReinforcementPools(game.playerList);
+    //game.setReinforcementPools(game.playerList); gamestart up give 50 troops
     game.draw2cards(game.playerList);
     cout << *player1 << endl;
     cout << *player2 << endl;
 
+    /*
+    
     Deploy *deployOrder = new Deploy(player1, player2, 4, nullptr, game.getTerritoryByName(loadedMap, "Delaware"));
 
     player1->issueOrder(deployOrder);
@@ -63,11 +65,13 @@ void testReinforcementPhase() {
     cout<<"User is: " << (deployOrder->getUser()->getName()) << endl;
     cout<<"Targeted is: " << (deployOrder->getTargeted()->getName()) << endl;    
     cout<<"Target is: " << (deployOrder->getTarget()->getName()) << endl;
-    cout<<"Source is: " << (deployOrder->getSource()->getName()) << endl;
+   // cout<<"Source is: " << (deployOrder->getSource()->getName()) << endl; nullptr error cause a crash
 
+    cout<<"Order type is: " << (player1->getOrdersList()->getList()[0]->getLabel()) << endl;
 
-    cout<<"Order type is: " << *(player1->getOrdersList()->getList()[0]) << endl;
-    
+    */
+
+    game.reinforcementPhase(game.playerList, loadedMap);
     
 
 }

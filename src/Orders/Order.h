@@ -24,15 +24,14 @@ private:
   int troops;
   Territory* target;
   Territory* source;
-  string label;
+  
 public:
-  string getLabel();
   virtual void execute() = 0;
   virtual void execute(Player* user, Player* targeted, int troops, Territory* source, Territory* target) = 0;
   virtual ~Order() = 0;
   virtual Order *clone() const = 0;
   Order();
-  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target, const string& label);
+  Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
   //Getters and setters for user
   Player* getUser() const;
   void setUser(Player* newUser);
@@ -53,8 +52,8 @@ public:
   Territory* getSource() const;
   void setSource(Territory* newSource);
 
-  //setter for label
-  void setLabel(string newlabel);
+  //get label
+  virtual string getLabel() const = 0;
 private:
   virtual std::ostream &orderCout(std::ostream &) const = 0;
   friend std::ostream &operator<<(std::ostream &, const Order &);
@@ -98,7 +97,6 @@ private:
   int troops;
   Territory* target;
   Territory* source;
-  string label;
 public:
   bool validate(Player* player, int armies, Territory* target);
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
@@ -125,6 +123,9 @@ public:
   //Getters and setters for source
   Territory* getSource() const;
   void setSource(Territory* newSource);
+
+  //get label
+  string getLabel() const override;
 private:
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
@@ -166,8 +167,10 @@ public:
   //Getters and setters for source
   Territory* getSource() const;
   void setSource(Territory* newSource);
+
+  //get label
+  string getLabel() const override;
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -208,8 +211,10 @@ public:
   //Getters and setters for source
   Territory* getSource() const;
   void setSource(Territory* newSource);
+
+  //get label
+  string getLabel() const override;
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -252,8 +257,9 @@ public:
   Territory* getSource() const;
   void setSource(Territory* newSource);
 
+  //get label
+  string getLabel() const override;
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -296,8 +302,10 @@ public:
   Territory* getSource() const;
   void setSource(Territory* newSource);
 
+  //get label
+  string getLabel() const override;
+
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -339,9 +347,12 @@ public:
   //Getters and setters for source
   Territory* getSource() const;
   void setSource(Territory* newSource);
+
+  //get label
+  string getLabel() const override;
   
 private:
-  string label;
+  
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
