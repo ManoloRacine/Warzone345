@@ -734,19 +734,9 @@ for (int i = 0; i < players.size(); i++) {
             string order = toLower(players[i]->getOrdersList()->getList()[j]->getLabel());
             cout<<"Order type is: " << order<< endl;
         if (order == "deploy") {
-            cout<<"deploying -----------------------------------------"<<endl;
-            // Calling the Validate function ---------------Current player---------------Number of Troops Deployed-------------------------Target Territory
-            cout<<"Num of Army units is "<< (players[i]->getOrdersList()->getList()[j]->getTroops())<< endl;
-            cout<<"player name found in order list "<< (players[i]->getOrdersList()->getList()[j]->getUser()->getName())<< endl;
-            cout<<"Current player name from loop "<< (players[i]->getName())<< endl;
-            cout<<"name of target territory "<< (players[i]->getOrdersList()->getList()[j]->getTarget()->getName())<< endl;
-            cout<<"owner of the territory is "<< (players[i]->getOrdersList()->getList()[j]->getTarget()->getOwner()->getName()) << endl;
-            
-
-            cout<<"THIS IS THE ORDER" << *(players[i]->getOrdersList()->getList()[j]) << endl;
+            cout<<"-------------------------- Deploying  --------------------------"<<endl;
             players[i]->getOrdersList()->getList()[j]->validate();
-            cout<<players[i]->getOrdersList()->getList()[j]->getTarget()->getArmies()<<endl;
-            cout<<"deploying middle"<<endl;
+            
             //validate internally calls the excute method if conditions satisfied
             //regardeless of validation remove the deploy order
             players[i]->getOrdersList()->remove(j);
@@ -755,7 +745,6 @@ for (int i = 0; i < players.size(); i++) {
             j--;
             //track the decreased size to prevent out of bounds
             orderListSize--;
-            cout<<"deploying end"<<endl;
 
         }
     }   
@@ -764,6 +753,7 @@ for (int i = 0; i < players.size(); i++) {
 //issue round robin players orders
 
 while(execute) {
+    cout<<"Number of players is " << players.size();
     for (int i = 0; i < players.size(); i++) {
         cout<<"inside the round robin"<<endl;
         if(!playerDoneExecuting[i]) {
@@ -774,7 +764,7 @@ while(execute) {
                 //get label to compare with order name later
                 string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
                 if (orderType == "advance") {
-                    cout<<"inside advance"<<endl;
+                    cout<<"-------------------------- Advance  --------------------------"<<endl;
                     players[i]->getOrdersList()->getList()[0]->validate();
 
                     //remove the order from the list, pop first element
@@ -783,28 +773,26 @@ while(execute) {
                     cout<<"inside advance at the end" << endl;
                 }
                 else if (orderType == "airlift") {
+                    cout<<"-------------------------- Airlift --------------------------"<<endl;
                     players[i]->getOrdersList()->getList()[0]->validate();
-                  //  delete airliftOrder;
                     players[i]->getOrdersList()->remove(0);
                 }
                 else if (orderType == "bomb") {
+                    cout<<"-------------------------- Bomb  --------------------------"<<endl;
                     players[i]->getOrdersList()->getList()[0]->validate();
-                  //  delete bombOrder;
                     players[i]->getOrdersList()->remove(0);
                 }
                 else if (orderType == "blockade") {
+                    cout<<"-------------------------- Blockade  --------------------------"<<endl;
                     players[i]->getOrdersList()->getList()[0]->validate();
-                   // delete blockadeOrder;
-
                     players[i]->getOrdersList()->remove(0);
                 }
                 else if (orderType == "negotiate") {
+                    cout<<"-------------------------- Deploying  --------------------------"<<endl;
                     players[i]->getOrdersList()->getList()[0]->validate();
-                    //delete negotiateOrder;
                     players[i]->getOrdersList()->remove(0);
                 }
                 }
-                cout<<"inside the round robin part of the if statement at the end"<<endl;
         }
         
                 bool allPlayersDone = true;
