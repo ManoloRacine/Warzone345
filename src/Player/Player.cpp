@@ -4,6 +4,12 @@
 
 using namespace std;
 
+/*Player::Player(GameEngine *game, const string &playerName) :
+    name(playerName), hand(new Hand()), ordersList(new OrdersList(game)), negotiatedPlayers(negotiatedPlayers) {}*/
+
+
+
+
 // Default constructor
 Player::Player(const string& playerName)
     : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers) {

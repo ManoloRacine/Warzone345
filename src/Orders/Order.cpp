@@ -68,6 +68,11 @@ string Order::getLabel(){
 
 //order list
 
+OrdersList::OrdersList(GameEngine *gameEngine) : game(gameEngine){
+  Subject::attach((ILogObserver*)game->logObserver);
+}
+
+
 OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
 
 OrdersList::OrdersList(const OrdersList &oldList){
@@ -548,7 +553,7 @@ std::string OrdersList::castOrderType(Order * o){
 
 std::string OrdersList::stringToLog() {
   Order &o = *orders.back();
-  std::string orderType = castOrderType(&o);
+  std::string orderType = o.getLabel();
 
   std::stringstream stream;
   stream << "ORDER LIST: ";

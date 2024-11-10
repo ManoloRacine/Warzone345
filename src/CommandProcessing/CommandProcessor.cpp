@@ -193,10 +193,12 @@ CommandProcessor::CommandProcessor() = default;
 
 CommandProcessor::CommandProcessor(GameEngine* game) {
     this->gameEngine = game;
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &copy) {
     commands = copy.commands;
+    Subject::attach((ILogObserver*)copy.gameEngine->logObserver);
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &copy, GameEngine* game) {

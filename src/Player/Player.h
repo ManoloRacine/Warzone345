@@ -13,6 +13,7 @@ class Territory;
 class Order;
 class OrdersList;
 
+
 using namespace std;
 
 class Player {
@@ -32,9 +33,10 @@ public:
     Player();
 
     Player(const string& playerName);
+    //Player(GameEngine* game, const string& playerName);
 
     // Copy constructor
-    Player(const Player& other); 
+    Player(const Player& other);
 
     // Destructor
     ~Player();

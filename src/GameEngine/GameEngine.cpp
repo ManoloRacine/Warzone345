@@ -176,6 +176,7 @@ void ExecuteOrdersState::changeState(GameEngine *gameEngine, string stateInput) 
     else {
         throw stateInput;
     }
+
 }
 
 //returns a singleton representing this state
@@ -225,8 +226,8 @@ GameState* GameEngine::getCurrentState() const {
 }
 
 void GameEngine::changeState(string stateInput) {
-    gameEngineState->changeState(this, stateInput);
     Subject::notify(this);
+    gameEngineState->changeState(this, stateInput);
 }
 
 void GameEngine::setState(GameState &newState) {
@@ -260,7 +261,7 @@ std::string GameEngine::stringToLog() {
     std::stringstream stream;
     stream << "GAME ENGINE: ";
     stream << "State transition to ";
-    stream << GameEngine::getCurrentState();
+    stream << GameEngine::getCurrentState()->getName();
     return stream.str();
 }
 
