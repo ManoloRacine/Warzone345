@@ -821,11 +821,9 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
                         cout<<"\n--------------------------  Advance  --------------------------"<<endl;
                         //validate run excute internally
                         players[i]->getOrdersList()->getList()[0]->validate();
-
                         //remove the order from the list, pop first element
                         players[i]->getOrdersList()->remove(0);
 
-                        cout<<"inside advance at the end" << endl;
                     }
                     else if (orderType == "airlift") {
                         cout<<"\n--------------------------  Airlift --------------------------"<<endl;

@@ -238,6 +238,12 @@ bool Deploy::validate(Player* player, int armies, Territory* target){
   int armies = getTroops();
   Territory* target = getTarget();
 
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !target) {
+    std::cout << "Deploy Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
       cout << "Deployment Valid" << endl;
       execute(player, armies, target);
@@ -333,6 +339,7 @@ bool Advance::validate(Player* player, int armies, Territory* source, Territory*
   && !player->isNegotiatedWith(target->getOwner())){
     cout << "Advance Order is Valid" << endl;
     execute(player, armies, source, target);
+    return true;
   }
   else
     cout << "Advance Order Invalid" << endl;
@@ -346,12 +353,19 @@ bool Advance::validate(){
   Territory* source = getSource();
   Territory* target = getTarget();
 
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !source || !target) {
+    std::cout << "Advance Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
   && armies <= source->getArmies() 
   && !player->isNegotiatedWith(target->getOwner())){
     cout << "Advance Order is Valid" << endl;
     execute(player, armies, source, target);
+    return true;
   }
   else
     cout << "Advance Order Invalid" << endl;
@@ -507,6 +521,12 @@ bool Airlift::validate() {
   Territory* source = getSource();
   Territory* target = getTarget();
 
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !source || !target) {
+    std::cout << "Airlift Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+
   if(source->getOwner() == target->getOwner()
     && armies <= source->getArmies()
     && hasCard("airlift", player)){
@@ -627,6 +647,12 @@ return false;
 bool Bomb::validate(){
   Player* player = getUser();
   Territory* target = getTarget();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !target) {
+    std::cout << "Bomb Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
   
   bool adjacent = false;
   for(int i = 0; i < target->getConnectedTerritories().size(); i++){
@@ -743,6 +769,12 @@ bool Blockade::validate(Player* player, Territory* source){
 bool Blockade::validate(){
   Player* player = getUser();
   Territory* source = getSource();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !source) {
+    std::cout << "Blockade Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
   
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && hasCard("blockade", player)){
@@ -856,6 +888,12 @@ bool Negotiate::validate(Player* user, Player* targeted){
 bool Negotiate::validate(){
   Player* user = getUser();
   Player* targeted = getTargeted();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!user || !targeted) {
+    std::cout << "Advance Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
   
   if (user->getName() != targeted->getName()
    &&hasCard("diplomacy", user)){
