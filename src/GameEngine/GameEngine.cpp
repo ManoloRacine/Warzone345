@@ -470,7 +470,7 @@ void GameEngine::mainGameLoop() {
     CommandProcessor commandProcessor;
     MapLoader mapLoader;
     Map loadedMap;
-    mapLoader.loadMap(loadedMap,"../res/maps/europe.txt");
+    mapLoader.loadMap(loadedMap,"../res/maps/smallAfrica.txt");
     cout << "loadingMap: usa.txt..." << endl;
     game.gameMap = new Map(loadedMap);
     bool result = loadedMap.validate();
@@ -478,8 +478,8 @@ void GameEngine::mainGameLoop() {
     Player* player1 = new Player("bob");
     game.playerList.push_back(player1);
     cout << "adding player bob" << endl;
-    //Player* player2 = new Player("sam");
-    //game.playerList.push_back(player2);
+    Player* player2 = new Player("sam");
+    game.playerList.push_back(player2);
     cout << "adding player sam" << endl;
     cout << "Assigning territories" << endl;
     game.assignTerritoriesToPlayers(loadedMap, game.playerList);
@@ -504,6 +504,7 @@ void GameEngine::mainGameLoop() {
 
         if (game.playerList.size() <= 1) {
             setState(WinState::getInstance());
+            cout << game.playerList[0]->getName() << " wins the game"<< endl;
             play = false;
         }
      }
@@ -522,7 +523,7 @@ void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
 
         //set minimal troops for player if less than 3
         if (numTroops < 3) {
-        player->setReinforcements(3 + player->getReinforcements());
+        player->setReinforcements(2 + player->getReinforcements());
         }
         cout << player->getName() <<" recieves " << player->getReinforcements() << " troops." << endl;
     }
@@ -565,7 +566,7 @@ void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
 
 
 void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
-   
+    
     //Vector storing number players with turn status
     int numPlayers = players.size();
     //create vector with size equal to num players and set true
@@ -579,7 +580,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     string targetTerritory;
     string opposingPlayerName;
 
-
+    cout<<"Issuing Orders" << endl;
     //While orders are still being issued
     while(playersIssuingOrders) {
         //looping until player puts in a valid order
@@ -619,6 +620,10 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     if (choice == "deploy"){
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
+                        if (cin.fail()) {
+                            numArmies = 0;
+                            cin.clear();
+                        }
                         int playerTroops = (players[i]->getReinforcements());
 
                         if(playerTroops-numArmies < 0) {
@@ -646,6 +651,10 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     else if (choice == "advance") {
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
+                        if (cin.fail()) {
+                            numArmies = 0;
+                            cin.clear();
+                        }
                         cout << "Enter name of source territory:" << endl;
                         getline(cin >> ws, sourceTerritory);
                         cout << "Enter name of target territory:" << endl;
@@ -667,6 +676,10 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     else if (choice == "airlift") {
                         cout << "Enter number of troops to move:" << endl;
                         cin >> numArmies;
+                        if (cin.fail()) {
+                            numArmies = 0;
+                            cin.clear();
+                        }
                         cout << "Enter name of source territory:" << endl;
                         getline(cin >> ws, sourceTerritory);
                         cout << "Enter name of target territory:" << endl;
@@ -762,7 +775,6 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
     //First loop through all players orderlist search for deploy orders
     for (int i = 0; i < players.size(); i++) {
         int orderListSize = players[i]->getOrdersList()->getList().size();
-        cout<<"number of orders is: " << orderListSize<<endl;
         for (int j = 0; j < orderListSize; j++) {
             
             //if the order list size is 0 no orders left skip
@@ -780,7 +792,6 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
                 //regardeless of validation remove the deploy order
                 players[i]->getOrdersList()->remove(j);
                 //move back one index because remove shifted the vector
-            // delete deployOrder;
                 j--;
                 //track the decreased size to prevent out of bounds
                 orderListSize--;
@@ -793,13 +804,19 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
 
     while(execute) {
         for (int i = 0; i < players.size(); i++) {
-            if(playerNotDoneExecuting[i] == true) {
-            if (players[i]->getOrdersList()->getList().size() == 0) {
+            //firstly check if player has any territories
+            if (players[i]->getTerritories().empty() || players[i]->getTerritories()[0] == nullptr) {
+                //remove the player at the specified index from the vector of player
+                players.erase(players.begin()+i);
+                break;
+            }
+            else if(playerNotDoneExecuting[i] == true) {
+                if (players[i]->getOrdersList()->getList().size() == 0) {
                     playerNotDoneExecuting[i] = false;  
-            } 
+                } 
                 else {
                     //get label to compare with order name later
-                    string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
+                    string orderType = toLower(players[i]->getOrdersList()->getList()[0]->getLabel());
                     if (orderType == "advance") {
                         cout<<"\n--------------------------  Advance  --------------------------"<<endl;
                         //validate run excute internally
@@ -830,7 +847,7 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
                         players[i]->getOrdersList()->getList()[0]->validate();
                         players[i]->getOrdersList()->remove(0);
                     }
-                    }
+                }
             }
             bool allPlayersDone = true;
             // Check if all players are done

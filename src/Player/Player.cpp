@@ -171,6 +171,7 @@ bool Player::removeTerritories(Territory* territory){
             if (card == currentCard)
             {
                 player->getHand()->play(player->getHand()->getCards()[i]);
+                
                 return true;
             }
         }

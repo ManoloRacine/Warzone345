@@ -39,7 +39,7 @@ void testReinforcementPhase() {
     GameEngine game;
     MapLoader mapLoader;
     Map loadedMap;
-    mapLoader.loadMap(loadedMap,"../res/maps/europe.txt");
+    mapLoader.loadMap(loadedMap,"../res/maps/smallAfrica.txt");
     cout << "loadingMap: usa.txt..." << endl;
     game.gameMap = new Map(loadedMap);
     bool result = loadedMap.validate();

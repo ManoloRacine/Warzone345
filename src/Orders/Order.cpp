@@ -398,6 +398,7 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
       }
 
       if(target->getArmies() == 0){
+        target->getOwner()->removeTerritories(target);
         target->setOwner(user);
         user->addTerritories(target);
         user->setConqueredATerritory(true);
@@ -407,7 +408,7 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
         cout << "Territory " << target->getName() << " conquered by " << user->getName() << endl;
       }
       else{
-        cout << "Attack Failed " << target->getName() << " remains in " << user->getName() << "'s possession." << endl;
+        cout << "Attack Failed " << target->getName() << " remains in " << source->getName() << "'s possession." << endl;
       }
 
     }
@@ -759,6 +760,7 @@ static Player* neutral = new Player("neutral");
 
 //execute the blockade function
 void Blockade::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) {
+  source->getOwner()->removeTerritories(source);
   source->setArmies(source->getArmies()*2);
   source->setOwner(neutral);
   neutral->addTerritories(source);

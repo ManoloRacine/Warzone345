@@ -1,0 +1,20 @@
+[Map]
+author=Sean O'Connor
+warn=yes
+image=Africa.bmp
+wrap=no
+scroll=horizontal
+
+[Continents]
+Eastern Africa=2
+The Horn=20
+
+
+[Territories]
+South Sudan,421,253,The Horn,Ethiopia,Kenya,Uganda
+Eritrea,507,199,The Horn,Somalia,Ethiopia
+Ethiopia,510,256,The Horn,Eritrea,Somalia,Kenya,South Sudan
+Somalia,584,274,The Horn,Eritrea,Ethiopia,Kenya
+
+Uganda,452,323,Eastern Africa,South Sudan,Kenya
+Kenya,498,330,Eastern Africa,South Sudan,Ethiopia,Somalia,Uganda
