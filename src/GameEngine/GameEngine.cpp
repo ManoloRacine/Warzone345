@@ -717,100 +717,94 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
 
 
 void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
-vector<bool> playerDoneExecuting(players.size(), false);
-bool execute = true;  
-//First loop through all players orderlist search for deploy orders
-for (int i = 0; i < players.size(); i++) {
-    int orderListSize = players[i]->getOrdersList()->getList().size();
-    cout<<"number of orders is: " << orderListSize<<endl;
-    for (int j = 0; j < orderListSize; j++) {
-        
-        //if the order list size is 0 no orders left skip
-        if (orderListSize == 0) {
-            playerDoneExecuting[i] = true;
-            break;
-        }
-
-            string order = toLower(players[i]->getOrdersList()->getList()[j]->getLabel());
-            cout<<"Order type is: " << order<< endl;
-        if (order == "deploy") {
-            cout<<"-------------------------- Deploying  --------------------------"<<endl;
-            players[i]->getOrdersList()->getList()[j]->validate();
-            
-            //validate internally calls the excute method if conditions satisfied
-            //regardeless of validation remove the deploy order
-            players[i]->getOrdersList()->remove(j);
-            //move back one index because remove shifted the vector
-           // delete deployOrder;
-            j--;
-            //track the decreased size to prevent out of bounds
-            orderListSize--;
-
-        }
-    }   
-}
-
-//issue round robin players orders
-
-while(execute) {
-    cout<<"Number of players is " << players.size();
+    vector<bool> playerNotDoneExecuting(players.size(), true);
+    bool execute = true;  
+    //First loop through all players orderlist search for deploy orders
     for (int i = 0; i < players.size(); i++) {
-        cout<<"inside the round robin"<<endl;
-        if(!playerDoneExecuting[i]) {
-           if (players[i]->getOrdersList()->getList().size() == 0 || players[i]->getOrdersList()->getList()[0] == nullptr) {
-                playerDoneExecuting[i] = true;  
-           } 
-            else {
-                //get label to compare with order name later
-                string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
-                if (orderType == "advance") {
-                    cout<<"-------------------------- Advance  --------------------------"<<endl;
-                    players[i]->getOrdersList()->getList()[0]->validate();
+        int orderListSize = players[i]->getOrdersList()->getList().size();
+        cout<<"number of orders is: " << orderListSize<<endl;
+        for (int j = 0; j < orderListSize; j++) {
+            
+            //if the order list size is 0 no orders left skip
+            if (orderListSize == 0) {
+                playerNotDoneExecuting[i] = false;
+                break;
+            }
 
-                    //remove the order from the list, pop first element
-                    players[i]->getOrdersList()->remove(0);
+                string order = toLower(players[i]->getOrdersList()->getList()[j]->getLabel());
+            if (order == "deploy") {
+                cout<<"\n--------------------------  Deploying  --------------------------"<<endl;
+                players[i]->getOrdersList()->getList()[j]->validate();
+                
+                //validate internally calls the excute method if conditions satisfied
+                //regardeless of validation remove the deploy order
+                players[i]->getOrdersList()->remove(j);
+                //move back one index because remove shifted the vector
+            // delete deployOrder;
+                j--;
+                //track the decreased size to prevent out of bounds
+                orderListSize--;
 
-                    cout<<"inside advance at the end" << endl;
+            }
+        }   
+    }
+
+    //issue round robin players orders
+
+    while(execute) {
+        for (int i = 0; i < players.size(); i++) {
+            if(playerNotDoneExecuting[i] == true) {
+            if (players[i]->getOrdersList()->getList().size() == 0) {
+                    playerNotDoneExecuting[i] = false;  
+            } 
+                else {
+                    //get label to compare with order name later
+                    string orderType = toLower(players[i]->getOrdersList()->getList()[i]->getLabel());
+                    if (orderType == "advance") {
+                        cout<<"\n--------------------------  Advance  --------------------------"<<endl;
+                        //validate run excute internally
+                        players[i]->getOrdersList()->getList()[0]->validate();
+
+                        //remove the order from the list, pop first element
+                        players[i]->getOrdersList()->remove(0);
+
+                        cout<<"inside advance at the end" << endl;
+                    }
+                    else if (orderType == "airlift") {
+                        cout<<"\n--------------------------  Airlift --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                    else if (orderType == "bomb") {
+                        cout<<"\n--------------------------  Bomb  --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                    else if (orderType == "blockade") {
+                        cout<<"\n--------------------------  Blockade  --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                    else if (orderType == "negotiate") {
+                        cout<<"\n--------------------------  Deploying  --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                    }
+            }
+            bool allPlayersDone = true;
+            // Check if all players are done
+            for (int j = 0; j < players.size(); j++) {
+                if (playerNotDoneExecuting[j] == true) {
+                    allPlayersDone = false;
+                    break;
                 }
-                else if (orderType == "airlift") {
-                    cout<<"-------------------------- Airlift --------------------------"<<endl;
-                    players[i]->getOrdersList()->getList()[0]->validate();
-                    players[i]->getOrdersList()->remove(0);
-                }
-                else if (orderType == "bomb") {
-                    cout<<"-------------------------- Bomb  --------------------------"<<endl;
-                    players[i]->getOrdersList()->getList()[0]->validate();
-                    players[i]->getOrdersList()->remove(0);
-                }
-                else if (orderType == "blockade") {
-                    cout<<"-------------------------- Blockade  --------------------------"<<endl;
-                    players[i]->getOrdersList()->getList()[0]->validate();
-                    players[i]->getOrdersList()->remove(0);
-                }
-                else if (orderType == "negotiate") {
-                    cout<<"-------------------------- Deploying  --------------------------"<<endl;
-                    players[i]->getOrdersList()->getList()[0]->validate();
-                    players[i]->getOrdersList()->remove(0);
-                }
-                }
+            }
+            if (allPlayersDone) {
+                execute = false;
+            }
         }
-        
-                bool allPlayersDone = true;
-                    // Check if all players are done
-                    for (int j = 0; j < players.size(); j++) {
-                        if (playerDoneExecuting[j] == false) {
-                            allPlayersDone = false;
-                            break;
-                        }
-                    }
-                    if (allPlayersDone) {
-                        execute = false;
-                    }
-    cout<<"inside the round robin at the very end"<<endl;
     }
-    
-    }
-
 }
 
 
@@ -852,16 +846,22 @@ Player* GameEngine::getPlayerByName(vector<Player*>& players, string targetPlaye
     return(nullptr);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+void resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
+    for (int i; i < players.size(); i++) {
+        //reset concquered territory status
+        if (players[i]->getConqueredATerritory() == true) {
+            players[i]->getHand()->draw(deck);
+            players[i]->setConqueredATerritory(false);
+        }
+        //initialize some empty vectors
+        vector<Territory*>  emptyToAttack = {};
+        vector<Territory*>  emptyToDefend = {};
+        //set territoies to attack and to defend to empty vectors
+        players[i]->setTerritoriesToAttack(emptyToAttack);
+        players[i]->setTerritoriesToDefend(emptyToDefend);
+        //resets player negotiations
+        players[i]->clearNegotiations();
+        players[i]->getOrdersList()->getList().clear();
+   
+    }
+}

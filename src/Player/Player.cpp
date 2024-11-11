@@ -129,18 +129,14 @@ void Player::printPlayer() const {
 // Method to return a list of territories to defend
 vector<Territory*> Player::toDefend(Territory* defendingTerritories) {
     territoriesToDefend.push_back(defendingTerritories);
-    for (int i = 0; i < territoriesToDefend.size(); i++) {
-        cout << territoriesToDefend[i]->getName() << " is defending" << endl;
-    }
+    cout<< "Defending territory is " << defendingTerritories<< endl;
     return territoriesToDefend;
 }
 
 // Method to return a list of territories to attack
 vector<Territory*> Player::toAttack(Territory* attackingTerritories) {
     territoriesToAttack.push_back(attackingTerritories);
-    for (int i = 0; i < territoriesToAttack.size(); i++) {
-         cout << territoriesToAttack[i]->getName() << " is attacking" << endl;
-    }
+    cout<< "Attacking territory is " << attackingTerritories<<endl;
     return territoriesToAttack;
 }
 
@@ -194,22 +190,3 @@ void Player::clearNegotiations() {
     negotiatedPlayers.clear();
 }
 
-void resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
-    for (int i; i < players.size(); i++) {
-        //reset concquered territory status
-        if (players[i]->getConqueredATerritory() == true) {
-            players[i]->getHand()->draw(deck);
-            players[i]->setConqueredATerritory(false);
-        }
-        //initialize some empty vectors
-        vector<Territory*>  emptyToAttack = {};
-        vector<Territory*>  emptyToDefend = {};
-        //set territoies to attack and to defend to empty vectors
-        players[i]->setTerritoriesToAttack(emptyToAttack);
-        players[i]->setTerritoriesToDefend(emptyToDefend);
-        //resets player negotiations
-        players[i]->clearNegotiations();
-        players[i]->getOrdersList()->getList().clear();
-   
-    }
-}

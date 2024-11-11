@@ -143,7 +143,7 @@ class GameEngine {
     Territory *getTerritoryByName(Map &map, string targetName);
     Territory *getTerritoriesByName(Map &map, string territory);
     Player* getPlayerByName(std::vector<Player*>& players, string targetPlayer);
-    
+    void resetPlayerStatuses(vector<Player*>& players, Deck* deck);
 
 
     private:
