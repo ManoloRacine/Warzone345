@@ -350,9 +350,6 @@ void GameEngine::startupPhase() {
                 cout << "Game Set Up Succesfull..." << endl;
                 cout << "Starting Game..." << endl;
                 cout << "Current State: " << *this << endl;
-                reinforcementPhase(loadedMap, playerList);
-                issueOrdersPhase(loadedMap,playerList);
-                orderExecutionPhase(playerList);
 
             } else if(!isMapLoaded) {
                 cout << "Can't proceed: Map not loaded" << endl;
@@ -468,6 +465,49 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
 //----------------A2-PART3-Griffin-Sin-Chan---------------//
 
 
+void GameEngine::mainGameLoop() {
+    GameEngine game;
+    CommandProcessor commandProcessor;
+    MapLoader mapLoader;
+    Map loadedMap;
+    mapLoader.loadMap(loadedMap,"../res/maps/europe.txt");
+    cout << "loadingMap: usa.txt..." << endl;
+    game.gameMap = new Map(loadedMap);
+    bool result = loadedMap.validate();
+    cout << "Map validation is: " << result << endl;
+    Player* player1 = new Player("bob");
+    game.playerList.push_back(player1);
+    cout << "adding player bob" << endl;
+    //Player* player2 = new Player("sam");
+    //game.playerList.push_back(player2);
+    cout << "adding player sam" << endl;
+    cout << "Assigning territories" << endl;
+    game.assignTerritoriesToPlayers(loadedMap, game.playerList);
+    cout << "Setting Reinforcement pools" << endl;
+    //game.setReinforcementPools(game.playerList); gamestart up give 50 troops
+    game.draw2cards(game.playerList);
+    cout << *player1 << endl;
+   // cout << *player2 << endl;
+    
+    bool play = true;
+     while (play) {
+        setState(AssignReinforcementState::getInstance());
+        game.resetPlayerStatuses(playerList, gameDeck);
+        game.reinforcementPhase(loadedMap, game.playerList);
+        
+        setState(IssueOrdersState::getInstance());
+        game.issueOrdersPhase(loadedMap, game.playerList);
+
+        setState(ExecuteOrdersState::getInstance());
+        game.orderExecutionPhase(game.playerList);
+        
+
+        if (game.playerList.size() <= 1) {
+            setState(WinState::getInstance());
+            play = false;
+        }
+     }
+}
 void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
 
     vector<Continent*> continents = map.getContinents();
@@ -846,7 +886,7 @@ Player* GameEngine::getPlayerByName(vector<Player*>& players, string targetPlaye
     return(nullptr);
 }
 
-void resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
+void GameEngine::resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
     for (int i; i < players.size(); i++) {
         //reset concquered territory status
         if (players[i]->getConqueredATerritory() == true) {
@@ -865,3 +905,4 @@ void resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
    
     }
 }
+

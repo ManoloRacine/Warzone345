@@ -30,7 +30,10 @@ void testStartupPhase() {
     game.startupPhase();
 }
 
-
+void testMainGameLoop() {
+    GameEngine game;
+    game.mainGameLoop();
+}
 
 void testReinforcementPhase() {
     GameEngine game;

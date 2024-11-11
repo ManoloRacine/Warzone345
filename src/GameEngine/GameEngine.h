@@ -136,6 +136,7 @@ class GameEngine {
     //---------------------------------------
 
     //------------- A2-P3 CHANGES -------------- ( by Griffin)
+    void mainGameLoop();
     void reinforcementPhase(Map& map, std::vector<Player*>& players);
     void issueOrdersPhase(Map& map, std::vector<Player*>& players);
     void orderExecutionPhase(std::vector<Player*>& players);
