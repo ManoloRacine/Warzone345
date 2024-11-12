@@ -80,6 +80,8 @@ void testOrdersLists()
     player2->addTerritories(portugal);
     player1->addTerritories(england);
     player1->addTerritories(romania);
+
+    cout << "Creation of order" << endl;
     
     //creation of orders
     Deploy *deployOrder1 = new Deploy(player1, nullptr, 4, nullptr, china);
@@ -89,6 +91,7 @@ void testOrdersLists()
     Blockade *blockadeOrder = new Blockade(player1, nullptr, 0, romania, romania);
     Negotiate *negotiate = new Negotiate(player1, player2, 0, nullptr, nullptr);
     Advance *advanceOrder2 = new Advance(player1, player2, 0, china, nullptr);
+
 
     //demonstrating the Orders
     cout << "\nOrder's start below:" << endl;

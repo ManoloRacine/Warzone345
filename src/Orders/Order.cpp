@@ -103,22 +103,7 @@ OrdersList &OrdersList::operator=(const OrdersList &copyList){
   return *this;
 }
 
-// print out the order list
-std::ostream &operator<<(std::ostream &stream, const OrdersList &ol){
-  unsigned listLength = ol.orders.size();
 
-  for (unsigned l = 0; l < listLength; l++){
-    stream << l + 1 << " - " << ol.orders[l]->getLabel() << " | ";
-  }
-  stream << "\n";
-  return stream;
-}
-
-/*
-vector<Order*> *OrdersList::getList() {
-  return &this->orders;
-}
-*/
 
 std::vector<Order*> OrdersList::getList() const {
     return orders;
@@ -133,10 +118,10 @@ ostream &Deploy::orderCout(ostream &output) const {
 }
 //constructor
 Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Deploy"){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 Deploy::Deploy(GameEngine* game, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : game(game), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Deploy"){Subject::attach((ILogObserver*)game->logObserver);}
+    : game(game), user(user), targeted(targeted), troops(troops), source(source), target(target){Subject::attach((ILogObserver*)game->logObserver);}
 
 //Getters and setters for user
 Player* Deploy::getUser() const{
@@ -248,10 +233,7 @@ std::ostream &Advance::orderCout(std::ostream &output) const { return output << 
 Advance::~Advance() = default;
 
 Advance::Advance(GameEngine* game,Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : game(game), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){Subject::attach((ILogObserver*)game->logObserver);}
-
-Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){}
+    : game(game), user(user), targeted(targeted), troops(troops), source(source), target(target){Subject::attach((ILogObserver*)game->logObserver);}
 
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
@@ -310,7 +292,7 @@ return "advance";
 
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
   && armies <= source->getArmies() 
   && !player->isNegotiatedWith(target->getOwner())){
@@ -425,10 +407,10 @@ Airlift::~Airlift() = default;
 
 //constructor
 Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift"){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 Airlift::Airlift(GameEngine *gameEng, Player *user, Player *targeted, int troops, Territory *source,
-  Territory *target): game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift") {
+  Territory *target): game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target){
   Subject::attach((ILogObserver*)game->logObserver);
 }
 
@@ -550,10 +532,10 @@ Order *Airlift::clone() const { return new Airlift(*this); }
 
 // constructor for bomb
 Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Bomb"){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 Bomb::Bomb(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-  : game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift") {Subject::attach((ILogObserver*)game->logObserver);}
+  : game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target) {Subject::attach((ILogObserver*)game->logObserver);}
 
 //destructor for bomb
 Bomb::~Bomb() = default;
@@ -686,10 +668,10 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 
 //Constructor
 Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){Subject::attach((ILogObserver*)game->logObserver);}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 Blockade::Blockade(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){Subject::attach((ILogObserver*)game->logObserver);}
+    : game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target){Subject::attach((ILogObserver*)game->logObserver);}
 
 
 
@@ -815,10 +797,10 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 
 //constructor
 Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate"){Subject::attach((ILogObserver*)game->logObserver);}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 Negotiate::Negotiate(GameEngine *gameEng, Player *user, Player *targeted, int troops, Territory *source,
-  Territory *target): game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate") {
+  Territory *target): game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target){
   Subject::attach((ILogObserver*)game->logObserver);
 }
   

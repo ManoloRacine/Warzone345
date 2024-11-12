@@ -72,11 +72,7 @@ public:
     bool getConqueredATerritory() const;
     void setConqueredATerritory(const bool captured);
 
-     // Getters and Setters for for NegociatePlayers
-     set<Player*> getNegotiatedPlayers() const;
-     void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
-
-     // Getters and Setters for for NegociatePlayers
+     // Getters and Setters for for NegotiatePlayers
      set<Player*> getNegotiatedPlayers() const;
      void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
 

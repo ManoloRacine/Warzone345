@@ -104,7 +104,6 @@ private:
   int troops;
   Territory* target;
   Territory* source;
-  string label;
 public:
   bool validate(Player* player, int armies, Territory* target);
   bool validate() override;
@@ -186,7 +185,6 @@ public:
   //get label
   string getLabel() const override;
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -235,7 +233,6 @@ public:
   //get label
   string getLabel() const override;
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -285,7 +282,6 @@ public:
   //get label
   string getLabel() const override;
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -307,10 +303,15 @@ public:
   bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  std::string stringToLog() override;
+
   Blockade(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+
   void execute(Player* user, Territory* source);  
   ~Blockade() override;
+
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+
    //Getters and setters for user
   Player* getUser() const override;
   void setUser(Player* newUser);
@@ -335,7 +336,6 @@ public:
   string getLabel() const override;
 
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -387,7 +387,6 @@ public:
   string getLabel() const override;
   
 private:
-  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
