@@ -9,6 +9,7 @@
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include <filesystem>
+#include <cstdlib>
 
 using namespace std;
 
@@ -269,7 +270,6 @@ std::string GameEngine::stringToLog() {
 void GameEngine::startupPhase() {
     CommandProcessor commandProcessor; // Create CommandProcessor instance
     std::cout << "Starting game setup. Enter commands:" << std::endl;
-
     bool isMapLoaded = false;
     bool isMapValid = false;
     bool enoughPlayers = false;
@@ -388,7 +388,7 @@ void GameEngine::assignTerritoriesToPlayers(Map& map, vector<Player*>& players) 
 
     int playerIndex = 0;
     int totalPlayers = players.size();
-
+//make a for loop that alternates between the players
     // Traverse mapData and assign each territory to a player in round-robin fashion
     for (auto& pair : map.getMapData()) {
         Territory* territory = pair.second;
@@ -479,11 +479,466 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
     }
 }
 
+//----------------A2-PART3-Griffin-Sin-Chan---------------//
 
 
+void GameEngine::mainGameLoop() {
+    GameEngine game;
+    CommandProcessor commandProcessor;
+    MapLoader mapLoader;
+    Map loadedMap;
+    mapLoader.loadMap(loadedMap,"../res/maps/smallAfrica.txt");
+    cout << "loadingMap: usa.txt..." << endl;
+    game.gameMap = new Map(loadedMap);
+    bool result = loadedMap.validate();
+    cout << "Map validation is: " << result << endl;
+    Player* player1 = new Player("bob");
+    game.playerList.push_back(player1);
+    cout << "adding player bob" << endl;
+    Player* player2 = new Player("sam");
+    game.playerList.push_back(player2);
+    cout << "adding player sam" << endl;
+    cout << "Assigning territories" << endl;
+    game.assignTerritoriesToPlayers(loadedMap, game.playerList);
+    cout << "Setting Reinforcement pools" << endl;
+    //game.setReinforcementPools(game.playerList); gamestart up give 50 troops
+    Deck* deck = new Deck();
+    deck->generateDeck();
+    cout << *player1 << endl;
+    cout << *player2 << endl;
+    
+    bool play = true;
+     while (play) {
+        setState(AssignReinforcementState::getInstance());
+        game.resetPlayerStatuses(game.playerList, deck);
+        game.reinforcementPhase(loadedMap, game.playerList);
+        
+        setState(IssueOrdersState::getInstance());
+        game.issueOrdersPhase(loadedMap, game.playerList);
+
+        setState(ExecuteOrdersState::getInstance());
+        game.orderExecutionPhase(game.playerList);
+        
+
+        if (game.playerList.size() <= 1) {
+            setState(WinState::getInstance());
+            cout << game.playerList[0]->getName() << " wins the game"<< endl;
+            play = false;
+        }
+     }
+}
+void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
+
+    vector<Continent*> continents = map.getContinents();
+    
+    //Distribute normal number of troops to all players
+    cout<<"\n=======================  Reinforcement Phase  ======================="<< endl;
+    for(const auto& player : players) {
+        //# of territories owned divided by 3, rounded down
+        div_t numberOfTroops = div(player->getTerritories().size(),3);
+        int numTroops = numberOfTroops.quot;
+        player->setReinforcements(numTroops);
 
 
+        //set minimal troops for player if less than 3
+        if (numTroops < 3) {
+        player->setReinforcements(3);
+        }
+        cout << player->getName() <<" recieves " << player->getReinforcements() << " troops." << endl;
+    }
 
 
+    //Check for continent bonus
+    //loop throuh all continents
+    for(int i = 0; i < continents.size(); i++) {
+        //player ptr to track the current owner of the territory
+        //bool to say if the territories are owned by the same player
+        Player* tempOwnerPtr = nullptr;
+        bool sameOwner = false;
+        //loop through all the territories of the current continent
+        for (int j = 0; j < continents[i]->getTerritories().size(); j++) {
+            //On the first iteration nullptr is changed to the current territories owner
+            if (tempOwnerPtr == nullptr) {
+                tempOwnerPtr = continents[i]->getTerritories()[j]->getOwner();
+            }
+            //Check to see if the previous territories owner is the same as the current territories owner
+            if (tempOwnerPtr != continents[i]->getTerritories()[j]->getOwner()) {
+                //if not true they are not the same owner and break out of the loop
+                sameOwner = false;
+                break;
+            }
+            else {
+                //the previous owner was the same as the current
+                //the loop goes through all of the continents territories
+                sameOwner = true;
+            }
+        }
+        //if all territories share the same owner give the continent bonus
+        if (sameOwner) {
+            //total troops = current troops + continent bonus
+            int totalTroops = (tempOwnerPtr->getReinforcements() + continents[i]->getBonus());
+            tempOwnerPtr->setReinforcements(totalTroops);
+            cout << tempOwnerPtr->getName() <<" recieves a bonus of " << continents[i]->getBonus()<< " troops." <<endl;
+        }
+    }
+}
 
+
+void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
+    
+    //Vector storing number players with turn status
+    int numPlayers = players.size();
+    //create vector with size equal to num players and set true
+    vector<bool> playerNotDoneTurn(numPlayers, true);
+    vector<bool> playerDoneDeploying(numPlayers, false);
+    bool playersIssuingOrders = true;
+    bool validOrder = false;
+    string choice;
+    int numArmies;
+    string sourceTerritory;
+    string targetTerritory;
+    string opposingPlayerName;
+
+    cout<<"\n=======================  Issue Order Phase  ======================="<< endl;
+    //While orders are still being issued
+    while(playersIssuingOrders) {
+        //looping until player puts in a valid order
+        //rotate through each player
+        for(int i = 0; i < numPlayers; i++) {
+            //if player not done issuing orders let them issue order
+            if (playerNotDoneTurn[i]) { 
+                validOrder = false;
+                //loop until current player gives a valid order
+                while (!validOrder) {
+                    numArmies = 0;
+                    // ask user for their order
+                    cout << players[i]->getName() << " enter an order: " << endl;
+                    // let user put in order
+                    cin >> choice;
+                    choice = toLower(choice);
+
+                    if (players[i]->getReinforcements() == 0) {
+                        playerDoneDeploying[i] = true;
+                    }
+
+                    //for user to choose deploy
+                    if (!playerDoneDeploying[i]) {
+                        if(choice != "deploy") {
+                            
+                            cout<< "Must deploy all troops First" << endl;
+                            i--;
+                            break;
+                        }
+                    }
+
+                    // using user input create a new order
+                    
+                    //========================================
+                    //Deploy Order
+                    //========================================
+                    if (choice == "deploy"){
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> numArmies;
+                        if (cin.fail()) {
+                            numArmies = 0;
+                            cin.clear();
+                        }
+                        int playerTroops = (players[i]->getReinforcements());
+
+                        if(playerTroops-numArmies < 0) {
+                            cout << "Number entered goes beyond the reinforcement pool" << endl;
+                            cout << playerTroops << " troops remaining" << endl;
+                            i--;
+                            break;
+                        } 
+                            
+                        players[i]->setReinforcements(playerTroops-numArmies);
+                        cout << "Enter name of target territory:" << endl;
+                        getline(cin >> ws, targetTerritory);
+
+                        // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, source territory is unnecessary...null, target territory owned
+                        Deploy *deployOrder = new Deploy(players[i], nullptr, numArmies, nullptr, getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(deployOrder);
+                        validOrder = true;
+                        
+                    } 
+                    //========================================
+                    //Advance Order
+                    //========================================
+                    else if (choice == "advance") {
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> numArmies;
+                        if (cin.fail()) {
+                            numArmies = 0;
+                            cin.clear();
+                        }
+                        cout << "Enter name of source territory:" << endl;
+                        getline(cin >> ws, sourceTerritory);
+                        cout << "Enter name of target territory:" << endl;
+                        getline(cin >> ws, targetTerritory);
+
+
+                        // Pass in the current player and the player being attacked
+                        // getTerritoryByName(map, targetTerritory)->getOwner()... it gets the owner of the territory being attacked or defended
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
+                        Advance *advanceOrder = new Advance(players[i], nullptr, numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(advanceOrder);
+                        validOrder = true;
+                    }
+                    
+                    //========================================
+                    //Airlift Order
+                    //========================================
+                    else if (choice == "airlift") {
+                        cout << "Enter number of troops to move:" << endl;
+                        cin >> numArmies;
+                        if (cin.fail()) {
+                            numArmies = 0;
+                            cin.clear();
+                        }
+                        cout << "Enter name of source territory:" << endl;
+                        getline(cin >> ws, sourceTerritory);
+                        cout << "Enter name of target territory:" << endl;
+                        getline(cin >> ws, targetTerritory);
+
+
+                        // the player issuing the order is also the one being affcted by the order, which is why the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
+                        Airlift *airliftOrder = new Airlift(players[i], players[i], numArmies, getTerritoryByName(map, sourceTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(airliftOrder);
+                        validOrder = true;
+
+
+                    }
+                    //========================================
+                    //Bomb Order
+                    //========================================
+                    else if (choice == "bomb") {
+                        cout << "Enter name of target territory:" << endl;
+                        getline(cin >> ws, targetTerritory);
+
+
+                        // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, from which territory to destination
+                        Bomb *bombOrder = new Bomb(players[i], players[i], 0, nullptr, getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(bombOrder);
+                        validOrder = true;
+
+
+                    }
+                    //========================================
+                    //Blockade Order
+                    //========================================
+                    else if (choice == "blockade") {
+                        
+                        cout << "Enter name of target territory:" << endl;
+                        getline(cin >> ws, targetTerritory);
+
+
+                        // the player issuing the order is also the one being affcted by the order, which is way the same player is passed twice
+                        // the rest of the inputs are inputted by the user, number of troops to transfer, source territory and targte territory are the same
+                        Blockade *blockadeOrder = new Blockade(players[i], players[i], 0, getTerritoryByName(map, targetTerritory), getTerritoryByName(map, targetTerritory));
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(blockadeOrder);
+                        validOrder = true;
+
+
+                    }
+                    //========================================
+                    //Negotiate Order
+                    //========================================
+                    else if (choice == "negotiate") {
+                        cout << "Enter name of player to negotiate with:" << endl;
+                        cin >> opposingPlayerName;
+
+
+                        //negotiate only needs current player and opposing player of choosing
+                        Negotiate *negotiateOrder = new Negotiate(players[i], getPlayerByName(players, opposingPlayerName), 0, nullptr, nullptr);
+                        // pass the order onto the current players order list place order inside of the function
+                        players[i]->issueOrder(negotiateOrder);
+                        validOrder = true;
+
+                    }
+                    else if (choice == "done") {
+                        // player is now done issuing orders
+                        playerNotDoneTurn[i] = false;
+                        validOrder = true;
+                    }
+
+                    bool allPlayersDone = true;
+                    // Check if all players are done
+                    for (int j = 0; j < numPlayers; j++) {
+                        if (playerNotDoneTurn[j]) {
+                            allPlayersDone = false;
+                            break;
+                        }
+                    }
+                    if (allPlayersDone) {
+                        playersIssuingOrders = false;
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
+    vector<bool> playerNotDoneExecuting(players.size(), true);
+    bool execute = true;  
+    //First loop through all players orderlist search for deploy orders
+    cout<<"\n=======================  Order Execution Phase  ======================="<< endl;
+    for (int i = 0; i < players.size(); i++) {
+        int orderListSize = players[i]->getOrdersList()->getList().size();
+        for (int j = 0; j < orderListSize; j++) {
+            
+            //if the order list size is 0 no orders left skip
+            if (orderListSize == 0) {
+                playerNotDoneExecuting[i] = false;
+                break;
+            }
+
+                string order = toLower(players[i]->getOrdersList()->getList()[j]->getLabel());
+            if (order == "deploy") {
+                cout<<"\n--------------------------  Deploying  --------------------------"<<endl;
+                players[i]->getOrdersList()->getList()[j]->validate();
+                
+                //validate internally calls the excute method if conditions satisfied
+                //regardeless of validation remove the deploy order
+                players[i]->getOrdersList()->remove(j);
+                //move back one index because remove shifted the vector
+                j--;
+                //track the decreased size to prevent out of bounds
+                orderListSize--;
+
+            }
+        }   
+    }
+
+    //issue round robin players orders
+
+    while(execute) {
+        for (int i = 0; i < players.size(); i++) {
+            //firstly check if player has any territories
+            if (players[i]->getTerritories().empty() || players[i]->getTerritories()[0] == nullptr) {
+                //remove the player at the specified index from the vector of player
+                players.erase(players.begin()+i);
+                break;
+            }
+            else if(playerNotDoneExecuting[i] == true) {
+                if (players[i]->getOrdersList()->getList().size() == 0) {
+                    playerNotDoneExecuting[i] = false;  
+                } 
+                else {
+                    //get label to compare with order name later
+                    string orderType = toLower(players[i]->getOrdersList()->getList()[0]->getLabel());
+                    if (orderType == "advance") {
+                        cout<<"\n--------------------------  Advance  --------------------------"<<endl;
+                        //validate run excute internally
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        //remove the order from the list, pop first element
+                        players[i]->getOrdersList()->remove(0);
+
+                    }
+                    else if (orderType == "airlift") {
+                        cout<<"\n--------------------------  Airlift --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                    else if (orderType == "bomb") {
+                        cout<<"\n--------------------------  Bomb  --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                    else if (orderType == "blockade") {
+                        cout<<"\n--------------------------  Blockade  --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                    else if (orderType == "negotiate") {
+                        cout<<"\n--------------------------  Deploying  --------------------------"<<endl;
+                        players[i]->getOrdersList()->getList()[0]->validate();
+                        players[i]->getOrdersList()->remove(0);
+                    }
+                }
+            }
+            bool allPlayersDone = true;
+            // Check if all players are done
+            for (int j = 0; j < players.size(); j++) {
+                if (playerNotDoneExecuting[j] == true) {
+                    allPlayersDone = false;
+                    break;
+                }
+            }
+            if (allPlayersDone) {
+                execute = false;
+            }
+        }
+    }
+}
+
+
+// Function to convert a string to lowercase
+string GameEngine::toLower(const string& str) {
+    string lowerStr = str;
+    transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(), [](unsigned char c) {
+        return tolower(c);
+    });
+    return lowerStr;
+}
+
+Territory* GameEngine::getTerritoryByName(Map& map, string targetName) {
+    //Iterate through the map data
+    for (auto& pair : map.getMapData()) {
+        //refence second data in pair iterator which is a territory ptr
+        Territory* territory = pair.second;
+
+        //if target name matches current iterations name, return the territory ptr
+        if(toLower(targetName) == toLower(territory->getName())) {
+            return territory;
+        }
+    }
+    //never found return null
+    return(nullptr);
+}
+
+
+Player* GameEngine::getPlayerByName(vector<Player*>& players, string targetPlayer) {
+        //iterate through all players
+        for (auto& player: players) {
+       
+        //if target player name found in the player list return the player ptr
+        if(toLower(targetPlayer) == toLower(player->getName())) {
+            return player;
+        }
+    }
+    //never found return null
+    return(nullptr);
+}
+
+void GameEngine::resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
+    for (int i = 0; i < players.size(); i++) {
+        //reset concquered territory status
+        if (players[i]->getConqueredATerritory() == true) {
+            players[i]->getHand()->draw(deck);
+            cout << " ^ by "<< players[i]->getName() << endl;
+            players[i]->setConqueredATerritory(false);
+        }
+        //initialize some empty vectors
+        vector<Territory*>  emptyToAttack = {};
+        vector<Territory*>  emptyToDefend = {};
+        //set territoies to attack and to defend to empty vectors
+        players[i]->setTerritoriesToAttack(emptyToAttack);
+        players[i]->setTerritoriesToDefend(emptyToDefend);
+        //resets player negotiations
+        players[i]->clearNegotiations();
+        players[i]->getOrdersList()->getList().clear();
+   
+    }
+}
 

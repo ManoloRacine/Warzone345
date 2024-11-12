@@ -11,6 +11,7 @@
 #include "../Map/Map.h"
 #include "../Cards/Cards.h"
 #include "../Logger/LogObserver.h"
+#include "../Player/Player.h"
 
 using namespace std;
 
@@ -136,6 +137,18 @@ class GameEngine: public Subject, ILoggable {
     void draw2cards(std::vector<Player*>& players);
     void printAllMaps(const std::string& mapDirectory);
     //------------------------------------------------
+
+    //------------- A2-P3 CHANGES -------------- ( by Griffin)
+    void mainGameLoop();
+    void reinforcementPhase(Map& map, std::vector<Player*>& players);
+    void issueOrdersPhase(Map& map, std::vector<Player*>& players);
+    void orderExecutionPhase(std::vector<Player*>& players);
+    string toLower(const string &str);
+    Territory *getTerritoryByName(Map &map, string targetName);
+    Territory *getTerritoriesByName(Map &map, string territory);
+    Player* getPlayerByName(std::vector<Player*>& players, string targetPlayer);
+    void resetPlayerStatuses(vector<Player*>& players, Deck* deck);
+
 
     private:
     GameState* gameEngineState;

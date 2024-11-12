@@ -13,7 +13,6 @@ class Territory;
 class Order;
 class OrdersList;
 
-
 using namespace std;
 
 class Player {
@@ -71,7 +70,11 @@ public:
 
     // Getters and Setters for conqueredATerritory
     bool getConqueredATerritory() const;
-    void setConqueredATerritory(const bool& captured);
+    void setConqueredATerritory(const bool captured);
+
+     // Getters and Setters for for NegociatePlayers
+     set<Player*> getNegotiatedPlayers() const;
+     void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
 
      // Getters and Setters for for NegociatePlayers
      set<Player*> getNegotiatedPlayers() const;
@@ -98,8 +101,6 @@ bool isNegotiatedWith(Player* other);
 
 void clearNegotiations();
 
-//reset statuses that may have been altered during play
-void resetPlayerStatuses(std::vector<Player*>& players, Deck* deck);
 };
 
 //checks if a player has a card in hand

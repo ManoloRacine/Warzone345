@@ -10,59 +10,11 @@ Order::Order(){}
 Order::~Order() = default;
 std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderCout(stream); }
 
-//Getters and setters for user
-Player* Order::getUser() const{
-  return user;
-}
 
-void Order::setUser(Player* newUser){
-  user = newUser;
-}
 
-//Getters and setters for targeted
-Player* Order::getTargeted() const{
-  return targeted;
-}
-
-void Order::setTargeted(Player* newTargeted){
-  targeted = newTargeted;
-}
-
-//Getters and setters for Troops
-int Order::getTroops() const{
-  return troops;
-}
-
-void Order::setTroops(int newTroops){
-  troops = newTroops;
-}
-
-//Getters and setters for target
-Territory* Order::getTarget() const{
-  return target;
-}
-
-void Order::setTarget(Territory* newTarget){
-  target = newTarget;
-}
-
-//Getters and setters for source
-Territory* Order::getSource() const{
-  return source;
-}
-
-void Order::setSource(Territory* newSource){
-  source = newSource;
-}
-
-//Getters and setters for label
-void Order::setLabel(string newlabel) {
-  label = newlabel;
-}
-
-string Order::getLabel(){
-  return label;
-}
+//Parameterized constructor for common attributes
+    Order::Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+        : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
 
 
@@ -186,16 +138,88 @@ Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Te
 Deploy::Deploy(GameEngine* game, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : game(game), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Deploy"){Subject::attach((ILogObserver*)game->logObserver);}
 
+//Getters and setters for user
+Player* Deploy::getUser() const{
+  return user;
+}
+
+void Deploy::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Deploy::getTargeted() const{
+  return targeted;
+}
+
+void Deploy::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Deploy::getTroops() const{
+  return troops;
+}
+
+void Deploy::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Deploy::getTarget() const{
+  return target;
+}
+
+void Deploy::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Deploy::getSource() const{
+  return source;
+}
+
+void Deploy::setSource(Territory* newSource){
+  source = newSource;
+}
+
+  //get label
+  string Deploy::getLabel() const {
+  return "deploy";
+  }
+
 //Validate method for deploy
 bool Deploy::validate(Player* player, int armies, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end()){
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
       cout << "Deployment Valid" << endl;
       execute(player, armies, target);
       return true;
-  }
+ }
   else
     cout << "Order Invalid" << endl;
     return false;
+    
+}
+
+  bool Deploy::validate(){
+  Player* player = getUser();
+  int armies = getTroops();
+  Territory* target = getTarget();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !target) {
+    std::cout << "Deploy Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end()){
+      cout << "Deployment Valid" << endl;
+      execute(player, armies, target);
+      return true;
+ }
+  else
+    cout << "Order Invalid" << endl;
+    return false; 
 }
 //Overriden execute function that performs the execution
 void Deploy::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
@@ -228,6 +252,62 @@ Advance::Advance(GameEngine* game,Player* user, Player* targeted, int troops, Te
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){}
+
+
+Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+
+    //Getters and setters for user
+Player* Advance::getUser() const{
+  return user;
+}
+
+void Advance::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Advance::getTargeted() const{
+  return targeted;
+}
+
+void Advance::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Advance::getTroops() const{
+  return troops;
+}
+
+void Advance::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Advance::getTarget() const{
+  return target;
+}
+
+void Advance::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Advance::getSource() const{
+  return source;
+}
+
+void Advance::setSource(Territory* newSource){
+  source = newSource;
+}
+
+//get label
+string Advance::getLabel() const{
+return "advance";
+}
+
+
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
   if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
@@ -236,6 +316,33 @@ bool Advance::validate(Player* player, int armies, Territory* source, Territory*
   && !player->isNegotiatedWith(target->getOwner())){
     cout << "Advance Order is Valid" << endl;
     execute(player, armies, source, target);
+    return true;
+  }
+  else
+    cout << "Advance Order Invalid" << endl;
+    return false;
+}
+
+//validate for advance using getters
+bool Advance::validate(){
+  Player* player = getUser();
+  int armies = getTroops();
+  Territory* source = getSource();
+  Territory* target = getTarget();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !source || !target) {
+    std::cout << "Advance Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
+  && armies <= source->getArmies() 
+  && !player->isNegotiatedWith(target->getOwner())){
+    cout << "Advance Order is Valid" << endl;
+    execute(player, armies, source, target);
+    return true;
   }
   else
     cout << "Advance Order Invalid" << endl;
@@ -282,8 +389,8 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
       }
 
       if(target->getArmies() == 0){
+        target->getOwner()->removeTerritories(target);
         target->setOwner(user);
-        targeted->removeTerritories(target);
         user->addTerritories(target);
         user->setConqueredATerritory(true);
 
@@ -292,7 +399,7 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
         cout << "Territory " << target->getName() << " conquered by " << user->getName() << endl;
       }
       else{
-        cout << "Attack Failed " << target->getName() << " remains in " << user->getName() << "'s possession." << endl;
+        cout << "Attack Failed " << target->getName() << " remains in " << source->getName() << "'s possession." << endl;
       }
 
     }
@@ -325,11 +432,86 @@ Airlift::Airlift(GameEngine *gameEng, Player *user, Player *targeted, int troops
   Subject::attach((ILogObserver*)game->logObserver);
 }
 
+    //Getters and setters for user
+Player* Airlift::getUser() const{
+  return user;
+}
+
+void Airlift::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Airlift::getTargeted() const{
+  return targeted;
+}
+
+void Airlift::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Airlift::getTroops() const{
+  return troops;
+}
+
+void Airlift::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Airlift::getTarget() const{
+  return target;
+}
+
+void Airlift::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Airlift::getSource() const{
+  return source;
+}
+
+void Airlift::setSource(Territory* newSource){
+  source = newSource;
+}
+
+//get label
+string Airlift::getLabel() const{
+  return "airlift";
+}
+
 ostream &Airlift::orderCout(ostream &output) const { return output << "Airlift order"; }
 //validation for airlift
 bool Airlift::validate(Player* player, int armies, Territory* source, Territory* target) {
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
-    && find(player->getTerritories().begin(), player->getTerritories().end(), source) == player->getTerritories().end()
+  if(source->getOwner()->getName() == target->getOwner()->getName()
+    && armies <= source->getArmies()
+    && hasCard("airlift", player)){
+      cout << "AirLift Order Validated" << endl;
+      execute(player, armies, source, target);
+      return true;
+  }
+  else{
+    cout << "Airlift order Invalid" << endl;
+    return false;
+  }
+  
+}
+//validation using getters
+bool Airlift::validate() {
+  Player* player = getUser();
+  int armies = getTroops();
+  Territory* source = getSource();
+  Territory* target = getTarget();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !source || !target) {
+    std::cout << "Airlift Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+
+  if(source->getOwner() == target->getOwner()
     && armies <= source->getArmies()
     && hasCard("airlift", player)){
       cout << "AirLift Order Validated" << endl;
@@ -348,7 +530,7 @@ void Airlift::execute(Player* user, Player* targeted, int armies, Territory* sou
   source->setArmies(source->getArmies()-armies);
   target->setArmies(target->getArmies()+armies);
   Subject::notify(this);
-  cout << target->getArmies() <<"Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
+  cout << armies <<" Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
 }
 //Helper function for execute
 void Airlift::execute(Player* player, int armies, Territory* source, Territory* target){
@@ -378,6 +560,56 @@ Bomb::~Bomb() = default;
 
 std::ostream &Bomb::orderCout(std::ostream &output) const { return output << "Bomb order"; }
 
+//Getters and setters for user
+Player* Bomb::getUser() const{
+  return user;
+}
+
+void Bomb::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Bomb::getTargeted() const{
+  return targeted;
+}
+
+void Bomb::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Bomb::getTroops() const{
+  return troops;
+}
+
+void Bomb::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Bomb::getTarget() const{
+  return target;
+}
+
+void Bomb::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Bomb::getSource() const{
+  return source;
+}
+
+void Bomb::setSource(Territory* newSource){
+  source = newSource;
+}
+
+//get label
+string Bomb::getLabel() const{
+  return "bomb";
+}
+
 //validation for bomb
 bool Bomb::validate(Player* user, Territory* target){
   bool adjacent = false;
@@ -388,7 +620,7 @@ bool Bomb::validate(Player* user, Territory* target){
   }
 
   if(adjacent 
-  && find(user->getTerritories().begin(), user->getTerritories().end(), target) == user->getTerritories().end() 
+  && find(user->getTerritories().begin(), user->getTerritories().end(), target) != user->getTerritories().end() 
   && !user->isNegotiatedWith(target->getOwner())
   && hasCard("bomb", user) ){
     cout << "Bomb order Valid" << endl;
@@ -398,7 +630,37 @@ bool Bomb::validate(Player* user, Territory* target){
   cout << "Bomb invalid" << endl;
 return false;
 }
-//execution of the the Bomb order
+
+//validation for bomb
+bool Bomb::validate(){
+  Player* player = getUser();
+  Territory* target = getTarget();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !target) {
+    std::cout << "Bomb Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+  
+  bool adjacent = false;
+  for(int i = 0; i < target->getConnectedTerritories().size(); i++){
+    if(target->getConnectedTerritories()[i]->getOwner() == user){
+      adjacent = true;
+    }
+  }
+
+  if(adjacent 
+  && find(user->getTerritories().begin(), user->getTerritories().end(), target) != user->getTerritories().end() 
+  && !user->isNegotiatedWith(target->getOwner())
+  && hasCard("bomb", user) ){
+    cout << "Bomb order Valid" << endl;
+    execute(user, target);
+    return true;
+  }
+  cout << "Bomb invalid" << endl;
+return false;
+}
+//execution of the Bomb order
 void Bomb::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
   target->setArmies(target->getArmies()/2);
   cout << target->getName() << " has been bombed by " << user->getName() << ". It now has " << target->getArmies() << " troops remaining" << endl;
@@ -424,21 +686,93 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 
 //Constructor
 Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){Subject::attach((ILogObserver*)game->logObserver);}
 
 Blockade::Blockade(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){Subject::attach((ILogObserver*)game->logObserver);}
 
 
+
 //destructor
 Blockade::~Blockade() = default;
+
+//Getters and setters for user
+Player* Blockade::getUser() const{
+  return user;
+}
+
+void Blockade::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Blockade::getTargeted() const{
+  return targeted;
+}
+
+void Blockade::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Blockade::getTroops() const{
+  return troops;
+}
+
+void Blockade::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Blockade::getTarget() const{
+  return target;
+}
+
+void Blockade::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Blockade::getSource() const{
+  return source;
+}
+
+void Blockade::setSource(Territory* newSource){
+  source = newSource;
+}
+
+//get label
+string Blockade::getLabel() const{
+  return "blockade";
+}
 
 
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "Blockade order"; }
 
 //validate Blockade order
 bool Blockade::validate(Player* player, Territory* source){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  && hasCard("blockade", player)){
+    cout << "Blockade Validated" << endl;
+    execute(player, source);
+    return true;
+  }
+  cout << "Blockade invalid" << endl;
+  return false;
+}
+
+//validate Blockade order
+bool Blockade::validate(){
+  Player* player = getUser();
+  Territory* source = getSource();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!player || !source) {
+    std::cout << "Blockade Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+  
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
   && hasCard("blockade", player)){
     cout << "Blockade Validated" << endl;
     execute(player, source);
@@ -454,6 +788,7 @@ static Player* neutral = new Player("neutral");
 
 //execute the blockade function
 void Blockade::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) {
+  source->getOwner()->removeTerritories(source);
   source->setArmies(source->getArmies()*2);
   source->setOwner(neutral);
   neutral->addTerritories(source);
@@ -480,20 +815,90 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 
 //constructor
 Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate"){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate"){Subject::attach((ILogObserver*)game->logObserver);}
 
 Negotiate::Negotiate(GameEngine *gameEng, Player *user, Player *targeted, int troops, Territory *source,
   Territory *target): game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate") {
   Subject::attach((ILogObserver*)game->logObserver);
 }
-
+  
 //destructor
 Negotiate::~Negotiate() = default;
 
-//Validation for Negociate
+//Getters and setters for user
+Player* Negotiate::getUser() const{
+  return user;
+}
+
+void Negotiate::setUser(Player* newUser){
+  user = newUser;
+}
+
+//Getters and setters for targeted
+Player* Negotiate::getTargeted() const{
+  return targeted;
+}
+
+void Negotiate::setTargeted(Player* newTargeted){
+  targeted = newTargeted;
+}
+
+//Getters and setters for Troops
+int Negotiate::getTroops() const{
+  return troops;
+}
+
+void Negotiate::setTroops(int newTroops){
+  troops = newTroops;
+}
+
+//Getters and setters for target
+Territory* Negotiate::getTarget() const{
+  return target;
+}
+
+void Negotiate::setTarget(Territory* newTarget){
+  target = newTarget;
+}
+
+//Getters and setters for source
+Territory* Negotiate::getSource() const{
+  return source;
+}
+
+void Negotiate::setSource(Territory* newSource){
+  source = newSource;
+}
+
+//get label
+string Negotiate::getLabel() const{
+  return "negotiate";
+}
+//Validation for Negotiate
 bool Negotiate::validate(Player* user, Player* targeted){
   if (user != targeted 
   && hasCard("diplomacy", user)){
+    cout << "Negotiation valid" << endl;
+    execute(user, targeted);
+    return true;
+  }
+  cout << "Negotiation invalid" << endl;
+  return false;
+}
+
+
+bool Negotiate::validate(){
+  Player* user = getUser();
+  Player* targeted = getTargeted();
+
+  // Null checks to prevent dereferencing nullptrs
+  if (!user || !targeted) {
+    std::cout << "Advance Order Invalid: Null pointers detected." << std::endl;
+    return false;
+  }
+  
+  if (user->getName() != targeted->getName()
+   &&hasCard("diplomacy", user)){
     cout << "Negotiation valid" << endl;
     execute(user, targeted);
     return true;
