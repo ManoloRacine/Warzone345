@@ -9,6 +9,7 @@
 #include "../Map/Map.h"
 #include "../Player/Player.h"
 #include <filesystem>
+#include <cstdlib>
 
 using namespace std;
 
@@ -485,14 +486,15 @@ void GameEngine::mainGameLoop() {
     game.assignTerritoriesToPlayers(loadedMap, game.playerList);
     cout << "Setting Reinforcement pools" << endl;
     //game.setReinforcementPools(game.playerList); gamestart up give 50 troops
-    game.draw2cards(game.playerList);
+    Deck* deck = new Deck();
+    deck->generateDeck();
     cout << *player1 << endl;
-   // cout << *player2 << endl;
+    cout << *player2 << endl;
     
     bool play = true;
      while (play) {
         setState(AssignReinforcementState::getInstance());
-        game.resetPlayerStatuses(playerList, gameDeck);
+        game.resetPlayerStatuses(game.playerList, deck);
         game.reinforcementPhase(loadedMap, game.playerList);
         
         setState(IssueOrdersState::getInstance());
@@ -514,16 +516,17 @@ void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
     vector<Continent*> continents = map.getContinents();
     
     //Distribute normal number of troops to all players
-    cout << "Adding reinforcements..." << endl;
+    cout<<"\n=======================  Reinforcement Phase  ======================="<< endl;
     for(const auto& player : players) {
         //# of territories owned divided by 3, rounded down
-        int numTroops = ((player->getTerritories().size())/3);
-        player->setReinforcements(numTroops + player->getReinforcements());
+        div_t numberOfTroops = div(player->getTerritories().size(),3);
+        int numTroops = numberOfTroops.quot;
+        player->setReinforcements(numTroops);
 
 
         //set minimal troops for player if less than 3
         if (numTroops < 3) {
-        player->setReinforcements(2 + player->getReinforcements());
+        player->setReinforcements(3);
         }
         cout << player->getName() <<" recieves " << player->getReinforcements() << " troops." << endl;
     }
@@ -580,7 +583,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     string targetTerritory;
     string opposingPlayerName;
 
-    cout<<"Issuing Orders" << endl;
+    cout<<"\n=======================  Issue Order Phase  ======================="<< endl;
     //While orders are still being issued
     while(playersIssuingOrders) {
         //looping until player puts in a valid order
@@ -773,6 +776,7 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
     vector<bool> playerNotDoneExecuting(players.size(), true);
     bool execute = true;  
     //First loop through all players orderlist search for deploy orders
+    cout<<"\n=======================  Order Execution Phase  ======================="<< endl;
     for (int i = 0; i < players.size(); i++) {
         int orderListSize = players[i]->getOrdersList()->getList().size();
         for (int j = 0; j < orderListSize; j++) {
@@ -902,10 +906,11 @@ Player* GameEngine::getPlayerByName(vector<Player*>& players, string targetPlaye
 }
 
 void GameEngine::resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
-    for (int i; i < players.size(); i++) {
+    for (int i = 0; i < players.size(); i++) {
         //reset concquered territory status
         if (players[i]->getConqueredATerritory() == true) {
             players[i]->getHand()->draw(deck);
+            cout << " ^ by "<< players[i]->getName() << endl;
             players[i]->setConqueredATerritory(false);
         }
         //initialize some empty vectors

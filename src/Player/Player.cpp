@@ -6,7 +6,7 @@ using namespace std;
 
 // Default constructor
 Player::Player(const string& playerName)
-    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false)  {
+    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0) {
     // Initialize player with empty territories, hand, and order list
 }
 

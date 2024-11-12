@@ -17,9 +17,11 @@ int main() {
     // cout << command->getCommand() << endl;
     // cout << command->getType() << endl;
 
+    
     //testStartupPhase();
     testMainGameLoop();
     //testReinforcementPhase();
+    //testOrdersLists();
     //testLoadMaps();
     return 0;
 }
