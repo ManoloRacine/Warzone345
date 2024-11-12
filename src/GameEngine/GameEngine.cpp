@@ -504,6 +504,10 @@ void GameEngine::mainGameLoop() {
     //game.setReinforcementPools(game.playerList); gamestart up give 50 troops
     Deck* deck = new Deck();
     deck->generateDeck();
+    player1->getHand()->draw(deck);
+    player1->getHand()->draw(deck);
+    player2->getHand()->draw(deck);
+    player2->getHand()->draw(deck);
     cout << *player1 << endl;
     cout << *player2 << endl;
     

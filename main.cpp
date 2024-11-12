@@ -14,9 +14,9 @@ using namespace std;
 
 int main() {
     cout << "-----------------------------testLoggingObserver()-----------------------------------" << std::endl;
-    testLoggingObserver();
+    //testLoggingObserver();
     cout << "-----------------------------testCommandProcessor()-----------------------------------" << std::endl;
-    testCommandProcessor();
+    //testCommandProcessor();
 
     // FileCommandProcessorAdapter commandProcessor("../res/CommandFiles/test.txt");
     // GameEngine gameEngine;
@@ -25,13 +25,12 @@ int main() {
     // cout << command->getType() << endl;
 
     cout << "-----------------------------testStartupPhase()-----------------------------------" << std::endl;
-    testStartupPhase();
+    //testStartupPhase();
     cout << "-----------------------------testMainGameLoop()-----------------------------------" << std::endl;
     testMainGameLoop();
-    //testReinforcementPhase();
     cout << "-----------------------------testOrdersLists()-----------------------------------" << std::endl;
     testOrdersLists();
-    //testLoadMaps();
+
 
     return 0;
 }
