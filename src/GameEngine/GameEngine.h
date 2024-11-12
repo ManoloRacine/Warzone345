@@ -123,7 +123,7 @@ class GameEngine: public Subject, ILoggable {
     friend std::ostream& operator<<(std::ostream& os, const GameEngine& gameEngine);
 
     std::string stringToLog() override;// A2 P5 (by RYAD)
-    LogObserver* logObserver = nullptr;
+    LogObserver* logObserver = nullptr; // observer - observs the game
     //------------- A2-P2 CHANGES --------------- ( by Nektarios )
     void startupPhase(); //A2-Part2
     vector<Player*> playerList; // ( we need to store players somewhere)

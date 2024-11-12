@@ -218,7 +218,7 @@ string WinState::getName() {
 GameEngine::GameEngine() {
     gameEngineState = &StartState::getInstance();
     this->logObserver = new LogObserver(this);
-    Subject::attach((ILogObserver*)logObserver);
+    Subject::attach((ILogObserver*)logObserver);//subscribe to log list
 }
 
 GameState* GameEngine::getCurrentState() const {
@@ -232,20 +232,20 @@ void GameEngine::changeState(string stateInput) {
 
 void GameEngine::setState(GameState &newState) {
     gameEngineState = &newState;
-    Subject::notify(this);
+    Subject::notify(this); // log change state
 }
 
 GameEngine::GameEngine(const GameEngine &gameEngine) {
     gameEngineState = gameEngine.gameEngineState;
     this->logObserver = gameEngine.logObserver;
-    Subject::attach((ILogObserver*)logObserver);
+    Subject::attach((ILogObserver*)logObserver); //subscribe to log list
 }
 
 GameEngine & GameEngine::operator=(const GameEngine &other) {
     if (this != &other) {
         this->gameEngineState = other.gameEngineState;
         this->logObserver = other.logObserver;
-        Subject::attach((ILogObserver*)other.logObserver);
+        Subject::attach((ILogObserver*)other.logObserver);//subscribe to log list
     }
 
     return *this;
@@ -257,6 +257,7 @@ std::ostream & operator<<(std::ostream &os, const GameEngine &gameEngine) {
 }
 
 // --------------------------- A2-PART2 -----------------------------------------
+//everytime state changes, we log its name
 std::string GameEngine::stringToLog() {
     std::stringstream stream;
     stream << "GAME ENGINE: ";

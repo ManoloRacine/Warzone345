@@ -45,7 +45,7 @@ string Command::getEffect() {
     return effect;
 }
 
-// logging
+// logging - saving the effect
 std::string Command::stringToLog() {
     std::stringstream stream;
     stream << "COMMAND: ";

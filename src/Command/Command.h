@@ -24,6 +24,7 @@ enum CommandType {
     Invalid
 };
 
+//Loggable class with string to log
 class Command: public Subject, ILoggable {
     private:
         string command;

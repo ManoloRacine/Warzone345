@@ -13,6 +13,7 @@
 using namespace std;
 class Command;
 
+// loggable
 class CommandProcessor: public Subject, ILoggable {
     private:
         GameEngine* gameEngine;

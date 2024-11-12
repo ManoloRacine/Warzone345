@@ -24,7 +24,7 @@ public:
   virtual ~ILoggable()= default;
 };
 
-// ISubject
+// ISubject -  interface meant for loggable classes
 
 class ISubject {
 public:
@@ -36,7 +36,7 @@ public:
 };
 
 
-//subject
+//subject - actual class to be logged
 
 class Subject : ISubject {
 private:
@@ -52,7 +52,7 @@ public:
 
 };
 
-//interface logObserver
+//interface logObserver to observe the game
 
 class ILogObserver {
 public:

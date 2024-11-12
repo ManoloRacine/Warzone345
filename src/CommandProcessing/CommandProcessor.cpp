@@ -228,6 +228,7 @@ std::ostream &operator<<(std::ostream &os, const CommandProcessor &commandProces
     return os;
 }
 
+// command processor has multiple commands and we get the latest command
 std::string CommandProcessor::stringToLog() {
     std::stringstream stream;
     stream << "COMMAND PROCESSOR: ";

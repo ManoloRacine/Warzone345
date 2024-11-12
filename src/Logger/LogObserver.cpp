@@ -3,12 +3,9 @@
 //
 #include "LogObserver.h"
 
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                Subject - (Observable)
-//
-// ----------------------------------------------------------------------------------------------------------------
+
+//------------------------------------------------Subject - (Observable)-------------------------------------
+
 
 void Subject::attach(ILogObserver* observer) {
   if(observer == nullptr){ throw std::runtime_error("Observer is null."); }
@@ -34,18 +31,14 @@ void Subject::resetObservers() {
   this->observers = std::vector<ILogObserver*>();
 }
 
-// -----------------------------------------------------------------------------------------------------------------
-//
-//
-//                                                LogObserver
-//
-// ----------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------LogObserver-----------------------------------------------------
 
 // Default constructor
 LogObserver::LogObserver(GameEngine* game)
         :game(game)
 {
-    if(game == nullptr){throw std::runtime_error("LogObserver::Error | Cannot set observer Game Engine to null");}
+    if(game == nullptr){throw std::runtime_error("LogObserver::Error -> game engine undefined/nullptr");}
 }
 LogObserver::LogObserver(LogObserver *observer) {
     this->game = observer->game;
@@ -59,14 +52,14 @@ void LogObserver::update(ILoggable* loggable) {
         file << '\n';
     }
     catch(const std::fstream::failure& e){
-        std::cout << "Exception opening/writing to file" << std::endl;
+        std::cout << "cannot open file" << std::endl;
     }
     file.close();
 }
 
 std::ostream& operator << (std::ostream &out, const LogObserver &log)
 {
-  out << "I am a LogObserver" << std::endl;
+  out << "LogObserver" << std::endl;
   return out;
 }
 
