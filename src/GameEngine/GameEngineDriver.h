@@ -6,5 +6,8 @@
 #define GAMEENGINEDRIVER_H
 
 void testGameStates();
+void testStartupPhase();
+void testMainGameLoop();
+void testReinforcementPhase();
 
 #endif //GAMEENGINEDRIVER_H

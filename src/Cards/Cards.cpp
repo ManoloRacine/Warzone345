@@ -75,16 +75,26 @@ void Deck::putIntoDeck(Card* cardToPutBack) {
     cards.push(cardToPutBack);
 }
 
-//Prints out all the cards in the deck
+// Prints out all the cards in the deck ---------- UPDATED TO USE COMMAS - NEK A2-Part2
 std::ostream& operator<<(std::ostream& os, const Deck &deck) {
     std::queue<Card*> cardsToPrint = deck.cards;
+    bool firstCard = true; // Flag to check if it's the first card
+
     while (!cardsToPrint.empty()) {
         Card* card = cardsToPrint.front();
         cardsToPrint.pop();
-        os << card->print();
+
+        // Print a comma before the card if it's not the first one
+        if (!firstCard) {
+            os << ", "; // Add a comma before subsequent cards
+        }
+        os << card->print(); // Print the card
+        firstCard = false; // Update the flag after printing the first card
     }
+
     return os;
 }
+
 
 Hand::Hand() = default;
 

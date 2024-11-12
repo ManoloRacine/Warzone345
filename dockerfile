@@ -2,8 +2,10 @@
 FROM gcc:latest
 
 # Install CMake
-RUN apt-get update && apt-get install -y cmake
-RUN apt-get -y install gdb dos2unix
+RUN apt-get update && apt-get install -y cmake \
+        gdb \
+        dos2unix \
+        gfortran-
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -23,7 +25,6 @@ RUN cmake ..
 
 # Build the project using Make
 RUN make
-
 # Default command to run the compiled binary (assuming binary is named Warzone345)
 CMD ["./Warzone345"]
 

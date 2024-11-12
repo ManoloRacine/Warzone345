@@ -25,7 +25,7 @@ using std::basic_ostream;
 // ------------------ CONTINENT ---------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// Construcotr
+// Constructor
 Continent::Continent(const std::string &name, int bonus)
     : name(name), bonus(bonus) {}
 
@@ -104,8 +104,6 @@ void Continent::addTerritory(Territory *territory)
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ TERRITORY ---------------------------
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-//TO BE CHANGED
 
 // Constructor
 
@@ -477,7 +475,7 @@ bool Map::validateUniqueness(unordered_map<std::string, Territory*> mapData,vect
                 if (name == iterator->getTerritories()[j]->getName()) {
                         k++;
                     if (k > 1) {
-                        throw std::runtime_error("Error, territory is part of more than one continent or contienent is empty!");
+                        throw std::runtime_error("Error, territory is part of more than one continent or continent is empty!");
                         return false;
                        
                     }
@@ -606,9 +604,8 @@ bool Map::validate() {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Load map
-Map MapLoader::loadMap(const std::string &path)
+void MapLoader::loadMap(Map &map,const std::string &path)
 {
-    Map map;
     std::ifstream inputFile(path);
     std::unordered_map<Territory *, std::vector<std::string>> associationsMap;
 
@@ -656,8 +653,6 @@ Map MapLoader::loadMap(const std::string &path)
 
     inputFile.close();
     setupTerritoryConnections(map, associationsMap);
-
-    return map;
 }
 
 // Helper method to trim whitespace
