@@ -32,9 +32,10 @@ public:
     Player();
 
     Player(const string& playerName);
+    //Player(GameEngine* game, const string& playerName);
 
     // Copy constructor
-    Player(const Player& other); 
+    Player(const Player& other);
 
     // Destructor
     ~Player();
@@ -43,9 +44,9 @@ public:
     string getName() const;
     void setName(const string& newName);
 
-    // Getters and Setters for Reinforcemnts -ADDED IN P2-A2 - Nektarios
+    // Getters and Setters for Reinforcements -ADDED IN P2-A2 - Nektarios
     inline int getReinforcements() const { return this->reinforcementPool;};
-    inline void setReinforcements(const int& newReinforcments) { this->reinforcementPool = newReinforcments; };
+    inline void setReinforcements(const int& newReinforcements) { this->reinforcementPool = newReinforcements; };
 
     // Getters and Setters for Territories
     vector<Territory*> getTerritories() const;
@@ -75,6 +76,10 @@ public:
      set<Player*> getNegotiatedPlayers() const;
      void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
 
+     // Getters and Setters for for NegociatePlayers
+     set<Player*> getNegotiatedPlayers() const;
+     void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
+
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Player& player);  
 
@@ -95,7 +100,6 @@ void addNegotiateEffect(Player* other);
 bool isNegotiatedWith(Player* other);
 
 void clearNegotiations();
-
 
 };
 

@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <algorithm>
 #include "Order.h"
+#include "../GameEngine/GameEngine.h"
 using namespace std;
 
 //Constructor, Destructor and << override
@@ -15,63 +16,26 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
     Order::Order(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
         : user(user), targeted(targeted), troops(troops), source(source), target(target){}
 
-/*
-//Getters and setters for user
-Player* Order::getUser() const{
-  return user;
-}
 
-void Order::setUser(Player* newUser){
-  user = newUser;
-}
-
-//Getters and setters for targeted
-Player* Order::getTargeted() const{
-  return targeted;
-}
-
-void Order::setTargeted(Player* newTargeted){
-  targeted = newTargeted;
-}
-
-//Getters and setters for Troops
-int Order::getTroops() const{
-  return troops;
-}
-
-void Order::setTroops(int newTroops){
-  troops = newTroops;
-}
-
-//Getters and setters for target
-Territory* Order::getTarget() const{
-  return target;
-}
-
-void Order::setTarget(Territory* newTarget){
-  target = newTarget;
-}
-
-//Getters and setters for source
-Territory* Order::getSource() const{
-  return source;
-}
-
-void Order::setSource(Territory* newSource){
-  source = newSource;
-}
-*/
 
 //order list
+
+OrdersList::OrdersList(GameEngine *gameEngine) : game(gameEngine){
+  Subject::attach((ILogObserver*)game->logObserver);
+}
+
 
 OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
 
 OrdersList::OrdersList(const OrdersList &oldList){
   unsigned listLength = oldList.orders.size();
   orders = std::vector<Order *>(listLength);
+  this->game = oldList.game;
   for (unsigned o = 0; o < listLength; o++) {
     orders[o] = oldList.orders[o]->clone();
   }
+  // subscribe new object to subscribers
+  Subject::attach((ILogObserver*)game->logObserver);
 }
 
 void OrdersList::add(Order *o){
@@ -80,6 +44,7 @@ void OrdersList::add(Order *o){
   } else {
     throw std::runtime_error("NULL value inserted in the list");
   }
+  Subject::notify(this); // log that order is added
 }
 
 
@@ -168,7 +133,10 @@ ostream &Deploy::orderCout(ostream &output) const {
 }
 //constructor
 Deploy::Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Deploy"){}
+
+Deploy::Deploy(GameEngine* game, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : game(game), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Deploy"){Subject::attach((ILogObserver*)game->logObserver);}
 
 //Getters and setters for user
 Player* Deploy::getUser() const{
@@ -258,6 +226,7 @@ void Deploy::execute(Player* user, Player* targeted, int armies, Territory* sour
     target->setArmies(target->getArmies()+armies);
     user->toDefend(target);
     cout << "Troops deployed" << endl;
+    Subject::notify(this);
 }
 //Helper method for execute method
 void Deploy::execute(Player* player, int armies, Territory* target){
@@ -277,6 +246,13 @@ Order *Deploy::clone() const {
 //========================================
 std::ostream &Advance::orderCout(std::ostream &output) const { return output << "Advance order"; }
 Advance::~Advance() = default;
+
+Advance::Advance(GameEngine* game,Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : game(game), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){Subject::attach((ILogObserver*)game->logObserver);}
+
+Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Advance"){}
+
 
 Advance::Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
     : user(user), targeted(targeted), troops(troops), source(source), target(target){}
@@ -331,9 +307,10 @@ string Advance::getLabel() const{
 return "advance";
 }
 
+
 //Validate method for Advance
 bool Advance::validate(Player* player, int armies, Territory* source, Territory* target){
-  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) != player->getTerritories().end() 
+  if(find(player->getTerritories().begin(), player->getTerritories().end(), target) == player->getTerritories().end() 
   && find(source->getConnectedTerritories().begin(), source->getConnectedTerritories().end(), target) != source->getConnectedTerritories().end() 
   && armies <= source->getArmies() 
   && !player->isNegotiatedWith(target->getOwner())){
@@ -426,7 +403,9 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
       }
 
     }
+    Subject::notify(this);
 }
+
 //Helper Function for execute
 void Advance::execute(Player* player, int armies, Territory* source, Territory* target){
   execute(player, target->getOwner(), armies, source, target);
@@ -446,7 +425,12 @@ Airlift::~Airlift() = default;
 
 //constructor
 Airlift::Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift"){}
+
+Airlift::Airlift(GameEngine *gameEng, Player *user, Player *targeted, int troops, Territory *source,
+  Territory *target): game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift") {
+  Subject::attach((ILogObserver*)game->logObserver);
+}
 
     //Getters and setters for user
 Player* Airlift::getUser() const{
@@ -545,7 +529,7 @@ void Airlift::execute(Player* user, Player* targeted, int armies, Territory* sou
   user->toDefend(target);
   source->setArmies(source->getArmies()-armies);
   target->setArmies(target->getArmies()+armies);
-
+  Subject::notify(this);
   cout << armies <<" Troops have successfully been Airlifted from " << source->getName() << " to " << target->getName() << endl;
 }
 //Helper function for execute
@@ -566,7 +550,11 @@ Order *Airlift::clone() const { return new Airlift(*this); }
 
 // constructor for bomb
 Bomb::Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Bomb"){}
+
+Bomb::Bomb(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+  : game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Airlift") {Subject::attach((ILogObserver*)game->logObserver);}
+
 //destructor for bomb
 Bomb::~Bomb() = default;
 
@@ -676,6 +664,7 @@ return false;
 void Bomb::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target){
   target->setArmies(target->getArmies()/2);
   cout << target->getName() << " has been bombed by " << user->getName() << ". It now has " << target->getArmies() << " troops remaining" << endl;
+  Subject::notify(this);
 }
 
 //helper function for bomb order
@@ -697,7 +686,13 @@ Order *Bomb::clone() const { return new Bomb(*this); }
 
 //Constructor
 Blockade::Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){Subject::attach((ILogObserver*)game->logObserver);}
+
+Blockade::Blockade(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target)
+    : game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Blockade"){Subject::attach((ILogObserver*)game->logObserver);}
+
+
+
 //destructor
 Blockade::~Blockade() = default;
 
@@ -751,6 +746,7 @@ string Blockade::getLabel() const{
   return "blockade";
 }
 
+
 std::ostream &Blockade::orderCout(std::ostream &output) const { return output << "Blockade order"; }
 
 //validate Blockade order
@@ -796,7 +792,7 @@ void Blockade::execute(Player* user, Player* targeted, int armies, Territory* so
   source->setArmies(source->getArmies()*2);
   source->setOwner(neutral);
   neutral->addTerritories(source);
-  
+  Subject::notify(this);
   cout << "Blockade has been made on " << source->getName() << " with " << source->getArmies() << " troops." << endl;
 }
 
@@ -819,7 +815,13 @@ Order *Blockade::clone() const { return new Blockade(*this); }
 
 //constructor
 Negotiate::Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target)
-    : user(user), targeted(targeted), troops(troops), source(source), target(target){}
+    : user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate"){Subject::attach((ILogObserver*)game->logObserver);}
+
+Negotiate::Negotiate(GameEngine *gameEng, Player *user, Player *targeted, int troops, Territory *source,
+  Territory *target): game(gameEng), user(user), targeted(targeted), troops(troops), source(source), target(target), label("Negotiate") {
+  Subject::attach((ILogObserver*)game->logObserver);
+}
+  
 //destructor
 Negotiate::~Negotiate() = default;
 
@@ -909,6 +911,7 @@ void Negotiate::execute(Player* user, Player* targeted, int armies, Territory* s
   user->addNegotiateEffect(targeted);
   targeted->addNegotiateEffect(user);
   cout << "Negotiate Order executed: " << user->getName()  << " and " << targeted->getName() << " cannot attack each other this turn." << endl;
+  Subject::notify(this);
 }
 //helper function for execute
 void Negotiate::execute(Player* user, Player* targeted){
@@ -925,6 +928,86 @@ Order *Negotiate::clone() const { return new Negotiate(*this); }
 
 std::ostream &Negotiate::orderCout(std::ostream &ostream) const {
   return ostream << "-> Negotiate order.";
+}
+
+
+// i want string label to each type of order A2 P5
+std::string OrdersList::castOrderType(Order * o){
+  if(auto advance = dynamic_cast<Advance*>(o)){
+    return advance->getLabel();
+  }
+  else if(auto airlift = dynamic_cast<Airlift*>(o)){
+    return airlift->getLabel();
+  }
+  else if(auto blockade = dynamic_cast<Blockade*>(o)){
+    return blockade->getLabel();
+  }
+  else if(auto bomb = dynamic_cast<Bomb*>(o)){
+    return bomb->getLabel();
+  }
+  else if(auto deploy = dynamic_cast<Deploy*>(o)){
+    return deploy->getLabel();
+  }
+  else if(auto negotiate = dynamic_cast<Negotiate*>(o)){
+    return negotiate->getLabel();
+  }
+  throw std::runtime_error("OrderList::Error Order is null");
+}
+
+// STRING TO LOG FUNCTIONS TO BE CALLED WHEN LOGGING
+
+std::string OrdersList::stringToLog() {
+  Order &o = *orders.back();
+  std::string orderType = o.getLabel();
+
+  std::stringstream stream;
+  stream << "ORDER LIST: ";
+  stream << "Order List Added ";
+  stream << orderType;
+  return stream.str();
+}
+std::string Deploy::stringToLog() {
+  std::stringstream stream;
+  stream << "ORDER: ";
+  stream << "Order Executed ";
+  stream << *this;
+  return stream.str();
+}
+
+std::string Bomb::stringToLog() {
+  std::stringstream stream;
+  stream << "ORDER: ";
+  stream << "Order Executed ";
+  stream << *this;
+  return stream.str();
+}
+std::string Advance::stringToLog() {
+  std::stringstream stream;
+  stream << "ORDER: ";
+  stream << "Order Executed ";
+  stream << *this;
+  return stream.str();
+}
+std::string Blockade::stringToLog() {
+  std::stringstream stream;
+  stream << "ORDER: ";
+  stream << "Order Executed ";
+  stream << *this;
+  return stream.str();
+}
+std::string Airlift::stringToLog() {
+  std::stringstream stream;
+  stream << "ORDER: ";
+  stream << "Order Executed ";
+  stream << *this;
+  return stream.str();
+}
+std::string Negotiate::stringToLog() {
+  std::stringstream stream;
+  stream << "ORDER: ";
+  stream << "Order Executed ";
+  stream << *this;
+  return stream.str();
 }
 
 /*

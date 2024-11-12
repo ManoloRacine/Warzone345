@@ -4,6 +4,12 @@
 
 using namespace std;
 
+/*Player::Player(GameEngine *game, const string &playerName) :
+    name(playerName), hand(new Hand()), ordersList(new OrdersList(game)), negotiatedPlayers(negotiatedPlayers) {}*/
+
+
+
+
 // Default constructor
 Player::Player(const string& playerName)
     : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0) {
@@ -90,6 +96,15 @@ bool Player::getConqueredATerritory() const {
 
 void Player::setConqueredATerritory(const bool captured) {
     conqueredATerritory = captured;
+}
+
+// Getters and Setters for NegociatedPlayers
+set<Player*> Player::getNegotiatedPlayers() const {
+    return negotiatedPlayers;
+}
+
+void Player::setNegotiatedPlayers(set<Player*>& newNegotiatedPlayers) {
+    negotiatedPlayers = newNegotiatedPlayers;
 }
 
 // Getters and Setters for NegociatedPlayers

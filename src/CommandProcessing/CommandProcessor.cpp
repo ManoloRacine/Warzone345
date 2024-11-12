@@ -31,6 +31,7 @@ string toLower(const string& str) {
     return lowerStr;
 }
 
+//reads a string a creates a command based on it
 Command *CommandProcessor::getCommandFromString(string commandString) {
     vector<string> splitCommand;
     commandString = toLower(commandString);
@@ -63,6 +64,7 @@ Command *CommandProcessor::getCommandFromString(string commandString) {
 
 }
 
+//reads a string from the command line
 Command *CommandProcessor::readCommand() {
     string commandString;
     getline(cin, commandString);
@@ -70,6 +72,7 @@ Command *CommandProcessor::readCommand() {
     return getCommandFromString(commandString);
 }
 
+//validates if the Command is valid in the current game state and saves the effect if so
 void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
     vector<string> splitCommand;
     split(splitCommand, command->getCommand(), ' ');
@@ -140,8 +143,10 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
 
 void CommandProcessor::saveCommand(Command* command) {
     commands.push_back(command);
+    Subject::notify(this);
 }
 
+//reads the command from the commandline, validates it, then saves it in the commands vector
 Command *CommandProcessor::getCommand(GameEngine *gameEngine) {
     Command* command = readCommand();
     validate(gameEngine,command);
@@ -149,15 +154,17 @@ Command *CommandProcessor::getCommand(GameEngine *gameEngine) {
     return command;
 }
 
+//gets a string from the file
 Command *FileCommandProcessorAdapter::readCommand() {
     string commandString = fileLineReader->readLineFromFile();
     return getCommandFromString(commandString);
 }
 
+//reads the current line on the file
 string FileLineReader::readLineFromFile() {
     ifstream file(filePath);
     string line;
-    int lineBeingRead = 1;
+    int lineBeingRead = 0;
 
     while (getline(file, line)) {
         if (lineBeingRead == currentLine) {
@@ -169,17 +176,66 @@ string FileLineReader::readLineFromFile() {
     }
 
     file.close();
-    // TODO throw error or something
+    throw runtime_error("reached end of file");
 
-    return 0;
 }
 
 FileLineReader::FileLineReader(string filePath) {
     this->filePath = filePath;
-    currentLine = 1;
+    currentLine = 0;
 }
 
 FileCommandProcessorAdapter::FileCommandProcessorAdapter(string filePath) {
     fileLineReader = new FileLineReader(filePath);
 }
+
+CommandProcessor::CommandProcessor() = default;
+
+CommandProcessor::CommandProcessor(GameEngine* game) {
+    this->gameEngine = game;
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
+}
+
+CommandProcessor::CommandProcessor(const CommandProcessor &copy) {
+    commands = copy.commands;
+    Subject::attach((ILogObserver*)copy.gameEngine->logObserver);
+}
+
+CommandProcessor::CommandProcessor(const CommandProcessor &copy, GameEngine* game) {
+    commands = copy.commands;
+    this->gameEngine = game;
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
+}
+
+CommandProcessor &CommandProcessor::operator=(const CommandProcessor &copy) {
+    if (this != &copy) {
+        commands = copy.commands;
+    }
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
+    return *this;
+}
+
+vector<Command *> CommandProcessor::getCommands() const {
+    return commands;
+}
+
+
+std::ostream &operator<<(std::ostream &os, const CommandProcessor &commandProcessor) {
+    for (Command* command : commandProcessor.getCommands()) {
+        os << command->getCommand() << "\n";
+    }
+
+    return os;
+}
+
+// command processor has multiple commands and we get the latest command
+std::string CommandProcessor::stringToLog() {
+    std::stringstream stream;
+    stream << "COMMAND PROCESSOR: ";
+    stream << "Saved command \"";
+    stream << this->commands.back()->getCommand(); // get latest command from vector CommandProcessor::commands
+    stream << "\""; // quoted
+    return stream.str();
+}
+
 

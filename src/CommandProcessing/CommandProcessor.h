@@ -4,16 +4,19 @@
 
 #ifndef COMMANDPROCESSING_H
 #define COMMANDPROCESSING_H
-#include <fstream>
-#include "../GameEngine/GameEngine.h"
-#include "../Command/Command.h"
+
+#include <iostream>
+#include <sstream>
 #include <vector>
+#include "../Logger/LogObserver.h"
+#include "../Command/Command.h"
+using namespace std;
+class Command;
 
-
-class GameEngine;
-
-class CommandProcessor {
+// loggable
+class CommandProcessor: public Subject, ILoggable {
     private:
+        GameEngine* gameEngine;
         virtual Command* readCommand();
         void saveCommand(Command* command);
         void validate(GameEngine* gameEngine, Command* command);
@@ -23,6 +26,16 @@ class CommandProcessor {
         friend class GameEngine;
     public:
         Command* getCommand(GameEngine* gameEngine);
+        CommandProcessor();
+
+        explicit CommandProcessor(GameEngine* gameEngine);
+        CommandProcessor(const CommandProcessor &copy, GameEngine* game);
+        CommandProcessor(const CommandProcessor& copy);
+        CommandProcessor& operator=(const CommandProcessor& copy);
+        friend ostream& operator<<(ostream& os, CommandProcessor& commandProcessor);
+        vector<Command*> getCommands() const ;
+        // Logging -- A2 - P5
+        std::string stringToLog() override;
 };
 
 class FileLineReader {

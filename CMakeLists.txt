@@ -18,6 +18,7 @@ include_directories(
         ${PROJECT_SOURCE_DIR}/src/Map
         ${PROJECT_SOURCE_DIR}/src/Orders
         ${PROJECT_SOURCE_DIR}/src/Player
+        ${PROJECT_SOURCE_DIR}/src/Logger
 )
 
 # Include Boost headers
@@ -41,6 +42,11 @@ add_executable(Warzone345
         src/Command/Command.cpp
         src/CommandProcessing/CommandProcessor.h
         src/CommandProcessing/CommandProcessor.cpp
+        src/CommandProcessing/CommandProcessingDriver.cpp
+        src/Logger/LogObserver.h
+        src/Logger/LogObserver.cpp
+        "src/Logger/ LoggingObserverDriver.h"
+        "src/Logger/ LoggingObserverDriver.cpp"
 )
 
 # Link Boost libraries to your executable

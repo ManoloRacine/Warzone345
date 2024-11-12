@@ -7,8 +7,10 @@
 #include <string>
 #include "../Cards/Cards.h"
 #include "../Player/Player.h"
+#include "Logger/LogObserver.h"
 
 class Player;
+class GameEngine;
 class Territory;
 class Card;
 enum CardType : int;
@@ -64,23 +66,26 @@ private:
 };
 
 //order list
-class OrdersList{
+class OrdersList: public Subject, ILoggable{
 private:
   vector<Order*> orders{};
-
+  GameEngine* game = nullptr;
 public:
   OrdersList() = default;
+  explicit OrdersList(GameEngine* gameEngine);
   ~OrdersList();
   OrdersList(const OrdersList &);
 
   OrdersList &operator=(const OrdersList &);
 
+  // logging order list
+  static std::string castOrderType(Order * o);
+  std::string stringToLog() override;
+
   void add(Order *o);
   void remove(int);
   void move(int, int);
-  //vector<Order*> getList() const;
- // std::vector<Order *>* getList();
- std::vector<Order*> getList() const;
+  std::vector<Order*> getList() const;
   const std::vector<Territory*>& getConnectedTerritories() const;
 
 private:
@@ -91,21 +96,25 @@ private:
 //========================================
 //Deploy Order
 //========================================
-class Deploy : public Order{
+class Deploy  : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
   Territory* target;
   Territory* source;
+  string label;
 public:
   bool validate(Player* player, int armies, Territory* target);
   bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute(Player* player, int armies, Territory* target);
   void execute() override;
+  std::string stringToLog() override;
   ~Deploy() override;
   Deploy(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Deploy(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
   Player* getUser() const override;
   void setUser(Player* newUser);
@@ -136,8 +145,9 @@ private:
 //========================================
 //Advance Order
 //========================================
-class Advance : public Order{
+class Advance : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -149,8 +159,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
+  std::string stringToLog() override;
   ~Advance() override;
   Advance(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Advance(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
   Player* getUser() const override;
   void setUser(Player* newUser);
@@ -174,6 +186,7 @@ public:
   //get label
   string getLabel() const override;
 private:
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -181,8 +194,9 @@ private:
 //========================================
 //Airlift Order
 //========================================
-class Airlift : public Order{
+class Airlift : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -194,8 +208,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, int armies, Territory* source, Territory* target);
+  std::string stringToLog() override;
   ~Airlift() override;
   Airlift(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Airlift(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
   Player* getUser() const override;
   void setUser(Player* newUser);
@@ -219,6 +235,7 @@ public:
   //get label
   string getLabel() const override;
 private:
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -227,8 +244,9 @@ private:
 //========================================
 //Bomb Order
 //========================================
-class Bomb : public Order{
+class Bomb : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -240,8 +258,10 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* player, Territory* target);
+  std::string stringToLog() override;
   ~Bomb() override;
   Bomb(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
+  Bomb(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
   Player* getUser() const override;
   void setUser(Player* newUser);
@@ -265,6 +285,7 @@ public:
   //get label
   string getLabel() const override;
 private:
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -273,8 +294,9 @@ private:
 //========================================
 //Blockade Order
 //========================================
-class Blockade : public Order{
+class Blockade : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -285,6 +307,7 @@ public:
   bool validate() override;
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
+  Blockade(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
   void execute(Player* user, Territory* source);  
   ~Blockade() override;
   Blockade(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
@@ -312,6 +335,7 @@ public:
   string getLabel() const override;
 
 private:
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -320,8 +344,9 @@ private:
 //========================================
 //Negotiate Order
 //========================================
-class Negotiate : public Order{
+class Negotiate : public Order, Subject, ILoggable{
 private:
+  GameEngine* game = nullptr;
   Player* user;
   Player* targeted;
   int troops;
@@ -333,6 +358,9 @@ public:
   void execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) override;
   void execute() override;
   void execute(Player* user, Player* targeted);
+  std::string stringToLog() override;
+
+  Negotiate(GameEngine* gameEng, Player* user, Player* targeted, int troops, Territory* source, Territory* target);
   ~Negotiate() override;
   Negotiate(Player* user, Player* targeted, int troops, Territory* source, Territory* target);
    //Getters and setters for user
@@ -359,7 +387,7 @@ public:
   string getLabel() const override;
   
 private:
-  
+  string label;
   Order *clone() const override;
   std::ostream &orderCout(std::ostream &) const override;
 };
@@ -367,12 +395,6 @@ private:
 class UserInputOrder{
 public:
   static Order *create(const std::string&) ;
-};
-
-class OrdersFactory {
-public:
-  static Order* CreateOrder(CardType cardType);
-
 };
 
 #endif
