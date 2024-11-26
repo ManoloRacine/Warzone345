@@ -21,7 +21,8 @@ enum CommandType {
     GameStart,
     Replay,
     Quit,
-    Invalid
+    Invalid,
+    Tournament
 };
 
 //Loggable class with string to log
