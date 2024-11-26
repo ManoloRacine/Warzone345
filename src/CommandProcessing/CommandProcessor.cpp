@@ -59,6 +59,10 @@ Command *CommandProcessor::getCommandFromString(string commandString) {
             return new Command(commandString, AddPlayer);
         }
     }
+    else if (isValidTournamentCommand(commandString)) {
+        return new Command(commandString, Tournament);
+    }
+
 
     return new Command(commandString, Invalid);
 
@@ -128,6 +132,13 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
             }
             break;
 
+        case Tournament:
+            if (currentGameState == Start) {
+                command->saveEffect("Tournament was started");
+                command->setSuccess(true);
+            }
+            break;
+
         case Invalid:
             command->saveEffect("Invalid command");
             command->setSuccess(false);
@@ -138,6 +149,98 @@ void CommandProcessor::validate(GameEngine * gameEngine, Command *command) {
     }
 
 
+}
+
+bool CommandProcessor::isValidTournamentCommand(string commandString) {
+    vector<string> splitCommand;
+    commandString = toLower(commandString);
+    split(splitCommand, commandString, ' ');
+
+    string currentOption;
+    vector<string> mapFiles;
+    vector<string> playerStrategies;
+    int numberOfGamesPerMap = 0;
+    int maxNumberOfTurns = 0;
+
+    if (splitCommand.empty()) {
+        return false;
+    }
+
+    if (splitCommand.at(0) != "tournament") {
+        return false;
+    }
+
+    for (unsigned int i = 1; i < splitCommand.size(); i++) {
+
+        if (currentOption.empty() && !splitCommand.at(i).starts_with("-")) {
+            return false;
+        }
+
+        if (splitCommand.at(i).starts_with("-")) {
+            currentOption = splitCommand.at(i);
+            continue;
+        }
+
+        if (currentOption == "-m") {
+            mapFiles.push_back(splitCommand.at(i));
+        }
+        if (currentOption == "-p") {
+            playerStrategies.push_back(splitCommand.at(i));
+        }
+        if (currentOption == "-g") {
+            numberOfGamesPerMap = stoi(splitCommand.at(i));
+            currentOption = "";
+        }
+        if (currentOption == "-d") {
+            maxNumberOfTurns = stoi(splitCommand.at(i));
+            currentOption = "";
+        }
+    }
+
+    if (numberOfGamesPerMap < 1 || numberOfGamesPerMap > 5) return false;
+    if (maxNumberOfTurns < 10 || maxNumberOfTurns > 50) return false;
+    if (mapFiles.empty() || mapFiles.size() > 5) return false;
+    if (playerStrategies.size() < 2 || playerStrategies.size() > 4) return false;
+
+    return true;
+}
+
+TournamentSetup CommandProcessor::getTournamentSetupFromCommand(Command* command) {
+    TournamentSetup tournamentSetup;
+
+    vector<string> splitCommand;
+    string commandString = toLower(command->getCommand());
+    split(splitCommand, commandString, ' ');
+
+    if (command->getType() != Tournament) {
+        throw std::runtime_error("Command is not tournament: " + command->getCommand());
+    }
+
+    string currentOption;
+
+    for (unsigned int i = 1; i < splitCommand.size(); i++) {
+        if (splitCommand.at(i).starts_with("-")) {
+            currentOption = splitCommand.at(i);
+            continue;
+        }
+
+        if (currentOption == "-m") {
+            tournamentSetup.mapNames.push_back(splitCommand.at(i));
+        }
+        if (currentOption == "-p") {
+            tournamentSetup.playerStrategies.push_back(splitCommand.at(i));
+        }
+        if (currentOption == "-g") {
+            tournamentSetup.nbGames = stoi(splitCommand.at(i));
+            currentOption = "";
+        }
+        if (currentOption == "-d") {
+            tournamentSetup.nbTurns = stoi(splitCommand.at(i));
+            currentOption = "";
+        }
+    }
+
+    return tournamentSetup;
 }
 
 

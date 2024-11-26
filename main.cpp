@@ -13,24 +13,11 @@ using namespace std;
 
 
 int main() {
-    cout << "-----------------------------testLoggingObserver()-----------------------------------" << std::endl;
-    //testLoggingObserver();
-    cout << "-----------------------------testCommandProcessor()-----------------------------------" << std::endl;
-    //testCommandProcessor();
 
-    // FileCommandProcessorAdapter commandProcessor("../res/CommandFiles/test.txt");
-    // GameEngine gameEngine;
-    // Command* command = commandProcessor.getCommand(&gameEngine);
-    // cout << command->getCommand() << endl;
-    // cout << command->getType() << endl;
+    CommandProcessor command_processor = CommandProcessor();
+    GameEngine game = GameEngine();
 
-    cout << "-----------------------------testStartupPhase()-----------------------------------" << std::endl;
-    //testStartupPhase();
-    cout << "-----------------------------testMainGameLoop()-----------------------------------" << std::endl;
-    testMainGameLoop();
-    cout << "-----------------------------testOrdersLists()-----------------------------------" << std::endl;
-    testOrdersLists();
-
-
+    Command *command = command_processor.getCommand(&game);
+    TournamentSetup tournament_setup = command_processor.getTournamentSetupFromCommand(command);
     return 0;
 }
