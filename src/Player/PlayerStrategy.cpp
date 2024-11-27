@@ -15,11 +15,11 @@ PlayerStrategy* PlayerStrategy::createStrategy(Player *player, const std::string
     if(strategy_name == "human") {
         return new HumanPlayerStrategy(player);
     } else if(strategy_name == "aggressive") {
-       // return new AggressivePlayerStrategy(player);
+        return new AggressivePlayerStrategy(player);
     } else if(strategy_name == "benevolent") {
         return new BenevolentPlayerStrategy(player);
     } else if(strategy_name == "neutral") {
-       // return new NeutralPlayerStrategy(player);
+        return new NeutralPlayerStrategy(player);
     } else if (strategy_name == "cheater") {
         return new CheaterPlayerStrategy(player);
     } else {
