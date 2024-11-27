@@ -47,6 +47,8 @@ add_executable(Warzone345
         src/Logger/LogObserver.cpp
         "src/Logger/ LoggingObserverDriver.h"
         "src/Logger/ LoggingObserverDriver.cpp"
+        src/Player/PlayerStrategy.h
+        src/Player/PlayerStrategy.cpp
 )
 
 # Link Boost libraries to your executable
