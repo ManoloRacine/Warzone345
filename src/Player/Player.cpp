@@ -11,9 +11,10 @@ using namespace std;
 
 
 // Default constructor
-Player::Player(const string& playerName)
-    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0) {
+Player::Player(const string& playerName, const std::string& strategy)
+    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0){
     // Initialize player with empty territories, hand, and order list
+    this->strategy = PlayerStrategy::createStrategy(this, strategy);
 }
 
 // Copy Constructor

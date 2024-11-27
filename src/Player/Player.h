@@ -8,6 +8,7 @@
 #include "../Map/Map.h"
 #include "../Orders/Order.h"
 #include "../Cards/Cards.h"
+#include "PlayerStrategy.h"
 
 class Territory;
 class Order;
@@ -17,6 +18,7 @@ using namespace std;
 
 class Player {
 private:
+    PlayerStrategy* strategy;
     string name;
     vector<Territory*> territories;  // Collection of territories
     OrdersList* ordersList;           // List of orders
@@ -31,7 +33,7 @@ public:
     // Constructors
     Player();
 
-    Player(const string& playerName);
+    Player(const string& playerName, const std::string& strategy);
     //Player(GameEngine* game, const string& playerName);
 
     // Copy constructor
