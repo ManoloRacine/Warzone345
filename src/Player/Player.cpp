@@ -145,7 +145,11 @@ vector<Territory*> Player::toAttack(Territory* attackingTerritories) {
 
 // Method to issue an order
 void Player::issueOrder(Order* order) {
-    strategy->issueOrder(order);
+    ordersList->add(order);
+}
+
+void Player::issueOrder() {
+    strategy->issueOrder();
 }
 
 // Adding a Territories

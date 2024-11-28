@@ -15,8 +15,8 @@ class PlayerStrategy {
 private:
     Player* player;
 
-public:
-    virtual void issueOrder(Order* order) = 0; // to override
+public: 
+    virtual void issueOrder() = 0; // to override
     virtual std::vector<Territory*>toDefend(Territory* territory) = 0; // to override
     virtual std::vector<Territory*>toAttack(Territory* territory) = 0; // to override
 
@@ -34,9 +34,10 @@ public:
     //getter for player
     Player* getPlayer();
     //function to override
-    void issueOrder(Order* order);
-    vector<Territory*> toDefend(Territory* territory);
-    vector<Territory*> toAttack(Territory* territory);
+    void issueOrder() override;
+
+    vector<Territory*> toDefend(Territory* territory) override;
+    vector<Territory*> toAttack(Territory* territory) override;
 };
 
 class BenevolentPlayerStrategy: public PlayerStrategy {
@@ -50,7 +51,7 @@ public:
     //getter for player
     Player* getPlayer();
     //function to override
-    void issueOrder(Order* order);
+    void issueOrder();
     vector<Territory*> toDefend(Territory* territory);
     vector<Territory*> toAttack(Territory* territory);
 };

@@ -88,6 +88,7 @@ public:
     vector<Territory*> toDefend(Territory*);
     vector<Territory*> toAttack(Territory*);
     void issueOrder(Order* order);
+    void issueOrder();
     void addTerritories(Territory*);
     bool removeTerritories(Territory*);
 

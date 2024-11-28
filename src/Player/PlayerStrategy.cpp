@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "PlayerStrategy.h"
 #include "Player.cpp"
+#include <algorithm>
 
 PlayerStrategy* PlayerStrategy::createStrategy(Player *player, const std::string& strategy) {
 
@@ -58,9 +59,10 @@ vector<Territory*> HumanPlayerStrategy::toAttack(Territory* attackingTerritories
 }
 
 // Method to issue an order
-void HumanPlayerStrategy::issueOrder(Order* order) {
-    getPlayer()->getOrdersList()->add(order);
+void HumanPlayerStrategy::issueOrder(){
 }
+
+
 
 //===================================
 //------------Benevolent-------------
@@ -86,7 +88,7 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend(Territory* defendingTerrit
     return getPlayer()->getTerritoriesToDefend();
 }
 
-// Method to return a list of territories to attack
+// Method to return a list of territories to attack kind of redundent as Benevolent player cannot attack
 vector<Territory*> BenevolentPlayerStrategy::toAttack(Territory* attackingTerritories) {
     getPlayer()->getTerritoriesToAttack().push_back(attackingTerritories);
     cout<< "Attacking territory is " << attackingTerritories->getName()<<endl;
@@ -94,58 +96,82 @@ vector<Territory*> BenevolentPlayerStrategy::toAttack(Territory* attackingTerrit
 }
 
 // issue order for the benevolent player
-void BenevolentPlayerStrategy::issueOrder(Order* order) {
-    if (order->getLabel() == "bomb"){
-        return;
-    }
-    else if (order->getLabel() == "blockade"){
-        getPlayer()->getOrdersList()->add(order);
-        return;
-    }
-    else if (order->getLabel() == "diplomacy"){
-        getPlayer()->getOrdersList()->add(order);
-        return;
-    }
-    else if (order->getLabel() == "airlift"){
-        getPlayer()->getOrdersList()->add(order);
-        return;
-    }
-    else if (order->getLabel() == "deploy"){
+void BenevolentPlayerStrategy::issueOrder() {
+    //setup for deploy order
+    Territory* thirdLeastTroopsTerritory = nullptr;
+    Territory* leastTroopsTerritory = nullptr;
+    Territory* secondLeastTroopsTerritory = nullptr;
+    Territory* fourthLeastTroopsTerritory = nullptr;
         int minTroops = INT_MAX;
         for(Territory* territory : getPlayer()->getTerritories()){
             if (territory->getArmies() < minTroops){
                 minTroops = territory->getArmies();
+                fourthLeastTroopsTerritory = thirdLeastTroopsTerritory;
+                thirdLeastTroopsTerritory = secondLeastTroopsTerritory;
+                secondLeastTroopsTerritory = leastTroopsTerritory;
+                leastTroopsTerritory = territory;
             }
         }
-        if( order->getTarget()->getArmies() == minTroops){
-            getPlayer()->getOrdersList()->add(order);
-        return;
-        }
-        else{
-         return;
-        }
-    }
-    else if (order->getLabel() == "advance"){
-        if(order->getSource()->getOwner() == order->getTarget()->getOwner()){
-        int minTroops = INT_MAX;
-        for(Territory* territory : getPlayer()->getTerritories()){
-            if (territory->getArmies() < minTroops){
-                minTroops = territory->getArmies();
-            }
-        }
-        if( order->getTarget()->getArmies() == minTroops){
-            getPlayer()->getOrdersList()->add(order);
-        return;
-        }
-        else{
-         return;
-        }
-        }
-        else{
-            return;
-        }
-    }
-    else
-    return;
 
+    //deploy orders
+    Deploy* deploy = new Deploy(getPlayer(), nullptr, (getPlayer()->getReinforcements()/2), nullptr, leastTroopsTerritory);
+    getPlayer()->getOrdersList()->add(deploy);
+    Deploy* deploy2 = new Deploy(getPlayer(), nullptr, getPlayer()->getReinforcements(), nullptr, secondLeastTroopsTerritory);
+    getPlayer()->getOrdersList()->add(deploy2);
+
+    //setup for advance order
+    bool NotNull = false;
+    Territory* advanceSource = nullptr;
+    for(Territory* territory : thirdLeastTroopsTerritory->getConnectedTerritories()){
+      if (territory->getOwner() == getPlayer()){
+        advanceSource = territory;
+      }
+    }
+    for(Territory* territory : thirdLeastTroopsTerritory->getConnectedTerritories()){
+      if (territory->getOwner() == getPlayer() && territory->getArmies() > advanceSource->getArmies()){
+        advanceSource = territory;
+        NotNull = true;
+      }
+    }
+    //Advance order
+    if(NotNull){
+       Advance* advance = new Advance(getPlayer(), getPlayer(), (advanceSource->getArmies()/4), advanceSource, thirdLeastTroopsTerritory);
+       getPlayer()->getOrdersList()->add(advance);
+    }
+    //Airlift order setup
+    Territory* maxTroopsTerritory = nullptr;
+        int maxTroops = 0;
+        for(Territory* territory : getPlayer()->getTerritories()){
+            if (territory->getArmies() > maxTroops){
+                maxTroops = territory->getArmies();
+                maxTroopsTerritory = territory;
+            }
+        }
+    //airlift order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
+    if (hasCard("airlift", getPlayer())){
+        if (rand() % 100 < 50){
+            Airlift* airlift = new Airlift(getPlayer(), getPlayer(), (maxTroopsTerritory->getArmies()/3), maxTroopsTerritory, fourthLeastTroopsTerritory);
+            getPlayer()->getOrdersList()->add(airlift);
+        }
+    }
+
+     //blockade order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
+    if (hasCard("blockade", getPlayer())){
+        if (rand() % 100 < 25){
+            Blockade* blockade = new Blockade(getPlayer(), getPlayer(), 0, leastTroopsTerritory, leastTroopsTerritory);
+            getPlayer()->getOrdersList()->add(blockade);
+        }
+    }
+
+     //diplomacy order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
+    if (hasCard("diplomacy", getPlayer())){
+        if (rand() % 100 < 75){
+            if(!leastTroopsTerritory->getConnectedTerritories()[1]){
+                if (leastTroopsTerritory->getConnectedTerritories()[1]->getOwner() != leastTroopsTerritory->getOwner()){
+                    Negotiate* negotiate = new Negotiate(player, leastTroopsTerritory->getConnectedTerritories()[1]->getOwner(), 0, leastTroopsTerritory, leastTroopsTerritory->getConnectedTerritories()[1]);
+                    getPlayer()->getOrdersList()->add(negotiate);
+                }
+            }
+        }
+    }
 }
