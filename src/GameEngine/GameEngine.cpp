@@ -481,7 +481,6 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
 
 //----------------A2-PART3-Griffin-Sin-Chan---------------//
 
-
 void GameEngine::mainGameLoop() {
     GameEngine game;
     CommandProcessor commandProcessor;

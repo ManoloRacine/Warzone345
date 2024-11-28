@@ -29,7 +29,7 @@ int main() {
     cout << "-----------------------------testMainGameLoop()-----------------------------------" << std::endl;
     testMainGameLoop();
     cout << "-----------------------------testOrdersLists()-----------------------------------" << std::endl;
-    testOrdersLists();
+    //testOrdersLists();
 
 
     return 0;

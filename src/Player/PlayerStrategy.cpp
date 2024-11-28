@@ -166,7 +166,7 @@ void BenevolentPlayerStrategy::issueOrder() {
      //diplomacy order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
     if (hasCard("diplomacy", getPlayer())){
         if (rand() % 100 < 75){
-            if(!leastTroopsTerritory->getConnectedTerritories()[1]){
+            if(leastTroopsTerritory->getConnectedTerritories()[1]){
                 if (leastTroopsTerritory->getConnectedTerritories()[1]->getOwner() != leastTroopsTerritory->getOwner()){
                     Negotiate* negotiate = new Negotiate(player, leastTroopsTerritory->getConnectedTerritories()[1]->getOwner(), 0, leastTroopsTerritory, leastTroopsTerritory->getConnectedTerritories()[1]);
                     getPlayer()->getOrdersList()->add(negotiate);
