@@ -27,7 +27,7 @@ class HumanPlayerStrategy: public PlayerStrategy {
 private:
     Player* player;
 public:
-    //consturctor
+    //constructor
     HumanPlayerStrategy(Player* player);
     //destructor
     ~HumanPlayerStrategy();
@@ -43,8 +43,13 @@ class BenevolentPlayerStrategy: public PlayerStrategy {
 private:
     Player* player;
 public:
+    //constructor
     BenevolentPlayerStrategy(Player* player);
+    //destructor
     ~BenevolentPlayerStrategy();
+    //getter for player
+    Player* getPlayer();
+    //function to override
     void issueOrder(Order* order);
     vector<Territory*> toDefend(Territory* territory);
     vector<Territory*> toAttack(Territory* territory);
