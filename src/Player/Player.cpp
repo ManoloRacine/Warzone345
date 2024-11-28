@@ -135,21 +135,17 @@ void Player::printPlayer() const {
 
 // Method to return a list of territories to defend
 vector<Territory*> Player::toDefend(Territory* defendingTerritories) {
-    territoriesToDefend.push_back(defendingTerritories);
-    cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
-    return territoriesToDefend;
+    strategy->toDefend(defendingTerritories);
 }
 
 // Method to return a list of territories to attack
 vector<Territory*> Player::toAttack(Territory* attackingTerritories) {
-    territoriesToAttack.push_back(attackingTerritories);
-    cout<< "Attacking territory is " << attackingTerritories->getName()<<endl;
-    return territoriesToAttack;
+    strategy->toAttack(attackingTerritories);
 }
 
 // Method to issue an order
 void Player::issueOrder(Order* order) {
-    ordersList->add(order);
+    strategy->issueOrder(order);
 }
 
 // Adding a Territories

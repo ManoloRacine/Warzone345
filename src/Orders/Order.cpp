@@ -765,7 +765,7 @@ bool Blockade::validate(){
 }
 
 //creation of the neutral player
-static Player* neutral = new Player("neutral");
+static Player* neutral = new Player("neutral", "neutral");
 
 
 //execute the blockade function
