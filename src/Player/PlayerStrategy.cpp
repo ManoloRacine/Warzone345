@@ -6,6 +6,7 @@
 #include "PlayerStrategy.h"
 #include "Player.cpp"
 #include <algorithm>
+#include "../Orders/Order.h"
 
 PlayerStrategy* PlayerStrategy::createStrategy(Player *player, const std::string& strategy) {
 
@@ -46,13 +47,20 @@ Player* HumanPlayerStrategy::getPlayer(){
 
 // Method to return a list of territories to defend
 vector<Territory*> HumanPlayerStrategy::toDefend(Territory* defendingTerritories) {
+AggressivePlayerStrategy::AggressivePlayerStrategy(Player *player) : player(player){
+}
+
+AggressivePlayerStrategy::~AggressivePlayerStrategy() {delete this->player;}
+
+Player * AggressivePlayerStrategy::getPlayer() {return this->player;}
+
+vector<Territory *> AggressivePlayerStrategy::toDefend(Territory *defendingTerritories) {
     getPlayer()->getTerritoriesToDefend().push_back(defendingTerritories);
     cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
     return getPlayer()->getTerritoriesToDefend();
 }
 
-// Method to return a list of territories to attack
-vector<Territory*> HumanPlayerStrategy::toAttack(Territory* attackingTerritories) {
+vector<Territory *> AggressivePlayerStrategy::toAttack(Territory *attackingTerritories) {
     getPlayer()->getTerritoriesToAttack().push_back(attackingTerritories);
     cout<< "Attacking territory is " << attackingTerritories->getName()<<endl;
     return getPlayer()->getTerritoriesToAttack();
@@ -262,3 +270,83 @@ void CheaterPlayerStrategy::issueOrder(){
 string CheaterPlayerStrategy::getType(){
     return "cheater";
 }
+
+void AggressivePlayerStrategy::issueOrder() {
+    //get strong country
+    Territory* maxTroopsTerritory = nullptr;
+    int maxTroops = 0;
+    for(Territory* territory : getPlayer()->getTerritories()) {
+        if (territory->getArmies() > maxTroops){
+            maxTroops = territory->getArmies();
+            maxTroopsTerritory = territory;
+        }
+    }
+
+    // if reinforcement available, deploy troops on strong country
+    if (player->getReinforcements() > 0) {
+        std::cout << "aggressive player " << this->player->getName() << " is Deploying " << player->getReinforcements() << " to strongest territory "
+                  << maxTroopsTerritory->getName() << std::endl;
+    }
+
+    // add order to player's orders list
+    player->getOrdersList()->add(new Deploy(player, player, player->getReinforcements(), nullptr, maxTroopsTerritory));
+
+    // looking for the strongest opponent connect to my strongest territory and therefore weaker
+    Territory* strongestWeakTerritory = nullptr;
+    int biggerOpponent = -1;
+    for(Territory* territory : maxTroopsTerritory->getConnectedTerritories()){
+        if (territory->getOwner() != getPlayer() && // not the same player
+            territory->getArmies() < maxTroopsTerritory->getArmies() && // armies in enemy territory is lesser
+            territory->getArmies() > biggerOpponent){ // update max armies in adjacent territories
+
+            strongestWeakTerritory = territory;
+            biggerOpponent = territory->getArmies();
+
+        }
+    }
+
+    if (hasCard("bomb", getPlayer())){
+        Bomb* bomb = new Bomb(getPlayer(), nullptr, 0, maxTroopsTerritory, strongestWeakTerritory);
+        getPlayer()->getOrdersList()->add(bomb);
+    }
+
+    player->getOrdersList()->add(new Advance(player, strongestWeakTerritory->getOwner(), maxTroopsTerritory->getArmies(), maxTroopsTerritory, strongestWeakTerritory));
+
+}
+
+NeutralPlayerStrategy::NeutralPlayerStrategy(Player *player) : player(player){
+}
+
+NeutralPlayerStrategy::~NeutralPlayerStrategy() {delete this->player;}
+
+Player * NeutralPlayerStrategy::getPlayer() {
+    this->getPlayer();
+}
+
+void NeutralPlayerStrategy::issueOrder() {
+}
+
+vector<Territory *> NeutralPlayerStrategy::toDefend(Territory *defendingTerritories) {
+    // creating strategy and setting neutral player to aggressive player
+    PlayerStrategy* strat = createStrategy(this->player, "aggressive");
+    this->player->setPlayerStrategy(strat);
+
+    //pushing back territory to defend
+    getPlayer()->getTerritoriesToDefend().push_back(defendingTerritories);
+    cout << "Neutral Player is under attack, and becomes aggressive" << endl;
+
+    cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
+
+    return getPlayer()->getTerritoriesToDefend();
+}
+
+vector<Territory *> NeutralPlayerStrategy::toAttack(Territory *attackingTerritories) {
+    getPlayer()->getTerritoriesToAttack().push_back(attackingTerritories);
+    cout<< "Attacking territory is " << attackingTerritories->getName()<<endl;
+    return getPlayer()->getTerritoriesToAttack();
+}
+
+
+
+
+

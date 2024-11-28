@@ -57,6 +57,19 @@ public:
     void issueOrder();
     //function to indicate type
     string getType();  
+
+class AggressivePlayerStrategy: public PlayerStrategy {
+private:
+    Player* player;
+public:
+    AggressivePlayerStrategy(Player* player); // constructor
+    ~AggressivePlayerStrategy(); // destructor
+
+    // player getter
+    Player* getPlayer();
+
+    // startegy actions
+    void issueOrder();
     vector<Territory*> toDefend(Territory* territory);
     vector<Territory*> toAttack(Territory* territory);
 };
@@ -78,6 +91,20 @@ public:
 
     vector<Territory*> toDefend(Territory* territory) override;
     vector<Territory*> toAttack(Territory* territory) override;
+class NeutralPlayerStrategy: public PlayerStrategy {
+private:
+    Player* player;
+public:
+    NeutralPlayerStrategy(Player* player); // constructor
+    ~NeutralPlayerStrategy(); // destructor
+
+    // player getter
+    Player* getPlayer();
+
+    // startegy actions
+    void issueOrder();
+    vector<Territory*> toDefend(Territory* territory);
+    vector<Territory*> toAttack(Territory* territory);
 };
 
 #endif //PLAYERSTRATEGY_H

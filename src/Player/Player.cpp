@@ -108,12 +108,12 @@ void Player::setNegotiatedPlayers(set<Player*>& newNegotiatedPlayers) {
     negotiatedPlayers = newNegotiatedPlayers;
 }
 
-PlayerStrategy* Player::getPlayerStrategy() const{
+PlayerStrategy * Player::getPlayerStrategy() const {
     return this->strategy;
 }
 
-void Player::setPlayerStrategy(PlayerStrategy* typePlayerStrategy) {
-    this->strategy = typePlayerStrategy;
+void Player::setPlayerStrategy(PlayerStrategy *strategyName) {
+    this->strategy = strategyName;
 }
 
 // Stream insertion operator
