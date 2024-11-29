@@ -10,6 +10,15 @@
 
 using namespace std;
 
+class Player;
+class Territory;
+class Order;
+class Deploy;
+class Advance;
+class Airlift;
+class Bomb;
+class Blockade;
+class Negotiate;
 
 class PlayerStrategy {
 private:
@@ -37,7 +46,7 @@ public:
     //function to override
     void issueOrder() override;
     //function to indicate type
-    string getType();    
+    string getType() override;    
 
     vector<Territory*> toDefend(Territory* territory) override;
     vector<Territory*> toAttack(Territory* territory) override;
@@ -54,11 +63,11 @@ public:
     //getter for player
     Player* getPlayer();
     //function to override
-    void issueOrder();
+    void issueOrder()override;
     //function to indicate type
-    string getType();  
-    vector<Territory*> toDefend(Territory* territory);
-    vector<Territory*> toAttack(Territory* territory);
+    string getType() override;
+    vector<Territory*> toDefend(Territory* territory) override;
+    vector<Territory*> toAttack(Territory* territory) override;
 };
 
 class CheaterPlayerStrategy: public PlayerStrategy {
@@ -74,7 +83,7 @@ public:
     //function to override
     void issueOrder() override;
     //function to indicate type
-    string getType();
+    string getType() override;
 
     vector<Territory*> toDefend(Territory* territory) override;
     vector<Territory*> toAttack(Territory* territory) override;
@@ -91,11 +100,11 @@ public:
         Player* getPlayer();
 
         // startegy actions
-        void issueOrder();
+        void issueOrder() override;
         //function to indicate type
-        string getType();
-        vector<Territory*> toDefend(Territory* territory);
-        vector<Territory*> toAttack(Territory* territory);
+        string getType() override;
+        vector<Territory*> toDefend(Territory* territory) override;
+        vector<Territory*> toAttack(Territory* territory) override;
     };
 
 class NeutralPlayerStrategy: public PlayerStrategy {
@@ -109,11 +118,11 @@ public:
     Player* getPlayer();
 
     // startegy actions
-    void issueOrder();
+    void issueOrder() override;
     //function to indicate type
-    string getType();
-    vector<Territory*> toDefend(Territory* territory);
-    vector<Territory*> toAttack(Territory* territory);
+    string getType() override;
+    vector<Territory*> toDefend(Territory* territory) override;
+    vector<Territory*> toAttack(Territory* territory) override;
 };
 
 #endif //PLAYERSTRATEGY_H

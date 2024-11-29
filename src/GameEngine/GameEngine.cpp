@@ -267,6 +267,7 @@ std::string GameEngine::stringToLog() {
     return stream.str();
 }
 
+/*
 void GameEngine::startupPhase() {
     CommandProcessor commandProcessor; // Create CommandProcessor instance
     std::cout << "Starting game setup. Enter commands:" << std::endl;
@@ -382,6 +383,7 @@ void GameEngine::startupPhase() {
     }
 }
 
+*/
 
 // Function to assign territories in a round-robin fashion
 void GameEngine::assignTerritoriesToPlayers(Map& map, vector<Player*>& players) {
@@ -480,7 +482,7 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
 }
 
 //----------------A2-PART3-Griffin-Sin-Chan---------------//
-
+/*
 void GameEngine::mainGameLoop() {
     GameEngine game;
     CommandProcessor commandProcessor;
@@ -530,6 +532,7 @@ void GameEngine::mainGameLoop() {
         }
      }
 }
+*/
 void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
 
     vector<Continent*> continents = map.getContinents();
@@ -610,7 +613,11 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
         for(int i = 0; i < numPlayers; i++) {
             //check player type, only humans should input
             if(players[i]->getPlayerStrategy()->getType() != "human"){
+                cout<<"INSIDE NON HUMAN PLAYERS" <<endl;
                 playerNotDoneTurn[i] = false;
+                cout<<"PLAYER DONE TURN" <<endl;
+                players[i]->issueOrder();
+                cout<<"33333" <<endl;
             }
 
             //if player not done issuing orders let them issue order
@@ -791,15 +798,6 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     }
                 }
             }
-        }
-    }
-    //============================================================
-    //Issue Orders for Non Human Players
-    //============================================================
-
-    for(int i = 0; i < numPlayers; i++) {
-        if(players[i]->getPlayerStrategy()->getType() != "human") {
-            players[i]->getPlayerStrategy()->issueOrder();
         }
     }
 }

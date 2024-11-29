@@ -4,8 +4,8 @@
 
 #include "Player.h"
 #include "PlayerStrategy.h"
-#include "Player.cpp"
 #include <algorithm>
+#include <climits>
 
 PlayerStrategy* PlayerStrategy::createStrategy(Player *player, const std::string& strategy) {
 
@@ -60,6 +60,10 @@ vector<Territory*> HumanPlayerStrategy::toAttack(Territory* attackingTerritories
 
 // Method to issue an order
 void HumanPlayerStrategy::issueOrder(){
+}
+
+string HumanPlayerStrategy::getType(){
+    return "human";
 }
 
 
@@ -168,8 +172,8 @@ void BenevolentPlayerStrategy::issueOrder() {
         if (rand() % 100 < 75){
             if(leastTroopsTerritory->getConnectedTerritories()[1]){
                 if (leastTroopsTerritory->getConnectedTerritories()[1]->getOwner() != leastTroopsTerritory->getOwner()){
-                    Negotiate* negotiate = new Negotiate(player, leastTroopsTerritory->getConnectedTerritories()[1]->getOwner(), 0, leastTroopsTerritory, leastTroopsTerritory->getConnectedTerritories()[1]);
-                    getPlayer()->getOrdersList()->add(negotiate);
+                    Negotiate* negotiate1 = new Negotiate(player, leastTroopsTerritory->getConnectedTerritories()[1]->getOwner(), 0, leastTroopsTerritory, leastTroopsTerritory->getConnectedTerritories()[1]);
+                    getPlayer()->getOrdersList()->add(negotiate1);
                 }
             }
         }
@@ -335,7 +339,7 @@ NeutralPlayerStrategy::NeutralPlayerStrategy(Player *player) : player(player){
 NeutralPlayerStrategy::~NeutralPlayerStrategy() {delete this->player;}
 
 Player * NeutralPlayerStrategy::getPlayer() {
-    this->getPlayer();
+    return this->getPlayer();
 }
 
 void NeutralPlayerStrategy::issueOrder() {

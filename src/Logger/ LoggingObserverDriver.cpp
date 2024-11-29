@@ -2,6 +2,7 @@
 // Created by Ryad on 2024-11-10.
 //
 
+/*
 
 #include "../GameEngine/GameEngine.h"
 #include " LoggingObserverDriver.h"
@@ -110,3 +111,4 @@ void testLoggingObserver() {
     }
 }
 
+*/

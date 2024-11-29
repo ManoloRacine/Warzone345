@@ -1,7 +1,7 @@
 //
 // Created by manol on 9/21/2024.
 //
-
+/*
 #include "GameEngine.h"
 #include "Map.h"
 #include <iostream>
@@ -58,7 +58,7 @@ void testReinforcementPhase() {
     cout << *player1 << endl;
     cout << *player2 << endl;
 
-    /*
+    
     
     Deploy *deployOrder = new Deploy(player1, player2, 4, nullptr, game.getTerritoryByName(loadedMap, "Delaware"));
 
@@ -72,7 +72,7 @@ void testReinforcementPhase() {
 
     cout<<"Order type is: " << (player1->getOrdersList()->getList()[0]->getLabel()) << endl;
 
-    */
+    
 
     game.reinforcementPhase(loadedMap, game.playerList);
     game.issueOrdersPhase(loadedMap, game.playerList);
@@ -80,3 +80,5 @@ void testReinforcementPhase() {
     
 
 }
+
+*/

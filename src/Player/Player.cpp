@@ -143,12 +143,12 @@ void Player::printPlayer() const {
 
 // Method to return a list of territories to defend
 vector<Territory*> Player::toDefend(Territory* defendingTerritories) {
-    strategy->toDefend(defendingTerritories);
+    return strategy->toDefend(defendingTerritories);
 }
 
 // Method to return a list of territories to attack
 vector<Territory*> Player::toAttack(Territory* attackingTerritories) {
-    strategy->toAttack(attackingTerritories);
+    return strategy->toAttack(attackingTerritories);
 }
 
 // Method to issue an order
@@ -157,7 +157,9 @@ void Player::issueOrder(Order* order) {
 }
 
 void Player::issueOrder() {
-    strategy->issueOrder();
+    cout<<"kill me"<< endl;
+    this->strategy->issueOrder();
+    cout<<"I've died"<< endl;
 }
 
 // Adding a Territories
