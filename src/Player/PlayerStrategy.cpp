@@ -247,8 +247,6 @@ void CheaterPlayerStrategy::issueOrder(){
                 //note what territory is being attacked
                 getPlayer()->getPlayerStrategy()->toAttack(getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]);
 
-                delete advance;
-                advance = nullptr;
                 }
             }
         }
