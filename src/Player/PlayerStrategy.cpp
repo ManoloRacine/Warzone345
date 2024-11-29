@@ -15,11 +15,11 @@ PlayerStrategy* PlayerStrategy::createStrategy(Player *player, const std::string
     if(strategy_name == "human") {
         return new HumanPlayerStrategy(player);
     } else if(strategy_name == "aggressive") {
-        return new AggressivePlayerStrategy(player);
+       // return new AggressivePlayerStrategy(player);
     } else if(strategy_name == "benevolent") {
         return new BenevolentPlayerStrategy(player);
     } else if(strategy_name == "neutral") {
-        return new NeutralPlayerStrategy(player);
+       // return new NeutralPlayerStrategy(player);
     } else if (strategy_name == "cheater") {
         return new CheaterPlayerStrategy(player);
     } else {
@@ -60,6 +60,10 @@ vector<Territory*> HumanPlayerStrategy::toAttack(Territory* attackingTerritories
 
 // Method to issue an order
 void HumanPlayerStrategy::issueOrder(){
+}
+
+string CheaterPlayerStrategy::getType(){
+    return "human";
 }
 
 
@@ -174,4 +178,87 @@ void BenevolentPlayerStrategy::issueOrder() {
             }
         }
     }
+}
+string BenevolentPlayerStrategy::getType(){
+    return "benevolent";
+}
+
+//===================================
+//------------Cheater------------------
+//===================================
+//constructor
+CheaterPlayerStrategy::CheaterPlayerStrategy(Player* player)
+    :player(player){}
+
+//destructor
+CheaterPlayerStrategy::~CheaterPlayerStrategy(){
+    delete player;
+}
+
+//getter for player
+Player* CheaterPlayerStrategy::getPlayer(){
+    return player;
+}
+
+// Method to return a list of territories to defend
+vector<Territory*> CheaterPlayerStrategy::toDefend(Territory* defendingTerritories) {
+    getPlayer()->getTerritoriesToDefend().push_back(defendingTerritories);
+    cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
+    return getPlayer()->getTerritoriesToDefend();
+}
+
+// Method to return a list of territories to attack
+vector<Territory*> CheaterPlayerStrategy::toAttack(Territory* attackingTerritories) {
+    getPlayer()->getTerritoriesToAttack().push_back(attackingTerritories);
+    return getPlayer()->getTerritoriesToAttack();
+}
+
+// Method to issue an order
+void CheaterPlayerStrategy::issueOrder(){
+    //loop through all owned territories
+    for(int i = 0; i < getPlayer()->getTerritories().size(); i++) {
+       
+       int numTroopsOnTerritory = getPlayer()->getTerritories()[i]->getArmies();
+       int numAdjacentTerritories = getPlayer()->getTerritories()[i]->getConnectedTerritories().size();
+    
+       //number of troops to send in advance order 
+       int numAttackTroops = numTroopsOnTerritory/numAdjacentTerritories;
+
+        for (int j = 0; j < numAdjacentTerritories; j++) {
+            //check each territory in the adjacency list
+            //compare territory owner's name with the current cheater player's name
+            if (getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]->getOwner()->getName() != getPlayer()->getName()){
+                //before adding advance order check that the territory has not been attacked yet this turn
+                bool territoryAttacked = false;
+                for(int k = 0; k < getPlayer()->getTerritoriesToAttack().size(); k++) {
+                    //territory names found in the attacked territories vector with current territory name
+                    if(getPlayer()->getTerritoriesToAttack()[k]->getName() == getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]->getName()) {
+                        territoryAttacked = true;
+                    }
+                }
+                
+                //if the territory has not been attacked advance onto it
+                if(territoryAttacked == false) {
+                //advance order contents 
+                //Current player
+                //Same player       (unnecessary for this order could have been a null pointer)
+                //Attack troops     calculated earlier
+                //Source Territory  current iteration of the outer most for loop
+                //Target Territory  current iteration of the inner most for loop
+                Advance* advance = new Advance(getPlayer(), getPlayer(), numAttackTroops, getPlayer()->getTerritories()[i], getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]); 
+                //add advance onto orderlist
+                getPlayer()->getOrdersList()->add(advance);
+                //note what territory is being attacked
+                getPlayer()->getPlayerStrategy()->toAttack(getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]);
+
+                delete advance;
+                advance = nullptr;
+                }
+            }
+        }
+    }
+}
+
+string CheaterPlayerStrategy::getType(){
+    return "cheater";
 }

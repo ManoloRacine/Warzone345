@@ -108,6 +108,14 @@ void Player::setNegotiatedPlayers(set<Player*>& newNegotiatedPlayers) {
     negotiatedPlayers = newNegotiatedPlayers;
 }
 
+PlayerStrategy* Player::getPlayerStrategy() const{
+    return this->strategy;
+}
+
+void Player::setPlayerStrategy(PlayerStrategy* typePlayerStrategy) {
+    this->strategy = typePlayerStrategy;
+}
+
 // Stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Player& player) {
     os << "Player territories: " << player.getTerritories().size() << " | Cards in hand: " << player.hand->getCards().size() << "\n";

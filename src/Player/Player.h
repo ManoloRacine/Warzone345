@@ -74,9 +74,13 @@ public:
     bool getConqueredATerritory() const;
     void setConqueredATerritory(const bool captured);
 
-     // Getters and Setters for for NegotiatePlayers
+     // Getters and Setters for NegotiatePlayers
      set<Player*> getNegotiatedPlayers() const;
      void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
+
+    // Getters and Setters for playerStrategy
+    PlayerStrategy* getPlayerStrategy() const;
+    void setPlayerStrategy(PlayerStrategy* strategyName);
 
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Player& player);  
