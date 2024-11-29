@@ -340,7 +340,8 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
       
     }
     else if(user != targeted && user->getPlayerStrategy()->getType() != "cheater"){
-      user->toAttack(target);
+      user->getPlayerStrategy()->toAttack(target);
+      target->getOwner()->getPlayerStrategy()->toDefend(target);
       int attackingUnits = armies;
       int defendingUnits = target->getArmies();
       int attackingLosses = 0;
