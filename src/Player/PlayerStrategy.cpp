@@ -117,34 +117,44 @@ void BenevolentPlayerStrategy::issueOrder() {
             }
         }
 
-    //deploy orders
-    Deploy* deploy = new Deploy(getPlayer(), nullptr, (getPlayer()->getReinforcements()/2), nullptr, leastTroopsTerritory);
-    getPlayer()->getOrdersList()->add(deploy);
-    Deploy* deploy2 = new Deploy(getPlayer(), nullptr, getPlayer()->getReinforcements(), nullptr, secondLeastTroopsTerritory);
-    getPlayer()->getOrdersList()->add(deploy2);
+    if (leastTroopsTerritory) {
+        //deploy orders
+        Deploy* deploy = new Deploy(getPlayer(), nullptr, (getPlayer()->getReinforcements()/2), nullptr, leastTroopsTerritory);
+        getPlayer()->getOrdersList()->add(deploy);
+    }
+
+    if (secondLeastTroopsTerritory) {
+        Deploy* deploy2 = new Deploy(getPlayer(), nullptr, getPlayer()->getReinforcements(), nullptr, secondLeastTroopsTerritory);
+        getPlayer()->getOrdersList()->add(deploy2);
+    }
 
     //setup for advance order
     bool NotNull = false;
     Territory* advanceSource = nullptr;
-    for(Territory* territory : thirdLeastTroopsTerritory->getConnectedTerritories()){
-      if (territory->getOwner() == getPlayer()){
-        advanceSource = territory;
-      }
+    if (thirdLeastTroopsTerritory) {
+        for(Territory* territory : thirdLeastTroopsTerritory->getConnectedTerritories()){
+            if (territory->getOwner() == getPlayer()){
+                advanceSource = territory;
+            }
+        }
+
+
+        for(Territory* territory : thirdLeastTroopsTerritory->getConnectedTerritories()){
+            if (territory->getOwner() == getPlayer() && territory->getArmies() > advanceSource->getArmies()){
+                advanceSource = territory;
+                NotNull = true;
+            }
+        }
+        //Advance order
+        if(NotNull){
+            Advance* advance = new Advance(getPlayer(), getPlayer(), (advanceSource->getArmies()/4), advanceSource, thirdLeastTroopsTerritory);
+            getPlayer()->getOrdersList()->add(advance);
+        }
     }
-    for(Territory* territory : thirdLeastTroopsTerritory->getConnectedTerritories()){
-      if (territory->getOwner() == getPlayer() && territory->getArmies() > advanceSource->getArmies()){
-        advanceSource = territory;
-        NotNull = true;
-      }
-    }
-    //Advance order
-    if(NotNull){
-       Advance* advance = new Advance(getPlayer(), getPlayer(), (advanceSource->getArmies()/4), advanceSource, thirdLeastTroopsTerritory);
-       getPlayer()->getOrdersList()->add(advance);
-    }
+
     //Airlift order setup
     Territory* maxTroopsTerritory = nullptr;
-        int maxTroops = 0;
+        int maxTroops = -1;
         for(Territory* territory : getPlayer()->getTerritories()){
             if (territory->getArmies() > maxTroops){
                 maxTroops = territory->getArmies();
@@ -153,14 +163,14 @@ void BenevolentPlayerStrategy::issueOrder() {
         }
     //airlift order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
     if (hasCard("airlift", getPlayer())){
-        if (rand() % 100 < 50){
+        if (rand() % 100 < 50 && fourthLeastTroopsTerritory && maxTroopsTerritory){
             Airlift* airlift = new Airlift(getPlayer(), getPlayer(), (maxTroopsTerritory->getArmies()/3), maxTroopsTerritory, fourthLeastTroopsTerritory);
             getPlayer()->getOrdersList()->add(airlift);
         }
     }
 
      //blockade order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
-    if (hasCard("blockade", getPlayer())){
+    if (hasCard("blockade", getPlayer()) && leastTroopsTerritory){
         if (rand() % 100 < 25){
             Blockade* blockade = new Blockade(getPlayer(), getPlayer(), 0, leastTroopsTerritory, leastTroopsTerritory);
             getPlayer()->getOrdersList()->add(blockade);
@@ -168,7 +178,7 @@ void BenevolentPlayerStrategy::issueOrder() {
     }
 
      //diplomacy order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
-    if (hasCard("diplomacy", getPlayer())){
+    if (hasCard("diplomacy", getPlayer()) && leastTroopsTerritory){
         if (rand() % 100 < 75){
             if(leastTroopsTerritory->getConnectedTerritories()[1]){
                 if (leastTroopsTerritory->getConnectedTerritories()[1]->getOwner() != leastTroopsTerritory->getOwner()){
@@ -286,7 +296,7 @@ string CheaterPlayerStrategy::getType(){
 void AggressivePlayerStrategy::issueOrder() {
     //get strong country
     Territory* maxTroopsTerritory = nullptr;
-    int maxTroops = 0;
+    int maxTroops = -1;
     for(Territory* territory : getPlayer()->getTerritories()) {
         if (territory->getArmies() > maxTroops){
             maxTroops = territory->getArmies();
@@ -314,16 +324,16 @@ void AggressivePlayerStrategy::issueOrder() {
             strongestWeakTerritory = territory;
             biggerOpponent = territory->getArmies();
 
-        }
+            }
     }
 
-    if (hasCard("bomb", getPlayer())){
+    if (hasCard("bomb", getPlayer()) && strongestWeakTerritory){
         Bomb* bomb = new Bomb(getPlayer(), nullptr, 0, maxTroopsTerritory, strongestWeakTerritory);
         getPlayer()->getOrdersList()->add(bomb);
     }
-
-    player->getOrdersList()->add(new Advance(player, strongestWeakTerritory->getOwner(), maxTroopsTerritory->getArmies(), maxTroopsTerritory, strongestWeakTerritory));
-
+    if (strongestWeakTerritory){
+        player->getOrdersList()->add(new Advance(player, strongestWeakTerritory->getOwner(), maxTroopsTerritory->getArmies(), maxTroopsTerritory, strongestWeakTerritory));
+    }
 }
 
 string AggressivePlayerStrategy::getType() {

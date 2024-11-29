@@ -613,11 +613,7 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
         for(int i = 0; i < numPlayers; i++) {
             //check player type, only humans should input
             if(players[i]->getPlayerStrategy()->getType() != "human"){
-                cout<<"INSIDE NON HUMAN PLAYERS" <<endl;
                 playerNotDoneTurn[i] = false;
-                cout<<"PLAYER DONE TURN" <<endl;
-                players[i]->issueOrder();
-                cout<<"33333" <<endl;
             }
 
             //if player not done issuing orders let them issue order
@@ -798,6 +794,14 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     }
                 }
             }
+        }
+
+    }
+    for(int i = 0; i < numPlayers; i++) {
+        //check player type, only humans should input
+        if(players[i]->getPlayerStrategy()->getType() != "human"){
+            cout << players[i]->getName() << " issues orders" << endl;
+            players[i]->issueOrder();
         }
     }
 }

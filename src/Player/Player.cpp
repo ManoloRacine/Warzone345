@@ -157,9 +157,7 @@ void Player::issueOrder(Order* order) {
 }
 
 void Player::issueOrder() {
-    cout<<"kill me"<< endl;
     this->strategy->issueOrder();
-    cout<<"I've died"<< endl;
 }
 
 // Adding a Territories
