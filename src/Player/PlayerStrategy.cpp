@@ -6,7 +6,6 @@
 #include "PlayerStrategy.h"
 #include "Player.cpp"
 #include <algorithm>
-#include "../Orders/Order.h"
 
 PlayerStrategy* PlayerStrategy::createStrategy(Player *player, const std::string& strategy) {
 
@@ -47,20 +46,13 @@ Player* HumanPlayerStrategy::getPlayer(){
 
 // Method to return a list of territories to defend
 vector<Territory*> HumanPlayerStrategy::toDefend(Territory* defendingTerritories) {
-AggressivePlayerStrategy::AggressivePlayerStrategy(Player *player) : player(player){
-}
-
-AggressivePlayerStrategy::~AggressivePlayerStrategy() {delete this->player;}
-
-Player * AggressivePlayerStrategy::getPlayer() {return this->player;}
-
-vector<Territory *> AggressivePlayerStrategy::toDefend(Territory *defendingTerritories) {
     getPlayer()->getTerritoriesToDefend().push_back(defendingTerritories);
     cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
     return getPlayer()->getTerritoriesToDefend();
 }
 
-vector<Territory *> AggressivePlayerStrategy::toAttack(Territory *attackingTerritories) {
+// Method to return a list of territories to attack
+vector<Territory*> HumanPlayerStrategy::toAttack(Territory* attackingTerritories) {
     getPlayer()->getTerritoriesToAttack().push_back(attackingTerritories);
     cout<< "Attacking territory is " << attackingTerritories->getName()<<endl;
     return getPlayer()->getTerritoriesToAttack();
@@ -68,10 +60,6 @@ vector<Territory *> AggressivePlayerStrategy::toAttack(Territory *attackingTerri
 
 // Method to issue an order
 void HumanPlayerStrategy::issueOrder(){
-}
-
-string CheaterPlayerStrategy::getType(){
-    return "human";
 }
 
 
@@ -225,11 +213,11 @@ vector<Territory*> CheaterPlayerStrategy::toAttack(Territory* attackingTerritori
 void CheaterPlayerStrategy::issueOrder(){
     //loop through all owned territories
     for(int i = 0; i < getPlayer()->getTerritories().size(); i++) {
-       
+
        int numTroopsOnTerritory = getPlayer()->getTerritories()[i]->getArmies();
        int numAdjacentTerritories = getPlayer()->getTerritories()[i]->getConnectedTerritories().size();
-    
-       //number of troops to send in advance order 
+
+       //number of troops to send in advance order
        int numAttackTroops = numTroopsOnTerritory/numAdjacentTerritories;
 
         for (int j = 0; j < numAdjacentTerritories; j++) {
@@ -244,16 +232,16 @@ void CheaterPlayerStrategy::issueOrder(){
                         territoryAttacked = true;
                     }
                 }
-                
+
                 //if the territory has not been attacked advance onto it
                 if(territoryAttacked == false) {
-                //advance order contents 
+                //advance order contents
                 //Current player
                 //Same player       (unnecessary for this order could have been a null pointer)
                 //Attack troops     calculated earlier
                 //Source Territory  current iteration of the outer most for loop
                 //Target Territory  current iteration of the inner most for loop
-                Advance* advance = new Advance(getPlayer(), getPlayer(), numAttackTroops, getPlayer()->getTerritories()[i], getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]); 
+                Advance* advance = new Advance(getPlayer(), getPlayer(), numAttackTroops, getPlayer()->getTerritories()[i], getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]);
                 //add advance onto orderlist
                 getPlayer()->getOrdersList()->add(advance);
                 //note what territory is being attacked
@@ -269,6 +257,28 @@ void CheaterPlayerStrategy::issueOrder(){
 
 string CheaterPlayerStrategy::getType(){
     return "cheater";
+}
+
+//===================================
+//------------Aggressive-------------
+//===================================
+    AggressivePlayerStrategy::AggressivePlayerStrategy(Player *player) : player(player){
+}
+
+    AggressivePlayerStrategy::~AggressivePlayerStrategy() {delete this->player;}
+
+    Player * AggressivePlayerStrategy::getPlayer() {return this->player;}
+
+    vector<Territory *> AggressivePlayerStrategy::toDefend(Territory *defendingTerritories) {
+    getPlayer()->getTerritoriesToDefend().push_back(defendingTerritories);
+    cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
+    return getPlayer()->getTerritoriesToDefend();
+}
+
+    vector<Territory *> AggressivePlayerStrategy::toAttack(Territory *attackingTerritories) {
+    getPlayer()->getTerritoriesToAttack().push_back(attackingTerritories);
+    cout<< "Attacking territory is " << attackingTerritories->getName()<<endl;
+    return getPlayer()->getTerritoriesToAttack();
 }
 
 void AggressivePlayerStrategy::issueOrder() {
@@ -314,6 +324,13 @@ void AggressivePlayerStrategy::issueOrder() {
 
 }
 
+string AggressivePlayerStrategy::getType() {
+    return "aggressive";
+}
+
+//===================================
+//------------Neutral-------------
+//===================================
 NeutralPlayerStrategy::NeutralPlayerStrategy(Player *player) : player(player){
 }
 
@@ -324,6 +341,10 @@ Player * NeutralPlayerStrategy::getPlayer() {
 }
 
 void NeutralPlayerStrategy::issueOrder() {
+}
+
+string NeutralPlayerStrategy::getType() {
+    return "neutral";
 }
 
 vector<Territory *> NeutralPlayerStrategy::toDefend(Territory *defendingTerritories) {
