@@ -48,9 +48,16 @@ void testPlayerStrategies() {
     player1->getHand()->draw(deck);
     player2->getHand()->draw(deck);
     player2->getHand()->draw(deck);
+    player3->getHand()->draw(deck);
+    player3->getHand()->draw(deck);
+    player4->getHand()->draw(deck);
+    player4->getHand()->draw(deck);
+    player5->getHand()->draw(deck);
+    player5->getHand()->draw(deck);
+
+
     cout << *player1 << endl;
-    cout << *player2 << endl;
-    
+
     bool play = true;
      while (play) {
        

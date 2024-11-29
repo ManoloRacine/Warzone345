@@ -360,17 +360,20 @@ string NeutralPlayerStrategy::getType() {
 }
 
 vector<Territory *> NeutralPlayerStrategy::toDefend(Territory *defendingTerritories) {
+    std::vector<Territory*> territoriesToDefend;
+    territoriesToDefend.push_back(defendingTerritories);
+
     // creating strategy and setting neutral player to aggressive player
     PlayerStrategy* strat = createStrategy(this->player, "aggressive");
     this->player->setPlayerStrategy(strat);
 
     //pushing back territory to defend
-    getPlayer()->getTerritoriesToDefend().push_back(defendingTerritories);
+
     cout << "Neutral Player is under attack, and becomes aggressive" << endl;
 
-    cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
 
-    return getPlayer()->getTerritoriesToDefend();
+
+    return territoriesToDefend;
 }
 
 vector<Territory *> NeutralPlayerStrategy::toAttack(Territory *attackingTerritories) {

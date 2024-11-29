@@ -267,7 +267,7 @@ std::string GameEngine::stringToLog() {
     return stream.str();
 }
 
-/*
+
 void GameEngine::startupPhase() {
     CommandProcessor commandProcessor; // Create CommandProcessor instance
     std::cout << "Starting game setup. Enter commands:" << std::endl;
@@ -341,7 +341,7 @@ void GameEngine::startupPhase() {
             if (spacePos != std::string::npos) {
                 std::string playername = fullCommand.substr(spacePos + 1); // Extract the player name after the first space
                 if (playerCount < 6) {  // Enforce max player count (6)
-                    Player* player = new Player(playername); // Use extracted player name
+                    Player* player = new Player(playername, "human"); // Use extracted player name
                     playerList.push_back(player); //Add player pointer to vector
                     playerCount++;
                     if (playerCount > 1) {
@@ -383,7 +383,7 @@ void GameEngine::startupPhase() {
     }
 }
 
-*/
+
 
 // Function to assign territories in a round-robin fashion
 void GameEngine::assignTerritoriesToPlayers(Map& map, vector<Player*>& players) {
@@ -482,7 +482,7 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
 }
 
 //----------------A2-PART3-Griffin-Sin-Chan---------------//
-/*
+
 void GameEngine::mainGameLoop() {
     GameEngine game;
     CommandProcessor commandProcessor;
@@ -493,10 +493,10 @@ void GameEngine::mainGameLoop() {
     game.gameMap = new Map(loadedMap);
     bool result = loadedMap.validate();
     cout << "Map validation is: " << result << endl;
-    Player* player1 = new Player("bob");
+    Player* player1 = new Player("bob", "human");
     game.playerList.push_back(player1);
     cout << "adding player bob" << endl;
-    Player* player2 = new Player("sam");
+    Player* player2 = new Player("sam", "human");
     game.playerList.push_back(player2);
     cout << "adding player sam" << endl;
     cout << "Assigning territories" << endl;
@@ -532,7 +532,7 @@ void GameEngine::mainGameLoop() {
         }
      }
 }
-*/
+
 void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
 
     vector<Continent*> continents = map.getContinents();
