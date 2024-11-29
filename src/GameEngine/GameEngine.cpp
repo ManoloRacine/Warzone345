@@ -608,6 +608,11 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
         //looping until player puts in a valid order
         //rotate through each player
         for(int i = 0; i < numPlayers; i++) {
+            //check player type, only humans should input
+            if(players[i]->getPlayerStrategy()->getType() != "human"){
+                playerNotDoneTurn[i] = false;
+            }
+
             //if player not done issuing orders let them issue order
             if (playerNotDoneTurn[i]) { 
                 validOrder = false;
@@ -786,6 +791,15 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                     }
                 }
             }
+        }
+    }
+    //============================================================
+    //Issue Orders for Non Human Players
+    //============================================================
+
+    for(int i = 0; i < numPlayers; i++) {
+        if(players[i]->getPlayerStrategy()->getType() != "human") {
+            players[i]->getPlayerStrategy()->issueOrder();
         }
     }
 }
