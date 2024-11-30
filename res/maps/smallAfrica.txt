@@ -11,7 +11,6 @@ The Horn=20
 
 
 [Territories]
-South Sudan,421,253,The Horn,Ethiopia,Kenya,Uganda
-
+South Sudan,421,253,The Horn,Kenya,Uganda
 Uganda,452,323,Eastern Africa,South Sudan,Kenya
-Kenya,498,330,Eastern Africa,South Sudan,Ethiopia,Somalia,Uganda
+Kenya,498,330,Eastern Africa,South Sudan,Uganda

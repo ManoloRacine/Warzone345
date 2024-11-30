@@ -14,7 +14,7 @@ void testPlayerStrategies() {
     CommandProcessor commandProcessor;
     MapLoader mapLoader;
     Map loadedMap;
-    mapLoader.loadMap(loadedMap,"../res/maps/usa.txt");
+    mapLoader.loadMap(loadedMap,"../res/maps/smallAfrica.txt");
    
     game.gameMap = new Map(loadedMap);
     bool result = loadedMap.validate();
