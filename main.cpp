@@ -3,6 +3,7 @@
 #include "src/GameEngine/GameEngineDriver.h"
 #include "src/Orders/OrderDriver.h"
 #include "src/Player/PlayerDriver.h"
+#include "src/Player/PlayerStrategiesDriver.h"
 #include <iostream>
 #include "src/CommandProcessing/CommandProcessingDriver.h"
 #include "src/Logger/ LoggingObserverDriver.h"
@@ -13,8 +14,9 @@ using namespace std;
 
 
 int main() {
-
-    CommandProcessor command_processor = CommandProcessor();
+    testPlayerStrategies();
+	
+	CommandProcessor command_processor = CommandProcessor();
     GameEngine game = GameEngine();
 
     Command *command = command_processor.getCommand(&game);

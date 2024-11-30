@@ -11,9 +11,10 @@ using namespace std;
 
 
 // Default constructor
-Player::Player(const string& playerName)
-    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0) {
+Player::Player(const string& playerName, const std::string& strategy)
+    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0){
     // Initialize player with empty territories, hand, and order list
+    this->strategy = PlayerStrategy::createStrategy(this, strategy);
 }
 
 // Copy Constructor
@@ -107,6 +108,14 @@ void Player::setNegotiatedPlayers(set<Player*>& newNegotiatedPlayers) {
     negotiatedPlayers = newNegotiatedPlayers;
 }
 
+PlayerStrategy * Player::getPlayerStrategy() const {
+    return this->strategy;
+}
+
+void Player::setPlayerStrategy(PlayerStrategy *strategyName) {
+    this->strategy = strategyName;
+}
+
 // Stream insertion operator
 std::ostream& operator<<(std::ostream& os, const Player& player) {
     os << "Player territories: " << player.getTerritories().size() << " | Cards in hand: " << player.hand->getCards().size() << "\n";
@@ -134,21 +143,21 @@ void Player::printPlayer() const {
 
 // Method to return a list of territories to defend
 vector<Territory*> Player::toDefend(Territory* defendingTerritories) {
-    territoriesToDefend.push_back(defendingTerritories);
-    cout<< "Defending territory is " << defendingTerritories->getName()<< endl;
-    return territoriesToDefend;
+    return strategy->toDefend(defendingTerritories);
 }
 
 // Method to return a list of territories to attack
 vector<Territory*> Player::toAttack(Territory* attackingTerritories) {
-    territoriesToAttack.push_back(attackingTerritories);
-    cout<< "Attacking territory is " << attackingTerritories->getName()<<endl;
-    return territoriesToAttack;
+    return strategy->toAttack(attackingTerritories);
 }
 
 // Method to issue an order
 void Player::issueOrder(Order* order) {
     ordersList->add(order);
+}
+
+void Player::issueOrder() {
+    this->strategy->issueOrder();
 }
 
 // Adding a Territories

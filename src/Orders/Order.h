@@ -74,6 +74,9 @@ public:
   OrdersList() = default;
   explicit OrdersList(GameEngine* gameEngine);
   ~OrdersList();
+
+  void addOrder(Territory * territory);
+
   OrdersList(const OrdersList &);
 
   OrdersList &operator=(const OrdersList &);

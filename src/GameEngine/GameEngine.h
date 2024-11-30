@@ -12,6 +12,7 @@
 #include "../Cards/Cards.h"
 #include "../Logger/LogObserver.h"
 #include "../Player/Player.h"
+#include "../Player/PlayerStrategy.h"
 
 using namespace std;
 
