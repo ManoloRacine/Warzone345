@@ -604,10 +604,18 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     string sourceTerritory;
     string targetTerritory;
     string opposingPlayerName;
+    bool humanFound = false;
 
     cout<<"\n=======================  Issue Order Phase  ======================="<< endl;
-    //While orders are still being issued
-    while(playersIssuingOrders) {
+    //loop through all players and look for a human
+    for(int i = 0; i < numPlayers; i++){
+        //check player strategy type
+            if(players[i]->getPlayerStrategy()->getType() == "human"){
+                humanFound = true;
+            }
+    }
+
+    while(playersIssuingOrders && humanFound) {
         //looping until player puts in a valid order
         //rotate through each player
         for(int i = 0; i < numPlayers; i++) {
