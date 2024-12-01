@@ -8,8 +8,8 @@
 #include "GameEngine.h"
 
 
-void testTournament(GameEngine game,CommandProcessor commandProcessor,TournamentSetup tournamentSetup);
-void tournamentPlay(GameEngine game, Map loadedMap, int maxTurnCount);
+void testTournament(GameEngine & game,CommandProcessor & commandProcessor,TournamentSetup tournamentSetup);
+void tournamentPlay(GameEngine & game, int maxTurnCount);
 
 
 #endif //TOURNAMENTDRIVER_H

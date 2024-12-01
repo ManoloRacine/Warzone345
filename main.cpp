@@ -19,7 +19,7 @@ int main() {
 	CommandProcessor commandProcessor = CommandProcessor();
     GameEngine game = GameEngine();
 
-    string commandString = "tournament -m smallafrica.txt -p Aggressive -p Benevolent -g 2 -d 20";
+    string commandString = "tournament -m smallAfrica.txt -p benevolent -p cheater -g 2 -d 20";
     Command *command = commandProcessor.getCommandFromString(commandString);
     TournamentSetup tournamentSetup = commandProcessor.getTournamentSetupFromCommand(command);
 

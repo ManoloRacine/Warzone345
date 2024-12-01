@@ -211,6 +211,10 @@ void Player::resetPlayer() {
     for (auto terr : territories) {
         delete terr;
     }
+
+
+
+
     delete ordersList;
     delete hand;
 

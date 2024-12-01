@@ -305,10 +305,10 @@ void AggressivePlayerStrategy::issueOrder() {
     }
 
     // if reinforcement available, deploy troops on strong country
-    if (player->getReinforcements() > 0) {
-        std::cout << "aggressive player " << this->player->getName() << " is Deploying " << player->getReinforcements() << " to strongest territory "
-                  << maxTroopsTerritory->getName() << std::endl;
-    }
+    // if (player->getReinforcements() > 0) {
+    //     std::cout << "aggressive player " << this->player->getName() << " is Deploying " << player->getReinforcements() << " to strongest territory "
+    //               << maxTroopsTerritory->getName() << std::endl;
+    // }
 
     // add order to player's orders list
     player->getOrdersList()->add(new Deploy(player, player, player->getReinforcements(), nullptr, maxTroopsTerritory));

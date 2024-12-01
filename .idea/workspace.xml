@@ -7,6 +7,7 @@
     <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
+    <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
   </component>
   <component name="CMakePresetLoader">{
   &quot;useNewFormat&quot;: true
@@ -28,65 +29,14 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2e25fe08-d609-4ed5-b44b-128531990e98" name="Changes" comment="startupphase() fully functional">
-      <change beforePath="$PROJECT_DIR$/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Warzone345.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Warzone345.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/editor.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/editor.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="2e25fe08-d609-4ed5-b44b-128531990e98" name="Changes" comment="Fixed bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/CommandFiles/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/CommandFiles/test.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/maps/africa.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/maps/africa.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/maps/africa_unconnectedsubgraph.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/maps/africa_unconnectedsubgraph.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/maps/europe.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/maps/europe.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/maps/europe_notconnected.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/maps/europe_notconnected.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/maps/smallAfrica.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/maps/smallAfrica.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/maps/usa.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/maps/usa.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/res/maps/usa_emptycontinent.txt" beforeDir="false" afterPath="$PROJECT_DIR$/res/maps/usa_emptycontinent.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cards/Cards.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cards/Cards.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cards/Cards.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cards/Cards.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cards/CardsDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cards/CardsDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Cards/CardsDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Cards/CardsDriver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Command/Command.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/Command.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Command/Command.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Command/Command.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessingDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessingDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessingDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessingDriver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessor.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessor.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/CommandProcessing/CommandProcessor.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameEngine/GameEngine.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameEngine/GameEngine.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameEngine/GameEngine.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameEngine/GameEngine.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameEngine/GameEngineDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameEngine/GameEngineDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/GameEngine/GameEngineDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameEngine/GameEngineDriver.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameEngine/TournamentDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameEngine/TournamentDriver.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GameEngine/TournamentDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/GameEngine/TournamentDriver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Logger/ LoggingObserverDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logger/ LoggingObserverDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Logger/ LoggingObserverDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logger/ LoggingObserverDriver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Logger/LogObserver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logger/LogObserver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Logger/LogObserver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Logger/LogObserver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Map/Map.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Map/Map.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Map/Map.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Map/Map.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Map/MapDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Map/MapDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Map/MapDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Map/MapDriver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Map/tempCodeRunnerFile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Map/tempCodeRunnerFile.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Orders/Order.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Orders/Order.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Orders/Order.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Orders/Order.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Orders/OrderDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Orders/OrderDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Orders/OrderDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Orders/OrderDriver.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Player/Player.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/Player.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player/Player.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/Player.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player/PlayerDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/PlayerDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player/PlayerDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/PlayerDriver.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player/PlayerStrategiesDriver.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/PlayerStrategiesDriver.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player/PlayerStrategiesDriver.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/PlayerStrategiesDriver.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Player/PlayerStrategy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/PlayerStrategy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Player/PlayerStrategy.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Player/PlayerStrategy.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +118,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "CMake Application.Warzone345.executor": "Valgrind",
+    "CMake Application.Warzone345.executor": "Run",
     "Docker.Docker-RUN.executor": "Run",
     "Docker.Docker-run.executor": "Run",
     "Docker.Unnamed.executor": "Run",
@@ -199,8 +149,8 @@
       <window_info id="Commit_Guest" show_stripe_button="false" />
       <window_info id="Pull Requests" />
       <window_info id="Learn" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32994792" />
-      <window_info id="Commit" order="1" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.19713542" />
+      <window_info active="true" id="Commit" order="1" visible="true" weight="0.19713542" />
       <window_info id="Structure" order="2" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Database Changes" />
       <window_info anchor="bottom" id="TypeScript" />
@@ -215,8 +165,8 @@
       <window_info anchor="bottom" id="Terminal" order="3" weight="0.15358527" />
       <window_info anchor="bottom" id="Services" order="4" />
       <window_info anchor="bottom" id="CMake" order="5" />
-      <window_info anchor="bottom" id="Messages" order="5" weight="0.5896318" />
-      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.12645349" />
+      <window_info anchor="bottom" id="Messages" order="5" weight="0.46656978" />
+      <window_info active="true" anchor="bottom" id="Run" order="5" visible="true" weight="0.029554263" />
       <window_info anchor="right" id="make" side_tool="true" />
       <window_info anchor="right" id="Coverage" side_tool="true" />
       <window_info anchor="right" id="Python Console" />
@@ -229,11 +179,6 @@
     </layout>
   </component>
   <component name="RunManager" selected="CMake Application.Warzone345">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Warzone345" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="true" PASS_PARENT_ENVS_2="true" PROJECT_NAME="Warzone345" TARGET_NAME="Warzone345" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="Warzone345" RUN_TARGET_NAME="Warzone345">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -295,6 +240,8 @@
       <workItem from="1731036587940" duration="5000" />
       <workItem from="1733031100515" duration="134000" />
       <workItem from="1733031325673" duration="93000" />
+      <workItem from="1733032694677" duration="1860000" />
+      <workItem from="1733072033529" duration="6197000" />
     </task>
     <task id="LOCAL-00001" summary="Almost done startupphase();">
       <option name="closed" value="true" />
@@ -320,7 +267,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730331100599</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fixed bug">
+      <option name="closed" value="true" />
+      <created>1733032647053</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1733032647054</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -335,7 +290,8 @@
     <MESSAGE value="Almost done startupphase();" />
     <MESSAGE value="startupphase() functional, minor state change issues" />
     <MESSAGE value="startupphase() fully functional" />
-    <option name="LAST_COMMIT_MESSAGE" value="startupphase() fully functional" />
+    <MESSAGE value="Fixed bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed bug" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

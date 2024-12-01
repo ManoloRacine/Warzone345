@@ -434,7 +434,8 @@ void GameEngine::draw2cards(std::vector<Player*>& players) {
     this->gameDeck = new Deck();
     gameDeck->generateDeck();
 
-    cout<< "CURRENT GAME DECK: " << *gameDeck << endl;
+    //cout<< "CURRENT GAME DECK: " << *gameDeck << endl;
+    cout << "Game Deck generated..." << endl;
 
     for(const auto& player : players) {
         cout << player->getName() << " Draws two cards..." << endl;
@@ -541,7 +542,7 @@ void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
     for(const auto& player : players) {
         //# of territories owned divided by 3, rounded down
         div_t numberOfTroops = div(player->getTerritories().size(),3);
-        int numTroops = numberOfTroops.quot + player->getReinforcements(); // quotient from C library
+        int numTroops = numberOfTroops.quot; // quotient from C library
         player->setReinforcements(numTroops);
 
 
@@ -845,9 +846,7 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
             }
         }   
     }
-
     //issue round robin players orders
-
     while(execute) {
         for (int i = 0; i < players.size(); i++) {
             //firstly check if player has any territories
