@@ -20,7 +20,7 @@ void testTournament(GameEngine game,CommandProcessor commandProcessor, Tournamen
 
     for ( int i = 0 ; i < mapCount; i++ ) {
 
-        game.gameMap = game.gameMaps[mapCount];
+        game.gameMap = game.gameMaps[i];
 
         for ( int j = 0 ; j < gameCount; j++) {
             game.startGame();
