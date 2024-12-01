@@ -420,6 +420,13 @@ std::ostream& operator<<(std::ostream& os, const Map& map) {
     return os;
 }
 
+void Map::resetMap() {
+    for (auto& [key, value] : mapData) {
+        value->setArmies(0);
+        value->setOwner(nullptr);
+    }
+}
+
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // ------------------ MAP VALIDATION ----------------------

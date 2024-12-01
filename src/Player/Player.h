@@ -96,6 +96,8 @@ public:
     void addTerritories(Territory*);
     bool removeTerritories(Territory*);
 
+    void resetPlayer();
+
 
 
 //for negociating with a player

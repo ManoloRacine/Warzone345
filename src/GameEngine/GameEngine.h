@@ -14,10 +14,12 @@
 #include "../Player/Player.h"
 #include "../Player/PlayerStrategy.h"
 
+
 using namespace std;
 
 // Forward declaration
 class LogObserver;
+class CommandProcessor;
 
 
 enum State {
@@ -132,11 +134,16 @@ class GameEngine: public Subject, ILoggable {
     void assignTerritoriesToPlayers(Map& map, std::vector<Player*>& players);
     void determineOrderOfPlay(std::vector<Player*>& players);
     void setReinforcementPools(std::vector<Player*>& players);
-    Map * gameMap; // Also need a map object
+    vector<Map*> gameMaps;
+    inline void addMap(Map* map) { this->gameMaps.push_back(map); };
+    Map * gameMap;
     inline void setMap(Map& map) { this->gameMap = &map; };
     Deck * gameDeck;
     void draw2cards(std::vector<Player*>& players);
     void printAllMaps(const std::string& mapDirectory);
+    void startUpPhase(CommandProcessor commandProcessor,vector<string> &maps,vector<string> &players);
+    void startGame();
+    void resetGame();
     //------------------------------------------------
 
     //------------- A2-P3 CHANGES -------------- ( by Griffin)

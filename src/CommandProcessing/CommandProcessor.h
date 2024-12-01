@@ -29,7 +29,7 @@ class CommandProcessor: public Subject, ILoggable {
         void validate(GameEngine* gameEngine, Command* command);
         bool isValidTournamentCommand(string commandString);
         vector<Command*> commands;
-    protected:
+    public:
         Command* getCommandFromString(string commandString);
         friend class GameEngine;
     public:

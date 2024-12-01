@@ -21,7 +21,7 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 //order list
 
 OrdersList::OrdersList(GameEngine *gameEngine) : game(gameEngine){
-  Subject::attach((ILogObserver*)game->logObserver);
+
 }
 
 

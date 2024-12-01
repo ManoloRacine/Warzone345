@@ -206,3 +206,23 @@ void Player::clearNegotiations() {
     negotiatedPlayers.clear();
 }
 
+void Player::resetPlayer() {
+
+    for (auto terr : territories) {
+        delete terr;
+    }
+    delete ordersList;
+    delete hand;
+
+    setReinforcements(0);
+
+    for (auto terr : territoriesToDefend) {
+        delete terr;
+    }
+    for (auto terr : territoriesToAttack) {
+        delete terr;
+    }
+    for (auto plr : negotiatedPlayers) {
+        delete plr;
+    }
+}
