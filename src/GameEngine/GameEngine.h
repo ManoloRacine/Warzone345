@@ -144,6 +144,7 @@ class GameEngine: public Subject, ILoggable {
     void startUpPhase(CommandProcessor commandProcessor,vector<string> &maps,vector<string> &players);
     void startGame();
     void resetGame();
+    void initializeDeck();
     //------------------------------------------------
 
     //------------- A2-P3 CHANGES -------------- ( by Griffin)

@@ -30,6 +30,7 @@ private:
     set<Player*> negotiatedPlayers; //players that are negociating with you
 
 public:
+   inline string getStrategy() const { return this->strategy->getType();}
     // Constructors
     Player();
 

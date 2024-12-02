@@ -95,6 +95,24 @@ std::ostream& operator<<(std::ostream& os, const Deck &deck) {
     return os;
 }
 
+Deck::~Deck() {
+    // Loop through all the cards in the deck and delete them
+    while (!cards.empty()) {
+        Card* card = cards.front();
+        cards.pop();
+        delete card;  // Delete the card itself
+    }
+}
+
+
+Hand::~Hand() {
+    // Delete all the cards in the hand
+    for (auto card : cards) {
+        delete card;
+    }
+    cards.clear();  // Clear the vector to remove the pointers
+}
+
 
 Hand::Hand() = default;
 
@@ -218,6 +236,13 @@ std::ostream& operator<<(std::ostream& os, const Card &card) {
     return os << card.print();
 }
 
+
+void Hand::returnCards() {
+    for (auto card : cards) {
+        card->originalDeck->putIntoDeck(card);
+    }
+    cards.clear();
+}
 
 
 
