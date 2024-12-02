@@ -119,12 +119,12 @@ void BenevolentPlayerStrategy::issueOrder() {
 
     if (leastTroopsTerritory) {
         //deploy orders
-        Deploy* deploy = new Deploy(getPlayer(), nullptr, (getPlayer()->getReinforcements()/2), nullptr, leastTroopsTerritory);
+        Deploy* deploy = new Deploy(player->getGameEngine(), getPlayer(), nullptr, (getPlayer()->getReinforcements()/2), nullptr, leastTroopsTerritory);
         getPlayer()->getOrdersList()->add(deploy);
     }
 
     if (secondLeastTroopsTerritory) {
-        Deploy* deploy2 = new Deploy(getPlayer(), nullptr, getPlayer()->getReinforcements(), nullptr, secondLeastTroopsTerritory);
+        Deploy* deploy2 = new Deploy(player->getGameEngine(), getPlayer(), nullptr, getPlayer()->getReinforcements(), nullptr, secondLeastTroopsTerritory);
         getPlayer()->getOrdersList()->add(deploy2);
     }
 
@@ -147,7 +147,7 @@ void BenevolentPlayerStrategy::issueOrder() {
         }
         //Advance order
         if(NotNull){
-            Advance* advance = new Advance(getPlayer(), getPlayer(), (advanceSource->getArmies()/4), advanceSource, thirdLeastTroopsTerritory);
+            Advance* advance = new Advance(player->getGameEngine(), getPlayer(), getPlayer(), (advanceSource->getArmies()/4), advanceSource, thirdLeastTroopsTerritory);
             getPlayer()->getOrdersList()->add(advance);
         }
     }
@@ -164,7 +164,7 @@ void BenevolentPlayerStrategy::issueOrder() {
     //airlift order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
     if (hasCard("airlift", getPlayer())){
         if (rand() % 100 < 50 && fourthLeastTroopsTerritory && maxTroopsTerritory){
-            Airlift* airlift = new Airlift(getPlayer(), getPlayer(), (maxTroopsTerritory->getArmies()/3), maxTroopsTerritory, fourthLeastTroopsTerritory);
+            Airlift* airlift = new Airlift(player->getGameEngine(), getPlayer(), getPlayer(), (maxTroopsTerritory->getArmies()/3), maxTroopsTerritory, fourthLeastTroopsTerritory);
             getPlayer()->getOrdersList()->add(airlift);
         }
     }
@@ -172,7 +172,7 @@ void BenevolentPlayerStrategy::issueOrder() {
      //blockade order (added in some chance to use a card for some fun and it say that benevolent Players may use cards)
     if (hasCard("blockade", getPlayer()) && leastTroopsTerritory){
         if (rand() % 100 < 25){
-            Blockade* blockade = new Blockade(getPlayer(), getPlayer(), 0, leastTroopsTerritory, leastTroopsTerritory);
+            Blockade* blockade = new Blockade(player->getGameEngine(), getPlayer(), getPlayer(), 0, leastTroopsTerritory, leastTroopsTerritory);
             getPlayer()->getOrdersList()->add(blockade);
         }
     }
@@ -182,7 +182,7 @@ void BenevolentPlayerStrategy::issueOrder() {
         if (rand() % 100 < 75){
             if(leastTroopsTerritory->getConnectedTerritories()[1]){
                 if (leastTroopsTerritory->getConnectedTerritories()[1]->getOwner() != leastTroopsTerritory->getOwner()){
-                    Negotiate* negotiate1 = new Negotiate(player, leastTroopsTerritory->getConnectedTerritories()[1]->getOwner(), 0, leastTroopsTerritory, leastTroopsTerritory->getConnectedTerritories()[1]);
+                    Negotiate* negotiate1 = new Negotiate(player->getGameEngine(), player, leastTroopsTerritory->getConnectedTerritories()[1]->getOwner(), 0, leastTroopsTerritory, leastTroopsTerritory->getConnectedTerritories()[1]);
                     getPlayer()->getOrdersList()->add(negotiate1);
                 }
             }
@@ -255,7 +255,7 @@ void CheaterPlayerStrategy::issueOrder(){
                 //Attack troops     calculated earlier
                 //Source Territory  current iteration of the outer most for loop
                 //Target Territory  current iteration of the inner most for loop
-                Advance* advance = new Advance(getPlayer(), getPlayer(), numAttackTroops, getPlayer()->getTerritories()[i], getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]);
+                Advance* advance = new Advance(player->getGameEngine(), getPlayer(), getPlayer(), numAttackTroops, getPlayer()->getTerritories()[i], getPlayer()->getTerritories()[i]->getConnectedTerritories()[j]);
                 //add advance onto orderlist
                 getPlayer()->getOrdersList()->add(advance);
                 //note what territory is being attacked
@@ -311,7 +311,7 @@ void AggressivePlayerStrategy::issueOrder() {
     // }
 
     // add order to player's orders list
-    Deploy* deploy = new Deploy(player, player, player->getReinforcements(), nullptr, maxTroopsTerritory);
+    Deploy* deploy = new Deploy(player->getGameEngine(), player, player, player->getReinforcements(), nullptr, maxTroopsTerritory);
     player->getOrdersList()->add(deploy);
 
     // looking for the strongest opponent connect to my strongest territory and therefore weaker
@@ -329,11 +329,11 @@ void AggressivePlayerStrategy::issueOrder() {
     }
 
     if (hasCard("bomb", getPlayer()) && strongestWeakTerritory){
-        Bomb* bomb = new Bomb(getPlayer(), nullptr, 0, maxTroopsTerritory, strongestWeakTerritory);
+        Bomb* bomb = new Bomb(player->getGameEngine(),getPlayer(), nullptr, 0, maxTroopsTerritory, strongestWeakTerritory);
         getPlayer()->getOrdersList()->add(bomb);
     }
     if (strongestWeakTerritory){
-        Advance* advance = new Advance(player, strongestWeakTerritory->getOwner(), maxTroopsTerritory->getArmies(), maxTroopsTerritory, strongestWeakTerritory);
+        Advance* advance = new Advance(player->getGameEngine(), player, strongestWeakTerritory->getOwner(), maxTroopsTerritory->getArmies(), maxTroopsTerritory, strongestWeakTerritory);
         player->getOrdersList()->add(advance);
     }
 }

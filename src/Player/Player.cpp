@@ -11,8 +11,8 @@ using namespace std;
 
 
 // Default constructor
-Player::Player(const string& playerName, const std::string& strategy)
-    : name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0){
+Player::Player(GameEngine* game, const string& playerName, const std::string& strategy)
+    : gameEngine(game), name(playerName), hand(new Hand()), ordersList(new OrdersList()), negotiatedPlayers(negotiatedPlayers), conqueredATerritory(false), reinforcementPool(0){
     // Initialize player with empty territories, hand, and order list
     this->strategy = PlayerStrategy::createStrategy(this, strategy);
 }
@@ -37,6 +37,10 @@ string Player::getName() const {
 
 void Player::setName(const string& s) {
     name = s;
+}
+
+GameEngine * Player::getGameEngine() const {
+    return this->gameEngine;
 }
 
 // Getters and Setters for Territories

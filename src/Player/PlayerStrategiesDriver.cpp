@@ -21,9 +21,9 @@ void testPlayerStrategies() {
     cout << "Map validation is: " << result << endl;
     //Player* player1 = new Player("bob", "human");
     //Player* player2 = new Player("kevin", "aggressive");
-    Player* player3 = new Player("jeremy", "benevolent");
+    Player* player3 = new Player(&game, "jeremy", "benevolent");
     //Player* player4 = new Player("louis", "neutral");
-    Player* player5 = new Player("simon", "cheater");
+    Player* player5 = new Player(&game, "simon", "cheater");
     //game.playerList.push_back(player1);
     cout << "adding player bob" << endl;
     

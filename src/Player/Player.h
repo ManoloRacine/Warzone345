@@ -13,8 +13,10 @@
 class Territory;
 class Order;
 class OrdersList;
+class GameEngine;
 
 using namespace std;
+
 
 class Player {
 private:
@@ -28,13 +30,14 @@ private:
     vector<Territory*> territoriesToAttack; //For toAttack gets wiped every execute orders
     bool conqueredATerritory; //To give card at end of turn
     set<Player*> negotiatedPlayers; //players that are negociating with you
+    GameEngine* gameEngine;
 
 public:
    inline string getStrategy() const { return this->strategy->getType();}
     // Constructors
     Player();
 
-    Player(const string& playerName, const std::string& strategy);
+    Player(GameEngine* game, const string& playerName, const std::string& strategy);
     //Player(GameEngine* game, const string& playerName);
 
     // Copy constructor
@@ -46,6 +49,8 @@ public:
     // Getters and Setters for Name
     string getName() const;
     void setName(const string& newName);
+
+    GameEngine* getGameEngine() const;
 
     // Getters and Setters for Reinforcements -ADDED IN P2-A2 - Nektarios
     inline int getReinforcements() const { return this->reinforcementPool;};

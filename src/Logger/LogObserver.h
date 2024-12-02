@@ -45,6 +45,7 @@ public:
   Subject() = default;
   ~Subject() override = default;
 
+  void getObservers();
   void attach(ILogObserver* observer) override;
   void detach(ILogObserver* observer) override;
   void notify(ILoggable*) override;
