@@ -15,9 +15,9 @@ using namespace std;
 
 int main() {
     //testPlayerStrategies();
-
-	CommandProcessor commandProcessor = CommandProcessor();
     GameEngine game = GameEngine();
+
+	CommandProcessor commandProcessor = CommandProcessor(&game);
 
     string commandString = "tournament -m smallAfrica.txt -p benevolent -p aggressive  -g 3 -d 10";
     Command *command = commandProcessor.getCommandFromString(commandString);

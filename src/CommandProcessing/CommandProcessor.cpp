@@ -36,35 +36,49 @@ Command *CommandProcessor::getCommandFromString(string commandString) {
     vector<string> splitCommand;
     commandString = toLower(commandString);
     split(splitCommand, commandString, ' ');
-
     if (splitCommand.size() == 1) {
         if (splitCommand.at(0) == "validatemap") {
-            return new Command(commandString, ValidateMap);
+            auto* command = new Command(commandString, ValidateMap, this->gameEngine);
+            this->saveCommand(command);
+            return command;
         }
         if (splitCommand.at(0) =="gamestart") {
-            return new Command(commandString, GameStart);
+            auto* command = new Command(commandString, GameStart, this->gameEngine);
+            this->saveCommand(command);
+            return command;
         }
         if (splitCommand.at(0) == "replay") {
-            return new Command(commandString, Replay);
+            auto* command = new Command(commandString, Replay, this->gameEngine);
+            this->saveCommand(command);
+            return command;
         }
         if (splitCommand.at(0) == "quit") {
-            return new Command(commandString, Quit);
+            auto* command = new Command(commandString, Quit, this->gameEngine);
+            this->saveCommand(command);
+            return command;
         }
     }
-    else if (splitCommand.size() == 2) {
+
         if (splitCommand.at(0) == "loadmap") {
-            return new Command(commandString, LoadMap);
+            auto* command = new Command(commandString, LoadMap, this->gameEngine);
+            this->saveCommand(command);
+            return command;
         }
         if (splitCommand.at(0) == "addplayer") {
-            return new Command(commandString, AddPlayer);
+            auto* command = new Command(commandString, AddPlayer, this->gameEngine);
+            this->saveCommand(command);
+            return command;
         }
-    }
+
     else if (isValidTournamentCommand(commandString)) {
-        return new Command(commandString, Tournament);
+        auto* command = new Command(commandString, Tournament, this->gameEngine);
+        this->saveCommand(command);
+        return command;
+
     }
 
 
-    return new Command(commandString, Invalid);
+    return new Command(commandString, Invalid, this->gameEngine);
 
 }
 
@@ -239,7 +253,6 @@ TournamentSetup CommandProcessor::getTournamentSetupFromCommand(Command* command
             currentOption = "";
         }
     }
-
     return tournamentSetup;
 }
 
@@ -296,20 +309,26 @@ CommandProcessor::CommandProcessor() = default;
 
 CommandProcessor::CommandProcessor(GameEngine* game) {
     this->gameEngine = game;
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &copy) {
     commands = copy.commands;
+    this->gameEngine = copy.gameEngine;
+    Subject::attach((ILogObserver*)this->gameEngine->logObserver);
 }
 
 CommandProcessor::CommandProcessor(const CommandProcessor &copy, GameEngine* game) {
     commands = copy.commands;
     this->gameEngine = game;
+    Subject::attach((ILogObserver*)gameEngine->logObserver);
 }
 
 CommandProcessor &CommandProcessor::operator=(const CommandProcessor &copy) {
     if (this != &copy) {
         commands = copy.commands;
+        this->gameEngine = copy.gameEngine;
+        Subject::attach((ILogObserver*)gameEngine->logObserver);
     }
     return *this;
 }

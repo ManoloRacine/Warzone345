@@ -7,6 +7,10 @@
 //------------------------------------------------Subject - (Observable)-------------------------------------
 
 
+void Subject::getObservers() {
+  std::cout << observers[0] << std::endl;
+}
+
 void Subject::attach(ILogObserver* observer) {
   if(observer == nullptr){ throw std::runtime_error("Observer is null."); }
   observers.push_back(observer);

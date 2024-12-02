@@ -786,11 +786,12 @@ bool Blockade::validate(){
 }
 
 //creation of the neutral player
-static Player* neutral = new Player("neutral", "neutral");
+//static Player* neutral = new Player("neutral", "neutral");
 
 
 //execute the blockade function
 void Blockade::execute(Player* user, Player* targeted, int armies, Territory* source, Territory* target) {
+  Player* neutral = new Player(user->getGameEngine(), "neutral", "neutral");
   source->getOwner()->removeTerritories(source);
   source->setArmies(source->getArmies()*2);
   source->setOwner(neutral);

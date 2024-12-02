@@ -219,6 +219,8 @@ string WinState::getName() {
 GameEngine::GameEngine() {
     gameEngineState = &StartState::getInstance();
     this->logObserver = new LogObserver(this);
+    Subject::attach((ILogObserver*)logObserver);//subscribe to log list
+    Subject::notify(this);
 }
 
 GameState* GameEngine::getCurrentState() const {
@@ -238,12 +240,14 @@ void GameEngine::setState(GameState &newState) {
 GameEngine::GameEngine(const GameEngine &gameEngine) {
     gameEngineState = gameEngine.gameEngineState;
     this->logObserver = gameEngine.logObserver;
+    Subject::attach((ILogObserver*)logObserver);//subscribe to log list
 }
 
 GameEngine & GameEngine::operator=(const GameEngine &other) {
     if (this != &other) {
         this->gameEngineState = other.gameEngineState;
         this->logObserver = other.logObserver;
+        Subject::attach((ILogObserver*)logObserver);//subscribe to log list
     }
 
     return *this;
@@ -338,7 +342,7 @@ void GameEngine::startupPhase() {
             if (spacePos != std::string::npos) {
                 std::string playername = fullCommand.substr(spacePos + 1); // Extract the player name after the first space
                 if (playerCount < 6) {  // Enforce max player count (6)
-                    Player* player = new Player(playername, "human"); // Use extracted player name
+                    Player* player = new Player(this, playername, "human"); // Use extracted player name
                     playerList.push_back(player); //Add player pointer to vector
                     playerCount++;
                     if (playerCount > 1) {
@@ -492,10 +496,10 @@ void GameEngine::mainGameLoop() {
     game.gameMap = new Map(loadedMap);
     bool result = loadedMap.validate();
     cout << "Map validation is: " << result << endl;
-    Player* player1 = new Player("bob", "human");
+    Player* player1 = new Player(this, "bob", "human");
     game.playerList.push_back(player1);
     cout << "adding player bob" << endl;
-    Player* player2 = new Player("sam", "human");
+    Player* player2 = new Player(this, "sam", "human");
     game.playerList.push_back(player2);
     cout << "adding player sam" << endl;
     cout << "Assigning territories" << endl;
@@ -1040,13 +1044,13 @@ void GameEngine::startUpPhase(CommandProcessor commandProcessor,vector<string> &
         // human player
         if (player == "human") {
             string name = "player " + std::to_string(playerCounter++);
-            auto * newPlayer = new Player(name, player);
+            auto * newPlayer = new Player(this, name, player);
             playerList.push_back(newPlayer);
             std::cout << "New Player " << name << " added!" << std::endl;
         } else {
             // CPU player
             string name = "CPU " + std::to_string(cpuCounter++);
-            auto * newPlayer = new Player(name, player);
+            auto * newPlayer = new Player(this, name, player);
             playerList.push_back(newPlayer);
             std::cout << "New Player " << name << " added!" << std::endl;
         }
