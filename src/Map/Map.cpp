@@ -38,6 +38,10 @@ Continent::Continent(const Continent& other)
     }
 }
 
+Continent::~Continent() {
+
+}
+
 // Assignment Operator
 Continent& Continent::operator=(const Continent& other) {
     if (this != &other) { // Check for self-assignment
@@ -418,6 +422,13 @@ std::ostream& operator<<(std::ostream& os, const Map& map) {
     }
 
     return os;
+}
+
+void Map::resetMap() {
+    for (auto& [key, value] : mapData) {
+        value->setArmies(0);
+        value->setOwner(nullptr);
+    }
 }
 
 

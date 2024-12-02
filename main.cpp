@@ -3,33 +3,28 @@
 #include "src/GameEngine/GameEngineDriver.h"
 #include "src/Orders/OrderDriver.h"
 #include "src/Player/PlayerDriver.h"
+#include "src/Player/PlayerStrategiesDriver.h"
 #include <iostream>
 #include "src/CommandProcessing/CommandProcessingDriver.h"
 #include "src/Logger/ LoggingObserverDriver.h"
-
+#include "src/GameEngine/TournamentDriver.h"
 #include "Command/Command.h"
 #include "CommandProcessing/CommandProcessor.h"
 using namespace std;
 
 
 int main() {
-    cout << "-----------------------------testLoggingObserver()-----------------------------------" << std::endl;
-    //testLoggingObserver();
-    cout << "-----------------------------testCommandProcessor()-----------------------------------" << std::endl;
-    //testCommandProcessor();
+    //testPlayerStrategies();
 
-    // FileCommandProcessorAdapter commandProcessor("../res/CommandFiles/test.txt");
-    // GameEngine gameEngine;
-    // Command* command = commandProcessor.getCommand(&gameEngine);
-    // cout << command->getCommand() << endl;
-    // cout << command->getType() << endl;
+	CommandProcessor commandProcessor = CommandProcessor();
+    GameEngine game = GameEngine();
 
-    cout << "-----------------------------testStartupPhase()-----------------------------------" << std::endl;
-    //testStartupPhase();
-    cout << "-----------------------------testMainGameLoop()-----------------------------------" << std::endl;
-    testMainGameLoop();
-    cout << "-----------------------------testOrdersLists()-----------------------------------" << std::endl;
-    testOrdersLists();
+    string commandString = "tournament -m smallAfrica.txt -p benevolent -p cheater -g 2 -d 20";
+    Command *command = commandProcessor.getCommandFromString(commandString);
+    TournamentSetup tournamentSetup = commandProcessor.getTournamentSetupFromCommand(command);
+
+    testTournament(game,commandProcessor,tournamentSetup);
+
 
 
     return 0;

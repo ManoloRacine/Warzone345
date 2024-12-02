@@ -8,6 +8,7 @@
 #include "../Map/Map.h"
 #include "../Orders/Order.h"
 #include "../Cards/Cards.h"
+#include "PlayerStrategy.h"
 
 class Territory;
 class Order;
@@ -17,6 +18,7 @@ using namespace std;
 
 class Player {
 private:
+    PlayerStrategy* strategy;
     string name;
     vector<Territory*> territories;  // Collection of territories
     OrdersList* ordersList;           // List of orders
@@ -31,7 +33,7 @@ public:
     // Constructors
     Player();
 
-    Player(const string& playerName);
+    Player(const string& playerName, const std::string& strategy);
     //Player(GameEngine* game, const string& playerName);
 
     // Copy constructor
@@ -72,9 +74,13 @@ public:
     bool getConqueredATerritory() const;
     void setConqueredATerritory(const bool captured);
 
-     // Getters and Setters for for NegotiatePlayers
+     // Getters and Setters for NegotiatePlayers
      set<Player*> getNegotiatedPlayers() const;
      void setNegotiatedPlayers(set<Player*>& newNegociatedPlayers);
+
+    // Getters and Setters for playerStrategy
+    PlayerStrategy* getPlayerStrategy() const;
+    void setPlayerStrategy(PlayerStrategy* strategyName);
 
     // Stream insertion operator
     friend std::ostream& operator<<(std::ostream& os, const Player& player);  
@@ -86,8 +92,11 @@ public:
     vector<Territory*> toDefend(Territory*);
     vector<Territory*> toAttack(Territory*);
     void issueOrder(Order* order);
+    void issueOrder();
     void addTerritories(Territory*);
     bool removeTerritories(Territory*);
+
+    void resetPlayer();
 
 
 

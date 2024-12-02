@@ -21,7 +21,7 @@ std::ostream &operator<<(std::ostream &stream, const Order &o) { return o.orderC
 //order list
 
 OrdersList::OrdersList(GameEngine *gameEngine) : game(gameEngine){
-  Subject::attach((ILogObserver*)game->logObserver);
+
 }
 
 
@@ -336,11 +336,12 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
       source->setArmies(source->getArmies()-armies);
       target->setArmies(target->getArmies()+armies);
       user->toDefend(target);
-      cout << target->getName() << " Now has " << target->getArmies() << " occupying it" << endl;
+      cout << target->getName() << " Now has " << target->getArmies() << " occupying it." << endl;
       
     }
-    else if(user != targeted){
-      user->toAttack(target);
+    else if(user != targeted && user->getPlayerStrategy()->getType() != "cheater"){
+      user->getPlayerStrategy()->toAttack(target);
+      target->getOwner()->toDefend(target);
       int attackingUnits = armies;
       int defendingUnits = target->getArmies();
       int attackingLosses = 0;
@@ -378,12 +379,27 @@ void Advance::execute(Player* user, Player* targeted, int armies, Territory* sou
 
         target->setArmies(attackingUnits-attackingLosses);
         source->setArmies(source->getArmies()-(attackingUnits-attackingLosses));
-        cout << "Territory " << target->getName() << " conquered by " << user->getName() << endl;
+        cout << "Territory " << target->getName() << " conquered by " << user->getName() <<"." << endl;
       }
       else{
         cout << "Attack Failed " << target->getName() << " remains in " << source->getName() << "'s possession." << endl;
       }
 
+    }
+    else if (user->getPlayerStrategy()->getType() == "cheater"){
+          //check who owns the current attacked territory and remove territory from current owner
+          target->getOwner()->removeTerritories(target);
+          //change owner to the current cheater player
+          target->setOwner(user);
+          //add territory to cheater's territory list
+          user->addTerritories(target);
+          //note that they conquered a territory for card distribution
+          user->setConqueredATerritory(true);
+          //remove troops from source depending on how armies many sent over
+          source->setArmies(source->getArmies()-armies);
+          //cheater takes over the territory and all troops on it become their own plus what they attack with
+          target->setArmies(target->getArmies()+armies);
+          cout <<"Territory " << target->getName() << " taken over by the cheater, " << user->getName() <<"." <<  endl;
     }
     Subject::notify(this);
 }
@@ -765,7 +781,7 @@ bool Blockade::validate(){
 }
 
 //creation of the neutral player
-static Player* neutral = new Player("neutral");
+static Player* neutral = new Player("neutral", "neutral");
 
 
 //execute the blockade function

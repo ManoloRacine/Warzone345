@@ -103,6 +103,10 @@ public:
 
     void setOwner(Player* newOwner);
     Player* getOwner() const;
+
+
+
+
 };
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -172,6 +176,7 @@ public:
     bool subGraphCheck(unordered_map<std::string, Territory*> mapData, vector<Continent*> Continents);
     void SubGraphDFS(Territory* territory, std::unordered_set<Territory*>& visitedNodes, Continent* Continent);
     bool validate();
+    void resetMap();
 
 };
 

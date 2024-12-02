@@ -13,6 +13,13 @@
 using namespace std;
 class Command;
 
+struct TournamentSetup {
+    vector<string> mapNames;
+    vector<string> playerStrategies;
+    int nbGames;
+    int nbTurns;
+};
+
 // loggable
 class CommandProcessor: public Subject, ILoggable {
     private:
@@ -20,8 +27,9 @@ class CommandProcessor: public Subject, ILoggable {
         virtual Command* readCommand();
         void saveCommand(Command* command);
         void validate(GameEngine* gameEngine, Command* command);
+        bool isValidTournamentCommand(string commandString);
         vector<Command*> commands;
-    protected:
+    public:
         Command* getCommandFromString(string commandString);
         friend class GameEngine;
     public:
@@ -36,6 +44,9 @@ class CommandProcessor: public Subject, ILoggable {
         vector<Command*> getCommands() const ;
         // Logging -- A2 - P5
         std::string stringToLog() override;
+
+        //A3-P2
+        TournamentSetup getTournamentSetupFromCommand(Command* command);
 };
 
 class FileLineReader {

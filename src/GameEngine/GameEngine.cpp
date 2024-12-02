@@ -219,7 +219,6 @@ string WinState::getName() {
 GameEngine::GameEngine() {
     gameEngineState = &StartState::getInstance();
     this->logObserver = new LogObserver(this);
-    Subject::attach((ILogObserver*)logObserver);//subscribe to log list
 }
 
 GameState* GameEngine::getCurrentState() const {
@@ -239,14 +238,12 @@ void GameEngine::setState(GameState &newState) {
 GameEngine::GameEngine(const GameEngine &gameEngine) {
     gameEngineState = gameEngine.gameEngineState;
     this->logObserver = gameEngine.logObserver;
-    Subject::attach((ILogObserver*)logObserver); //subscribe to log list
 }
 
 GameEngine & GameEngine::operator=(const GameEngine &other) {
     if (this != &other) {
         this->gameEngineState = other.gameEngineState;
         this->logObserver = other.logObserver;
-        Subject::attach((ILogObserver*)other.logObserver);//subscribe to log list
     }
 
     return *this;
@@ -266,6 +263,7 @@ std::string GameEngine::stringToLog() {
     stream << GameEngine::getCurrentState()->getName();
     return stream.str();
 }
+
 
 void GameEngine::startupPhase() {
     CommandProcessor commandProcessor; // Create CommandProcessor instance
@@ -340,7 +338,7 @@ void GameEngine::startupPhase() {
             if (spacePos != std::string::npos) {
                 std::string playername = fullCommand.substr(spacePos + 1); // Extract the player name after the first space
                 if (playerCount < 6) {  // Enforce max player count (6)
-                    Player* player = new Player(playername); // Use extracted player name
+                    Player* player = new Player(playername, "human"); // Use extracted player name
                     playerList.push_back(player); //Add player pointer to vector
                     playerCount++;
                     if (playerCount > 1) {
@@ -383,6 +381,7 @@ void GameEngine::startupPhase() {
 }
 
 
+
 // Function to assign territories in a round-robin fashion
 void GameEngine::assignTerritoriesToPlayers(Map& map, vector<Player*>& players) {
 
@@ -398,12 +397,14 @@ void GameEngine::assignTerritoriesToPlayers(Map& map, vector<Player*>& players) 
         players[playerIndex]->addTerritories(territory);
 
         // Print assignment (for debugging or confirmation)
-        std::cout << "Assigned territory " << pair.first
-                  << " to player " << players[playerIndex]->getName() << std::endl;
+        // std::cout << "Assigned territory " << pair.first
+        //           << " to player " << players[playerIndex]->getName() << std::endl;
 
         // Move to the next player (round-robin)
         playerIndex = (playerIndex + 1) % totalPlayers;
     }
+
+    cout << "assignTerritoriesToPlayers: Successful" << endl;
 }
 
 // Randomly shuffle player list to determine order of play
@@ -433,7 +434,8 @@ void GameEngine::draw2cards(std::vector<Player*>& players) {
     this->gameDeck = new Deck();
     gameDeck->generateDeck();
 
-    cout<< "CURRENT GAME DECK: " << *gameDeck << endl;
+    //cout<< "CURRENT GAME DECK: " << *gameDeck << endl;
+    cout << "Game Deck generated..." << endl;
 
     for(const auto& player : players) {
         cout << player->getName() << " Draws two cards..." << endl;
@@ -481,7 +483,6 @@ void GameEngine::printAllMaps(const std::string& mapDirectory) {
 
 //----------------A2-PART3-Griffin-Sin-Chan---------------//
 
-
 void GameEngine::mainGameLoop() {
     GameEngine game;
     CommandProcessor commandProcessor;
@@ -492,10 +493,10 @@ void GameEngine::mainGameLoop() {
     game.gameMap = new Map(loadedMap);
     bool result = loadedMap.validate();
     cout << "Map validation is: " << result << endl;
-    Player* player1 = new Player("bob");
+    Player* player1 = new Player("bob", "human");
     game.playerList.push_back(player1);
     cout << "adding player bob" << endl;
-    Player* player2 = new Player("sam");
+    Player* player2 = new Player("sam", "human");
     game.playerList.push_back(player2);
     cout << "adding player sam" << endl;
     cout << "Assigning territories" << endl;
@@ -531,6 +532,7 @@ void GameEngine::mainGameLoop() {
         }
      }
 }
+
 void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
 
     vector<Continent*> continents = map.getContinents();
@@ -540,7 +542,7 @@ void GameEngine::reinforcementPhase(Map& map, std::vector<Player*>& players) {
     for(const auto& player : players) {
         //# of territories owned divided by 3, rounded down
         div_t numberOfTroops = div(player->getTerritories().size(),3);
-        int numTroops = numberOfTroops.quot;
+        int numTroops = numberOfTroops.quot; // quotient from C library
         player->setReinforcements(numTroops);
 
 
@@ -602,13 +604,26 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
     string sourceTerritory;
     string targetTerritory;
     string opposingPlayerName;
+    bool humanFound = false;
 
     cout<<"\n=======================  Issue Order Phase  ======================="<< endl;
-    //While orders are still being issued
-    while(playersIssuingOrders) {
+    //loop through all players and look for a human
+    for(int i = 0; i < numPlayers; i++){
+        //check player strategy type
+            if(players[i]->getPlayerStrategy()->getType() == "human"){
+                humanFound = true;
+            }
+    }
+
+    while(playersIssuingOrders && humanFound) {
         //looping until player puts in a valid order
         //rotate through each player
         for(int i = 0; i < numPlayers; i++) {
+            //check player type, only humans should input
+            if(players[i]->getPlayerStrategy()->getType() != "human"){
+                playerNotDoneTurn[i] = false;
+            }
+
             //if player not done issuing orders let them issue order
             if (playerNotDoneTurn[i]) { 
                 validOrder = false;
@@ -788,6 +803,14 @@ void GameEngine::issueOrdersPhase(Map& map, std::vector<Player*>& players) {
                 }
             }
         }
+
+    }
+    for(int i = 0; i < numPlayers; i++) {
+        //check player type, only humans should input
+        if(players[i]->getPlayerStrategy()->getType() != "human"){
+            cout << players[i]->getName() << " issues orders" << endl;
+            players[i]->issueOrder();
+        }
     }
 }
 
@@ -823,9 +846,7 @@ void GameEngine::orderExecutionPhase(std::vector<Player*>& players) {
             }
         }   
     }
-
     //issue round robin players orders
-
     while(execute) {
         for (int i = 0; i < players.size(); i++) {
             //firstly check if player has any territories
@@ -945,4 +966,121 @@ void GameEngine::resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
    
     }
 }
+
+
+
+
+void GameEngine::startUpPhase(CommandProcessor commandProcessor,vector<string> &maps,vector<string> &players) {
+
+    const std::string mapDirectory = "../res/maps/";
+    MapLoader mapLoader;
+    vector<Map*> loadedMaps;
+
+    if (maps.empty()) {
+        std::cout << "No maps provided for loading." << std::endl;
+        return;
+    }
+
+    // Load all maps
+    commandProcessor.getCommandFromString("loadmap");
+    for (auto& map : maps) {
+        std::string selectedMap = mapDirectory + map;
+        std::cout << "Loading map from: " << selectedMap << std::endl;
+        Map* newMap = new Map();
+        mapLoader.loadMap(*newMap,selectedMap);
+        loadedMaps.push_back(newMap);
+        std::cout << "Map loaded successfully!" << std::endl;
+    }
+
+    if (maps.size() < 1) {
+        cout << "NO MAPS LOADED" << endl;
+        return;
+    }
+    if (maps.size() > 5) {
+        cout << "MAP SIZE LIMIT EXCEEDED" << endl;
+        return;
+    }
+
+    //Validate All maps
+    commandProcessor.getCommandFromString("validatemap");
+    int counter = 0;
+    for (auto& map : loadedMaps) {
+        bool result = map->validate();
+        if ( !result ) {
+            std::cout << "Map " << counter << " Invalid! " << std::endl;
+            counter++;
+        } else {
+            std::cout << "Map " << counter << " validated!" << std::endl;
+            addMap(map);
+            counter++;
+        }
+    }
+
+    if (gameMaps.size()<1) {
+        cout << "Error: No Maps are Valid" << endl;
+        return;
+    }
+
+
+    if (players.size() < 2) {
+        cout << "NOT ENOUGH PLAYERS" << endl;
+        return;
+    }
+    if (players.size() > 6) {
+        cout << "MAX PLAYER COUNT EXCEEDED" << endl;
+        return;
+    }
+
+    //Add Players
+    commandProcessor.getCommandFromString("addplayer");
+    int cpuCounter = 0;
+    int playerCounter = 0;
+    for (auto& player : players) {
+        // human player
+        if (player == "human") {
+            string name = "player " + std::to_string(playerCounter++);
+            auto * newPlayer = new Player(name, player);
+            playerList.push_back(newPlayer);
+            std::cout << "New Player " << name << " added!" << std::endl;
+        } else {
+            // CPU player
+            string name = "CPU " + std::to_string(cpuCounter++);
+            auto * newPlayer = new Player(name, player);
+            playerList.push_back(newPlayer);
+            std::cout << "New Player " << name << " added!" << std::endl;
+        }
+    }
+}
+
+
+
+
+void GameEngine::startGame() {
+    std::cout << "Preparing Game..." << std::endl;
+    // a) Assign all territories
+    assignTerritoriesToPlayers(*gameMap,playerList);
+    // b) Determine order of play
+    determineOrderOfPlay(playerList);
+    // c) Give all player 50 reinforcement units to start
+    setReinforcementPools(playerList);
+    // d) let each player draw 2 initial cards
+    draw2cards(playerList);
+    cout << "Game Set Up Succesfull..." << endl;
+    cout << "Starting Game..." << endl;
+}
+
+
+
+void GameEngine::resetGame() {
+
+    for (auto & player : playerList) {
+        player->resetPlayer();
+    }
+    gameMap->resetMap();
+    delete gameDeck;
+
+}
+
+
+
 
