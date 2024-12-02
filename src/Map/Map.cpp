@@ -38,10 +38,6 @@ Continent::Continent(const Continent& other)
     }
 }
 
-Continent::~Continent() {
-
-}
-
 // Assignment Operator
 Continent& Continent::operator=(const Continent& other) {
     if (this != &other) { // Check for self-assignment

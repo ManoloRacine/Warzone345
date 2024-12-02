@@ -19,7 +19,6 @@ public:
     Card& operator=(const Card& card);
     friend std::ostream& operator<<(std::ostream& os, const Card& card);
     virtual std::string print() const = 0;
-protected:
     Deck* originalDeck;
 };
 
@@ -77,8 +76,11 @@ class Deck {
     Deck& operator=(const Deck& deck);
     friend std::ostream& operator<<(std::ostream& os, const Deck& deck);
     void putIntoDeck(Card* cardToPutBack);
+    void resetDeck();
+    ~Deck();
 private:
     std::queue<Card*> cards;
+
 };
 
 class Hand {
@@ -90,8 +92,9 @@ class Hand {
     Hand& operator=(const Hand& hand);
     friend std::ostream& operator<<(std::ostream& os, const Hand& hand);
     std::vector<Card*> getCards();
-    private:
     std::vector<Card*> cards;
+    ~Hand();
+    void returnCards();
 };
 
 std::ostream& operator<<(std::ostream& os, const Card& card);

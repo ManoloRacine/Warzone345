@@ -431,11 +431,10 @@ void GameEngine::setReinforcementPools(std::vector<Player*>& players) {
 //let each player draw 2 initial cards from the deck using the deck’s draw() method
 void GameEngine::draw2cards(std::vector<Player*>& players) {
 
-    this->gameDeck = new Deck();
-    gameDeck->generateDeck();
-
-    //cout<< "CURRENT GAME DECK: " << *gameDeck << endl;
-    cout << "Game Deck generated..." << endl;
+    if (!gameDeck) {
+        cout << " ERROR NO GAME DECK " << endl;
+        return;
+    }
 
     for(const auto& player : players) {
         cout << player->getName() << " Draws two cards..." << endl;
@@ -962,6 +961,7 @@ void GameEngine::resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
         players[i]->setTerritoriesToDefend(emptyToDefend);
         //resets player negotiations
         players[i]->clearNegotiations();
+
         players[i]->getOrdersList()->getList().clear();
    
     }
@@ -972,6 +972,7 @@ void GameEngine::resetPlayerStatuses(vector<Player*>& players, Deck* deck) {
 
 void GameEngine::startUpPhase(CommandProcessor commandProcessor,vector<string> &maps,vector<string> &players) {
 
+    initializeDeck();
     const std::string mapDirectory = "../res/maps/";
     MapLoader mapLoader;
     vector<Map*> loadedMaps;
@@ -1052,9 +1053,6 @@ void GameEngine::startUpPhase(CommandProcessor commandProcessor,vector<string> &
     }
 }
 
-
-
-
 void GameEngine::startGame() {
     std::cout << "Preparing Game..." << std::endl;
     // a) Assign all territories
@@ -1069,18 +1067,26 @@ void GameEngine::startGame() {
     cout << "Starting Game..." << endl;
 }
 
-
-
 void GameEngine::resetGame() {
+
+    cout << "RESETTING GAME" << endl;
 
     for (auto & player : playerList) {
         player->resetPlayer();
+
     }
     gameMap->resetMap();
     delete gameDeck;
+    initializeDeck();
 
 }
 
+void GameEngine::initializeDeck() {
+    // Initialize the game deck
+        this->gameDeck = new Deck();
+        gameDeck->generateDeck();
+
+}
 
 
 

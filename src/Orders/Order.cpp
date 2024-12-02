@@ -25,7 +25,12 @@ OrdersList::OrdersList(GameEngine *gameEngine) : game(gameEngine){
 }
 
 
-OrdersList::~OrdersList(){ for(auto order: orders){ delete order; } }
+OrdersList::~OrdersList() {
+  for(auto order: orders) {
+    delete order;
+  }
+  orders.clear();
+}
 
 OrdersList::OrdersList(const OrdersList &oldList){
   unsigned listLength = oldList.orders.size();

@@ -311,7 +311,8 @@ void AggressivePlayerStrategy::issueOrder() {
     // }
 
     // add order to player's orders list
-    player->getOrdersList()->add(new Deploy(player, player, player->getReinforcements(), nullptr, maxTroopsTerritory));
+    Deploy* deploy = new Deploy(player, player, player->getReinforcements(), nullptr, maxTroopsTerritory);
+    player->getOrdersList()->add(deploy);
 
     // looking for the strongest opponent connect to my strongest territory and therefore weaker
     Territory* strongestWeakTerritory = nullptr;
@@ -332,7 +333,8 @@ void AggressivePlayerStrategy::issueOrder() {
         getPlayer()->getOrdersList()->add(bomb);
     }
     if (strongestWeakTerritory){
-        player->getOrdersList()->add(new Advance(player, strongestWeakTerritory->getOwner(), maxTroopsTerritory->getArmies(), maxTroopsTerritory, strongestWeakTerritory));
+        Advance* advance = new Advance(player, strongestWeakTerritory->getOwner(), maxTroopsTerritory->getArmies(), maxTroopsTerritory, strongestWeakTerritory);
+        player->getOrdersList()->add(advance);
     }
 }
 

@@ -208,25 +208,12 @@ void Player::clearNegotiations() {
 
 void Player::resetPlayer() {
 
-    for (auto terr : territories) {
-        delete terr;
-    }
-
-
-
-
-    delete ordersList;
-    delete hand;
-
+    setConqueredATerritory(false);
+    territories.clear();
+    getOrdersList()->getList().clear();
+    hand->returnCards();
     setReinforcements(0);
-
-    for (auto terr : territoriesToDefend) {
-        delete terr;
-    }
-    for (auto terr : territoriesToAttack) {
-        delete terr;
-    }
-    for (auto plr : negotiatedPlayers) {
-        delete plr;
-    }
+    territoriesToDefend.clear();
+    territoriesToAttack.clear();
+    negotiatedPlayers.clear();
 }
